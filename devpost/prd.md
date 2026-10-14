@@ -20,14 +20,14 @@ Sources: `scope.md > The Core Loop` and `What "Working" Looks Like`.
 
 ## Screens and Layout
 - **Character setup:** Character preview on the left; name, gender, and appearance controls on the right. Changes update the preview before setup is finished.
-- **Dashboard:** Character on the left. Name, level, and XP bar at the top center. Daily quests to the right of the character in a checkable to-do list. Coin balance is visible. Clearly organized Quest Catalog and Shop buttons open larger windows. A clothing-hanger button below the character replaces the daily quest panel with the wardrobe. Confirming an outfit returns that panel to quests.
-- **Catalog and shop windows:** Open over the dashboard and can be closed to return without losing progress. The wardrobe uses the existing daily quest panel instead of a window. Questbook and personal stats buttons are deferred with their features.
+- **Dashboard:** Character on the left. Name, level, and XP bar at the top center. Daily quests to the right of the character in a checkable to-do list. The coin wallet sits in the top-right header, immediately to the right of Edit character. The dashboard has no greeting or Your next chapter heading; its player and quest panels start near the top. The character scales with viewport height to reduce scrolling. Quest Catalog and Shop controls sit directly above the right-hand daily-quest panel. Quest Catalog opens the larger book popup; Shop replaces the panel inline. Daily quests and Back to quests return to the list. A clothing-hanger button below the character replaces the daily quest panel with the wardrobe. Confirming an outfit returns that panel to quests.
+- **Shared right-hand panel:** Daily quests, shop, and wardrobe are mutually exclusive views in the same area. Quest Catalog opens a larger book popup over the dashboard and returns to the underlying view when closed. Switching views preserves player progress. Completion rewards retain their acknowledgement dialog. Questbook and personal stats buttons are deferred with their features.
 Source: `scope.md > The POC Boundary`.
 
 ## Look and Feel
 Use the learner's Canva mockup as the character-style reference: a friendly full-body human with a 3D cartoon appearance. This describes the visual appearance, not a requirement for a rotatable character or a particular rendering technology.
 
-Updated interface direction from build feedback: deep navy backgrounds and layered blue/teal panels, vibrant lighter green reward accents, bold game-like headings, and smaller monospace interface labels. Raised buttons, stronger level badges, subtle grid/glow details, and clear contrast make it feel more like an RPG dashboard. The learner explicitly rejected the original white/gray palette and bland typography. The dashboard player card and character-creation preview use a white background with subtle graph/grid lines and dark readable text; the surrounding interface stays navy/teal. The interface palette supports the character and colorful cosmetics rather than competing with them.
+Latest visual direction: use the learner's blue/yellow/purple LEVEL UP reference as an arcade/pixel theme for the interface. Bright blue rays, yellow highlights, deep purple hard shadows, square pixel-like panel borders, an original local 5×7 pixel display font for headings/buttons, and readable monospace body text replace the earlier navy RPG theme. Carry the palette through setup controls, daily quests, catalog book, shop, wardrobe, reward dialogs, and level-up banner. Keep the player/clothing raster artwork smooth and retain the existing white grid background around the player. The dashboard player card now uses the same pixel frame, labels and controls as the interface, with a slightly shorter viewport-adaptive character display. Player artwork is unchanged. The catalog remains a book with page/spine/category bookmarks, now styled consistently with the pixel interface.
 Source: `scope.md > Inspiration & Identity`.
 
 ## Features and Behavior
@@ -43,18 +43,18 @@ Acceptance criteria:
 Source: `scope.md > The POC Boundary`.
 
 ### Quest Catalog
-Show a small catalog of positive activities with category tabs for home, health, and social positivity, plus search by quest wording. Each row shows a quest name, XP reward, and Add action. Bigger or harder tasks receive larger rewards. Search filters the selected category; clearing it restores that category's list.
+Show the catalog as a smooth, non-pixelated open quest book: parchment pages, a leather-like cover, a quest list on the left, and selected quest details/objective/XP/add action on the right. Home, heart (health), and people (social positivity) bookmark tabs run down its right edge. Keep search by quest wording within the selected category. Each row shows a quest name, XP reward, and Add action. Bigger or harder tasks receive larger rewards. Search filters the selected category; clearing it restores that category's list.
 
 Acceptance criteria:
 - Changing categories displays the relevant quests.
 - Searching for a listed task finds it; no matches shows a clear empty result.
 - Adding a quest makes it appear in daily quests with the same name and XP reward.
-- Trying to add an existing daily quest displays “Quest already in your daily quests!” without creating a second copy.
+- Trying to add an existing daily quest shows a small contextual message beside the catalog Add action without creating a second copy. Do not show a large red warning bar on the dashboard.
 - Completing or deleting a quest allows it to be added again.
 Source: `scope.md > The Core Loop` and `The POC Boundary`.
 
 ### Daily Quests and Completion
-Display each quest with its name, XP reward, completion checkbox, and delete button. Show XP alone on quest rows; coins remain part of the reward. A completion message reveals both, for example “+35 XP · +10 coins.”
+Display each quest with its name, XP reward, completion checkbox, and delete button. Show XP alone on quest rows; coins remain part of the reward. A centered completion dialog stays open until dismissed with its Close button: “Quest: Clean your room, completed!” and “Reward: +35 XP · +10 coins.” While the dialog is open, displayed XP and coins stay at their previous values. Closing it releases a stronger burst of green XP particles with trails from the popup toward the XP bar as it fills; coin particles travel toward the wallet while its number counts up quickly. The XP bar and wallet pulse as rewards arrive. A level-up fills the current bar, rolls over, and carries remaining XP forward. Reduced-motion users receive immediate values and the popup without particles.
 
 Acceptance criteria:
 - Checking a quest removes it, awards its XP and coins once, and visibly updates XP progress and coin balance.
@@ -76,12 +76,12 @@ Agreed starter values:
 
 Acceptance criteria:
 - XP earned across the level threshold increments the level and preserves remaining XP.
-- A level-up produces visible feedback and updates eligible shop items.
+- A level-up updates eligible shop items and, as the displayed XP crosses the new level after reward dismissal, plays a roughly 2.4-second character-centered celebration: hovering/swirl XP sparks, aura, expanding rings, and a LEVEL UP/new-level banner. Reduced-motion mode shows a static banner.
 - Purchases deduct only coins; XP and level remain unchanged.
 Source: `scope.md > The Unique Kernel` and `What "Working" Looks Like`.
 
 ### Shop
-Show a small collection of shirts, pants, shoes, and hats. Each item shows its appearance, category, price, and required level. Buying adds it to the wardrobe rather than automatically equipping it.
+Show a small collection using Shirts, Pants, Hats, Shoes tabs matching the wardrobe interface. Locked items use entirely grayed-out anonymous cards showing only a mystery/lock symbol and required level, with no actual image, item name, description, or price. Reaching the required level reveals the appearance, name, description, price, and purchase controls. Unlocked but unaffordable items remain visible. Buying adds it to the wardrobe rather than automatically equipping it.
 
 Acceptance criteria:
 - Items below the player's level requirement visibly state the required level and cannot be bought.
@@ -136,6 +136,10 @@ Expand the quest and cosmetic collections. Add milestone reward chests and share
 
 ## Non-Goals
 No creature transformations in this version; the learner wants to preserve an appealing human character. No automatic recurrence or daily reset. No verification of real-world task completion. No public deployment requirement or full production account system.
+
+## Sound Feedback
+
+Original arcade-style effects accompany button/tab clicks, quest completion, reward transfer after closing the acknowledgement dialog, and actual level-up celebrations. The click should have a short dry block-game feel; reward collection uses rapid rising “dup-dup-dup” ticks. A header sound toggle mutes all effects. Sound must not affect earned rewards or block the app if unavailable.
 
 ## States and Boundaries
 First use shows setup; returning use restores the dashboard. Empty daily quests point to the catalog. Search with no matches explains that nothing matched. Duplicate additions, missing names, locked items, insufficient coins, and save failures produce visible explanations. Completion, level-up, purchase, and equip actions produce visible feedback. Closing a window retains progress.

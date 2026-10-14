@@ -9,7 +9,7 @@ Build mode: fast
 
 ## Slices
 
-- [ ] **1. Create and customize your character in a running app**
+- [x] **1. Create and customize your character in a running app**
   Becomes usable: Character setup with two bases, both hairstyles, hair/eye colors, expressions, and a dashboard showing the chosen player.
   Why now: Proves the largest risk—fitted character artwork—before the rest of the app depends on it. Bootstrapping is included in this usable step.
   PRD ref: `prd.md > Character Setup`, `prd.md > Screens and Layout`, `prd.md > Look and Feel`
@@ -25,7 +25,7 @@ Build mode: fast
   PRD ref: `prd.md > Quest Catalog`, `prd.md > Daily Quests and Completion`, `prd.md > XP, Levels, and Coins`, `prd.md > Shop`, `prd.md > Wardrobe`
   Spec ref: `spec.md > Quest Catalog`, `spec.md > Daily Quests`, `spec.md > Shop`, `spec.md > Wardrobe`, `spec.md > Player Rules and Save Adapter`, `spec.md > Data Model`
   Build: Add the 15-quest starter catalog with category search, daily quest controls and duplicate errors; implement guarded reward/purchase/equip actions, player summary, feedback, six-item shop, wardrobe and accessible dialogs. Three ordinary completions must fund the level-2 green shirt; purchases do not automatically equip.
-  Verify (mechanical): Run focused Vitest reward/purchase/equip tests and production build. Verify duplicate completion/purchase guards, removal without rewards, re-add, search, level locks, affordability, and visible equipment changes. Check dialog keyboard behavior through an available browser or record learner-assisted evidence.
+  Verify (mechanical): Run focused Node reward/purchase/equip tests and production build. Verify duplicate completion/purchase guards, removal without rewards, re-add, search, level locks, affordability, and visible equipment changes. Check dialog keyboard behavior through an available browser or record learner-assisted evidence.
   Learner check: Add three ordinary quests, check them off, confirm level 2/30 coins, buy the green shirt, equip it from the hanger, and try a duplicate add and deleting an unfinished quest.
   Commit: `Add quests rewards shop and wardrobe`
 
@@ -42,7 +42,7 @@ Build mode: fast
 ## Hands-on Checkpoints
 
 - [x] Early usable behavior explored — after slice 1; learner tried character/wardrobe screens, requested layout and styling changes, and confirmed the revised appearance looks good. Character raster cleanup explicitly deferred.
-- [ ] Integrated reward journey explored — after slice 2, check that earning and equipping feels right
+- [x] Integrated reward journey explored — learner tested rewards, purchases and clothing, iterated on animation/sound/theme, and confirmed ready to move on.
 - [ ] Final kick-the-tires exploration and feedback completed — after slice 3
 
 ## Final Review
@@ -81,3 +81,37 @@ Activity mode: not established
 - Extended the white graph-line treatment to the character-creation preview, with dark heading/supporting text; the surrounding interface remains dark.
 
 - Removed the Player One header badge and moved Edit character to the top-right header when a character exists.
+
+- Slice 1 checkpoint verified: `8c5da38 Add character creation and fitted avatar renderer`. The learner made this commit because session filesystem restrictions prevent writing Git metadata.
+- Slice 2 implementation is ready for its integrated learner checkpoint. Nine reward/purchase/equipment rule tests, TypeScript checks, production build, and catalog/shop/wardrobe render checks pass. Browser/server restrictions remain; hands-on interactions, dialog focus, and visual review await learner feedback. No slice-2 commit yet.
+- Used the Node built-in test runner instead of Vitest because Vitest archives were not present in the offline cache. Verification coverage is preserved without changing product behavior or app architecture.
+
+- Learner requested completion effects: XP particles toward the bar, coin particles toward the wallet, fast balance count-up, and a centered quest-name/reward popup lasting about one second. Added display-only animation and level rollover; reducer remains the immediate source of balances. Reduced-motion mode skips particle/count motion. Animation timing math and reward event tests added; visual animation review remains learner-assisted.
+
+- Revised completion effects per learner feedback: reward dialog now waits for Close; XP/coin display stays paused until dismissal. Closing releases stronger XP trails, more particles, varied arcs, impact rings, and bar/wallet pulses. Reward balances remain awarded exactly once in the reducer; animation is presentation only.
+
+- Added learner-requested character-centered level-up celebration, triggered when animated XP actually crosses a level after closing the reward dialog. Includes hovering XP sparks, orbiting particles, expanding rings, aura and new-level banner; reduced-motion mode retains a static message. Tests/build pass; learner visual review remains required.
+
+- Restyled the quest catalog as a non-pixelated open book following the learner reference: left-page quest list/search, right-page details/objective/XP/add action, and right-edge home/heart/people category bookmarks. Added narrow-screen stacking and keyboard category navigation. Existing catalog/reward rules remain intact; book markup, tests and build pass.
+
+- Learner replaced the navy RPG design with a blue/yellow/purple pixel-arcade reference. Applied consistent theme overrides to all interfaces, including quest book and reward dialogs; kept player art, clothing, and existing white grid player boxes smooth. Created a local original 5×7 display font with reproducible source, checksum verified. All 12 tests and production build pass; visual feedback/font loading remain learner-assisted.
+
+- Learner requested removing the global duplicate warning and replacing catalog/shop popups with inline content. Moved Daily quests/Quest catalog/Shop controls directly above the right-hand panel; all four views including wardrobe share it. Added contextual catalog add feedback and shop purchase feedback, with no global banner. Completion reward dialog remains. Tests/build pass; new panel layout awaits learner feedback.
+
+- Added Shirts/Pants/Hats/Shoes shop tabs and anonymous grayed-out level-locked cards per learner request. Actual item images/names/descriptions/prices render only after the required level; unlocked but unaffordable items stay visible. Verified level-1 concealment and level-2/3 progressive reveal in rendered markup; 12 tests and build pass.
+
+- Moved the animated wallet to the top-right header beside Edit character, removed the dashboard greeting/eyebrow, and reduced top spacing. Player display height now adapts to viewport height to keep the workspace more visible. Reward coin particles target the relocated wallet. Production build passes.
+
+- Centered the header tagline independently of side content, shortened the dashboard player card, and applied the pixel frame/name/level/edit-button style to it at learner request. Preserved smooth player artwork and white graph lines; place the tagline in its own centered row on narrower screens to prevent collisions.
+
+- Learner moved Quest Catalog back to a larger popup for the book layout. Kept Daily quests, Shop and wardrobe inline, with catalog close/Escape returning to the previously visible panel. Updated affected PRD/spec behavior.
+
+- Added requested original synthesized click, quest-completion, reward-transfer “dup” ticks and level-up fanfare. A header toggle mutes and stops scheduled effects. One browser AudioContext activates from user interaction; audio failures never block game actions. Added activation/scheduling/mute test; all 13 tests and build pass. Actual sound preference and volume need learner listening feedback.
+
+- Learner approved the quest/transfer/level sounds and requested a louder, drier tick for clicking. Shortened the click decay and strengthened its sharp transient; other sounds unchanged. Audio tests and build pass.
+
+- Purchase feedback revision: register cha-ching replaces the buy click; item popup offers Equip/Wardrobe/Close; yellow new-item counters accumulate until wardrobe opens. Reducer tests cover duplicate purchases, count retention and clearing without changing balances or ownership.
+
+- Removed redundant shop wardrobe button; retained player hanger and purchase-dialog Wardrobe access. Added playful quest-specific roast descriptions and completion messages for all 15 quests, plus level-up flavor; objectives and rewards stay unchanged.
+
+- Learner approved the current experience and requested proceeding to persistence. Slice 2 verification passes (14 tests and production build); its required Git checkpoint is pending because this session cannot write Git metadata.

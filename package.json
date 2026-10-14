@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "node --experimental-strip-types --test src/game/*.test.mjs"
   },
   "dependencies": {
     "react": "19.3.0",

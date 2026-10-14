@@ -6,7 +6,7 @@ status: approved
 # Level Up — Technical Spec
 
 ## How This Works, In Plain Language
-The app runs in your browser. React draws the setup form, character, daily quests, and catalog/shop windows and inline wardrobe panel. Quest rewards and shop items come from small files shipped with the app.
+The app runs in your browser. React draws setup, the character, and a shared right-hand panel for daily quests, shop, and wardrobe, plus a larger quest catalog book popup. Quest rewards and shop items come from small files shipped with the app.
 
 One shared player record holds appearance choices, active quests, earned XP, coins, owned items, and equipped clothes. Completing a quest updates that record once; every part of the screen then shows the same result. The browser saves the record locally and restores it on your next visit.
 
@@ -29,7 +29,7 @@ Implements `prd.md > The Core Journey`.
 - **Regular CSS:** palette, layout, responsive sizing, and feedback; no UI framework required.
 - **Browser localStorage:** small versioned JSON save; no database or login. [Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).
 - **SVG image layers, clipping, and color filters:** render the raster character assets at fixed coordinates. [Clipping](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/clipPath), [color matrix](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix).
-- **Vitest, development only:** focused reward/purchase/save-validation tests. [Guide](https://vitest.dev/guide/).
+- **Node built-in test runner, development only:** focused reward/purchase/save-validation tests; Node 22.13.1 runs the TypeScript modules with `--experimental-strip-types`. This replaces the planned Vitest runner because the needed package archives were unavailable in the offline cache. [Documentation](https://nodejs.org/api/test.html).
 
 React/TypeScript/Vite/CSS/local saving were accepted by the learner. Reducer organization and the test runner are implementation details derived from that choice. Select compatible stable dependency versions during setup and record exact versions in `package-lock.json`; package installation has not been verified. Local Node is 22.13.1 and npm is 10.9.2. Vite's current guide requires Node 20.19+ or 22.12+; check the selected template and test-runner requirements before installing. Do not upgrade the machine silently.
 
@@ -43,20 +43,20 @@ npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 Open `http://127.0.0.1:5173`. Always use this origin for the demo: changing host, protocol, or port produces a separate browser save. On later installations use `npm ci` with the committed lockfile.
 
-Planned checks: `npm run test -- --run`, `npm run build` (TypeScript checking plus Vite build). Production preview: `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`; this origin has its own save.
+Planned checks: `npm test`, `npm run build` (TypeScript checking plus Vite build). Production preview: `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`; this origin has its own save.
 
 Record creating a character, adding three ordinary quests, completing them, reaching level 2, buying and equipping the first item, then refreshing to show saved progress. Real-life completion remains based on honesty. Submission requires a short demo video and public GitHub repository; deployment is optional. README will explain these commands and local-save limitations.
 
 ## Look and Feel
 Implements `prd.md > Look and Feel` and `Screens and Layout`.
-Use deep navy `#0C1121`, layered navy/teal panels, light text, and vibrant green `#91ED71` accents. CSS gradients and a subtle grid provide atmosphere without extra image dependencies. The dashboard player card and character-creation preview are white with subtle grid lines and dark readable player/XP text, as requested in the later visual review; the surrounding app remains navy/teal. Use Trebuchet MS for bold game-style headings/buttons, Avenir Next with Trebuchet/Arial fallbacks for body text, and system monospace for level/status labels. Keep raised buttons, readable dark text on bright green surfaces, and clear focus states. Character left, player summary top center, daily list right on desktop; stack logically on narrow screens. Keep XP visible on quest rows and coins in the player summary and completion feedback.
+The latest learner reference establishes an arcade/pixel UI: bright blue background (`#35BAF0`/`#52C9F3` rays), yellow highlights (`#FFEB39`), deep purple outlines (`#30219A`), pale readable panel surfaces, square borders, and offset hard shadows. `src/pixel-theme.css` loads after the base styles and consistently themes setup, quests, shop, wardrobe, catalog book, completion dialogs, and level-up banner. It preserves the player's white grid background and all smooth raster character/clothing art. The dashboard player card uses a pixel frame, labels and controls with a compact height. The header tagline is absolutely centered independently of brand and wallet widths, and moves to its own centered header row below 1100px to avoid overlap. `public/fonts/level-up-pixel.ttf` is an original, locally generated 5×7 display font built by `scripts/build_pixel_font.py`, used for headings and controls with monospace body text. No external font request is needed. Check display font loading and small-screen readability in the learner's visual review. Keep XP rewards on quest rows and coin balance visible in the dashboard.
 
-Catalog and shop use accessible dialog windows with headings, close buttons, Escape handling, managed focus, and scrollable content. Use actual buttons and labeled controls. Reward messages use a polite live region; avoid motion essential to understanding progress.
+Shop, quests, and wardrobe share the right-hand panel. Quest Catalog opens a larger book dialog from the controls above that panel; closing it restores the underlying view. Catalog and completion reward dialogs provide headings, close controls, Escape handling and managed focus. Use actual buttons and labeled controls. Reward messages use a polite live region; avoid motion essential to understanding progress.
 
 ## Components
 
 ### App Shell
-`App.tsx` connects the player record, setup/dashboard switch, dialog selection, inline wardrobe mode, draft outfit, and feedback. `useGame.ts` wraps React's reducer and persistence. No router needed for this single-dashboard app.
+`App.tsx` connects the player record, setup/dashboard switch, right-hand panel selection, draft outfit, and contextual feedback. `useGame.ts` wraps React's reducer and persistence. No router needed for this single-dashboard app.
 Implements `prd.md > Screens and Layout` and `Same-Device Progress`.
 
 ### Character Setup
@@ -83,11 +83,11 @@ Current assets: `output/imagegen/clean-bases/guy-white-tank.png` and `girl-bald-
 Implements `prd.md > Character Setup`, `Shop`, and `Wardrobe`.
 
 ### Dashboard and Player Summary
-`Dashboard.tsx` arranges the character, summary, daily quests, catalog/shop buttons, and hanger. `PlayerSummary.tsx` derives level and XP-bar progress from total XP and displays coins. Feedback explicitly shows completion rewards and level-ups.
+`Dashboard.tsx` arranges the character, summary, daily quests, catalog/shop buttons, and hanger. `PlayerSummary.tsx` derives level and XP-bar progress from total XP and displays coins. Completion feedback uses a centered modal with quest name, both rewards, and a Close button. It remains open until dismissed; Close/Escape release the transfer. Display-only numeric animation is paused while the reward modal is pending. RewardEffects uses captured popup/bar/wallet viewport coordinates for fixed-position XP/coin particles with trails, varied arcs, impact rings and target pulses. useAnimatedNumber uses requestAnimationFrame to interpolate display-only XP and wallet values, canceling/restarting cleanly for rapid updates. Player balances are awarded immediately and never depend on animation completion. rewardAnimation fills and briefly holds the old XP bar before level rollover. LevelUpCelebration observes the displayed level crossing and plays a 2.4-second character-centered aura/ring/orbit-spark/banner effect, including hover XP text; it does not trigger merely from opening the reward dialog or editing the character. Respect prefers-reduced-motion; cancel timers/frames on unmount. Non-completion messages keep ordinary feedback.
 Implements `prd.md > Screens and Layout` and `XP, Levels, and Coins`.
 
 ### Quest Catalog
-`QuestCatalog.tsx` renders category tabs, case-insensitive substring search within the selected category, and Add actions. Start with 15 curated quests: five each for home, health, and social positivity, covering all reward sizes. This is real starter content, not a simulated live catalog. Rows show name and XP; no-match feedback explains the empty result. Duplicate add remains actionable so the specified error can be shown.
+`QuestCatalog.tsx` renders a two-page quest journal using CSS cover, parchment pages and spine, smooth SVG category icons on right-edge bookmark tabs, a searchable left-page quest list, and selected details/XP/add action on the right. Selection falls back to the first filtered quest, with a no-results state if none match. On narrow phones the pages stack while category bookmarks remain available. The catalog renders in a larger popup using the book cover/page treatment; its size is not constrained to the daily-quest panel. Duplicate feedback is small and contextual to the Add action, not a dashboard banner. Search remains case-insensitive within the selected category. Start with 15 curated quests: five each for home, health, and social positivity, covering all reward sizes. This is real starter content, not a simulated live catalog. Rows show name and XP; no-match feedback explains the empty result. Duplicate add remains actionable so the specified error can be shown.
 Implements `prd.md > Quest Catalog`.
 
 ### Daily Quests
@@ -95,7 +95,7 @@ Implements `prd.md > Quest Catalog`.
 Implements `prd.md > Daily Quests and Completion`.
 
 ### Shop
-`Shop.tsx` displays preview, category, price, level requirement, and owned/locked/unaffordable status. Starter paid inventory: two shirt colors, two pants colors, one pair of shoes, one hat. Starter tank/pants are free wardrobe options, not paid shop entries.
+`Shop.tsx` has Shirts/Pants/Hats/Shoes category tabs, styled consistently with wardrobe tabs. Below the level requirement, render a separate grayed-out generic locked card without ItemPicture, actual item name, description or price, including in accessibility labels. Reveal the real preview and details when level is sufficient. Unlocked unaffordable/owned items retain their real details and corresponding purchase state. Starter paid inventory: two shirt colors, two pants colors, one pair of shoes, one hat. Starter tank/pants are free wardrobe options, not paid shop entries.
 
 Initial content proposal: green shirt 30 coins/level 2, blue shirt 45/level 3, dark pants 30/level 2, olive pants 45/level 3, sneakers 40/level 2, cap 50/level 3. Only the first item's 30-coin/level-2 threshold was fixed in the PRD; the rest are tunable starter content, not new progression mechanics.
 Implements `prd.md > Shop`.
@@ -103,6 +103,9 @@ Implements `prd.md > Shop`.
 ### Wardrobe
 `Wardrobe.tsx` replaces the daily quest panel during editing, with Shirts/Pants/Hats/Shoes tabs and image cards, names, and selected-item descriptions. A draft outfit drives the character preview; Confirm commits it and returns to quests, while Cancel discards it. The wardrobe is not a dialog and uses no clothing dropdowns. It groups owned choices into the four clothing slots. Starter tank/pants can always be selected; shoes/hat allow none. Equip switches only one slot and never deducts coins. Use the same renderer/asset mappings as the dashboard.
 Implements `prd.md > Wardrobe`.
+
+### Sound Effects
+`game/soundEffects.ts` synthesizes original short click, quest chime, reward-transfer tick sequence, and ascending level-up fanfare using one lazily created Web Audio AudioContext. Initialize/resume from user interaction; never autoplay on load. A captured click listener handles enabled buttons and quest checkboxes, including tab/dialog actions. RewardEffects plays the quest cue on acknowledgement opening and transfer cue on Close; LevelUpCelebration plays its fanfare only when the displayed level advances. A header sound toggle sets master gain and stops scheduled oscillators immediately when muted. Disconnect nodes after playback. Audio failures do not block player actions. No external samples, keys, or new packages. [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext), [audio best practices](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices). Sound preference is session-only until persistence is finished.
 
 ### Player Rules and Save Adapter
 `gameReducer.ts` owns create, add, delete, complete, purchase, and equip transitions. Invalid transitions leave the player unchanged and return an explanatory result for feedback. Components cannot directly increment XP or deduct coins.
@@ -126,6 +129,7 @@ type PlayerSave = {
     coins: number;
     activeQuestIds: string[];
     ownedItemIds: string[];
+    newItemIds: string[];
     equipped: { shirt: string; pants: string; shoes: string | null; hat: string | null };
   };
 };
@@ -145,6 +149,8 @@ project/
 ├── package.json / package-lock.json    # Scripts and exact dependency versions
 ├── tsconfig*.json / vite.config.ts     # Type checking, React build, test settings
 ├── README.md                          # Run, demo, save limits, asset notes
+├── public/fonts/level-up-pixel.ttf     # Local original display font
+├── scripts/build_pixel_font.py        # Reproducible font source
 ├── public/avatars/
 │   ├── base-a.png / base-b.png         # Selected base artwork
 │   ├── hair/                          # Fitted front/back hair layers
@@ -152,7 +158,8 @@ project/
 │   └── clothing/                      # Body-specific shoes, hats, shirt layers
 ├── src/
 │   ├── main.tsx / App.tsx              # Startup and application shell
-│   ├── styles.css                     # Palette, layout, dialogs, feedback
+│   ├── styles.css                     # Layout, dialogs, feedback
+│   ├── pixel-theme.css                # Latest arcade theme overrides
 │   ├── types.ts                       # Domain types
 │   ├── data/
 │   │   ├── quests.ts / cosmetics.ts    # Curated starter collections
@@ -160,8 +167,8 @@ project/
 │   ├── game/
 │   │   ├── gameReducer.ts / useGame.ts # Validated player actions and React integration
 │   │   ├── progression.ts / save.ts    # Derived levels and versioned persistence
-│   │   ├── gameReducer.test.ts         # Reward and purchase integrity
-│   │   └── save.test.ts                # Save round trips and invalid data
+│   │   ├── gameReducer.test.mjs         # Reward and purchase integrity
+│   │   └── save.test.mjs                # Save round trips and invalid data
 │   └── components/
 │       ├── CharacterSetup.tsx / Avatar.tsx
 │       ├── Dashboard.tsx / PlayerSummary.tsx
@@ -188,7 +195,7 @@ No runtime API endpoints, authentication, database, cloud storage, payment servi
 - Run type checks and production build. Browser automation was unavailable during asset previews; if it remains unavailable, report that and use a concrete learner-assisted walkthrough rather than claim automated visual verification.
 
 ## What Was Simplified and Why
-Single browser save, small local catalogs, one dashboard with dialog windows, and fixed-pose artwork keep the personal reward loop demonstrable. Accounts, households, large inventories, detailed stats, reward chests, live 3D movement, and recurrence remain outside this build. White tank-top underlayers replace gray starting shirts by learner request.
+Single browser save, small local catalogs, one dashboard with an inline right-hand workspace and a reward acknowledgement dialog, and fixed-pose artwork keep the personal reward loop demonstrable. Accounts, households, large inventories, detailed stats, reward chests, live 3D movement, and recurrence remain outside this build. White tank-top underlayers replace gray starting shirts by learner request.
 
 ## Decisions and Open Issues
 - Learner accepted the stack, fixed-pose 3D-looking artwork, Male/Female choices mapped to body bases, independent hairstyles, and the starter appearance/shop counts.
@@ -197,3 +204,5 @@ Single browser save, small local catalogs, one dashboard with dialog windows, an
 - **Early build investigation:** separate long hair from the bald bases, fit both hairstyles and clothing to each base, and supply meaningful eye/expression changes. Asset support remains to be completed and verified; a failed investigation requires a learner decision before changing the PRD.
 - **Early setup verification:** compatible package versions, npm access, and available browser testing. No app scaffold, installation, or production code has been created in this planning step.
 - Build learning/fast mode remains for `5-build`. Optional public deployment remains for shipping.
+
+Successful purchases emit a purchase event, play a synthesized register cha-ching instead of the button tick, and open an item dialog with picture, name, description, Equip, Wardrobe and Close. Equip uses the existing ownership/category guard. New item IDs accumulate independently of equipment and clear together only on opening the wardrobe; yellow counters appear on wardrobe entry buttons. Rejected purchases never emit a purchase event or add unread items.
