@@ -1,0 +1,47 @@
+import type { Player } from '../types.ts';
+import { quests } from '../data/quests.ts';
+import { cosmetics } from '../data/cosmetics.ts';
+export const SAVE_KEY='level-up:save:v1';
+type StoragePort=Pick<Storage,'getItem'|'setItem'>;
+export type LoadResult={status:'empty'|'ready';player:Player|null}|{status:'invalid'|'unavailable';player:null};
+const record=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
+const oneOf=(v:unknown,choices:string[])=>typeof v==='string'&&choices.includes(v);
+const ids=(v:unknown,allowed:string[]):v is string[]=>Array.isArray(v)&&v.every(id=>oneOf(id,allowed))&&new Set(v).size===v.length;
+export function validPlayer(v:unknown):v is Player {
+  if(!record(v)||typeof v.name!=='string'||!v.name.trim()||!oneOf(v.gender,['male','female'])||v.bodyId!==(v.gender==='male'?'base-a':'base-b'))return false;
+  if(!oneOf(v.hairStyleId,['short-swept','long'])||!oneOf(v.hairColorId,['brown','black','blonde'])||!oneOf(v.eyeColorId,['brown','blue','green'])||!oneOf(v.expressionId,['smile','neutral']))return false;
+  if(![v.totalXp,v.coins].every(n=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0))return false;
+  if(!ids(v.activeQuestIds,quests.map(q=>q.id))||!ids(v.ownedItemIds,cosmetics.map(c=>c.id))||!ids(v.newItemIds,v.ownedItemIds)||!record(v.equipped))return false;
+  if(!ids(v.favoriteQuestIds,quests.map(q=>q.id)))return false;
+  if(!record(v.questCompletions)||!Object.entries(v.questCompletions).every(([id,count])=>quests.some(q=>q.id===id)&&typeof count==='number'&&Number.isSafeInteger(count)&&count>=0))return false;
+  for(const slot of ['shirt','pants','hat','shoes'] as const){
+    const id=v.equipped[slot];
+    if((slot==='shirt'||slot==='pants')&&id==='starter')continue;
+    if((slot==='hat'||slot==='shoes')&&id===null)continue;
+    if(typeof id!=='string'||!v.ownedItemIds.includes(id)||!cosmetics.some(c=>c.id===id&&c.slot===slot))return false;
+  }
+  return true;
+}
+export function loadPlayer(storage:StoragePort):LoadResult {
+  let raw:string|null;
+  try{raw=storage.getItem(SAVE_KEY)}catch{return {status:'unavailable',player:null}}
+  if(raw===null)return {status:'empty',player:null};
+  try{
+    const data:unknown=JSON.parse(raw);
+    if(!record(data)||data.schemaVersion!==1||!record(data.player))return {status:'invalid',player:null};
+    // Older saves have no completion history; preserve progress without inventing counts.
+    const player={...data.player,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
+    if(!validPlayer(player))return {status:'invalid',player:null};
+    return {status:'ready',player};
+  }catch{return {status:'invalid',player:null}}
+}
+export function savePlayer(storage:StoragePort,player:Player):boolean {
+  if(!validPlayer(player))return false;
+  try{storage.setItem(SAVE_KEY,JSON.stringify({schemaVersion:1,player}));return true}catch{return false}
+}
+export function loadBrowserPlayer():LoadResult {
+  try{return loadPlayer(window.localStorage)}catch{return {status:'unavailable',player:null}}
+}
+export function saveBrowserPlayer(player:Player):boolean {
+  try{return savePlayer(window.localStorage,player)}catch{return false}
+}

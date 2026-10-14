@@ -11,7 +11,7 @@ npm ci
 npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 
-Open http://127.0.0.1:5173. Keep the same hostname and port once local saving is implemented.
+Open http://127.0.0.1:5173. Keep the same hostname and port to access the same browser save.
 
 ```bash
 npm run build
@@ -19,9 +19,9 @@ npm run build
 
 ## Current build step
 
-Character setup, catalog browsing/search, daily quests, XP/coin rewards, level-gated purchases, and the owned-item wardrobe are implemented. Progress is currently in memory; browser saving is the next build step. Refresh starts over for now.
+Character setup, catalog browsing/search, daily quests, XP/coin rewards, level-gated purchases, and the owned-item wardrobe are implemented. Progress saves automatically in this browser on this device. Refresh restores your character, unfinished quests, XP, coins, owned clothes, outfit, and unread wardrobe count.
 
-Try adding Do the dishes, Clean your room, and Wash and put away laundry from Home improvement. Complete those tasks to reach level 2 with 30 coins, buy Emerald tee in the shop, then use Edit clothes to select it and Confirm outfit. Purchases do not automatically equip. Wardrobe Cancel restores the prior outfit. Character editing preserves earned progress.
+Try adding Do the dishes, Clean your room, and Wash and put away laundry from Home improvement. Complete those tasks to reach level 2 with 55 coins, buy Emerald tee in the shop, then use Edit clothes to select it and Confirm outfit. Purchases do not automatically equip. Wardrobe Cancel restores the prior outfit. Character editing preserves earned progress.
 
 Known character/clothing edge imperfections are deferred for later photo-editor refinement.
 
@@ -47,3 +47,9 @@ Character raster artwork was generated with the built-in image-generation tool, 
 ## Planning and progress
 
 Canonical scope, PRD, technical spec and build checklist are in `devpost/`. Personal learner context and local credential files are ignored. A demo video and public GitHub repository are required for the hackathon; publishing is a later step.
+
+## Local saves and recovery
+
+Use the same browser and address (`http://127.0.0.1:5173`) when returning. Other browsers, private windows, hosts or ports have separate storage. Clearing site data removes progress; there is no cloud backup or cross-device sync. If saving fails, an on-screen warning offers Retry saving while the current session stays usable. An unreadable save is preserved until you explicitly choose Start fresh and create a new character.
+
+For the demo, leave an unfinished quest and equip a purchased shirt, then refresh to show everything restored. To check narrow layout, resize the browser and open the quest catalog, shop and wardrobe. Character/clothing image polish remains deferred.

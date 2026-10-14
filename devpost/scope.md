@@ -3,7 +3,7 @@ doc: scope
 status: approved
 ---
 
-# Level Up — Working Title
+# Level Up — Scope
 
 A gamified to-do list where positive real-life activities earn progress and cosmetics for a personalized cartoon character.
 
@@ -19,7 +19,9 @@ Open the quest catalog, add activities to daily quests, do them in real life, th
 Completion is based on honesty. Completed quests leave the active list and can be added again manually when needed. Daily quests persist until completed; they do not reset each day or automatically recur.
 
 ## Inspiration & Identity
-The learner's attached Canva mockup, titled “Personal Growth,” is the visual reference; no public reference URL was supplied. It shows a friendly full-body 3D cartoon human, rounded gray dashboard panels, and bright green progress accents. The character can resemble the player or act as their personal companion. Everyone starts in a plain white tank top and gray pants, with a few initial appearance choices; earned cosmetics provide later personalization.
+The learner's attached Canva mockup, titled “Personal Growth,” is the character-style reference; no public reference URL was supplied. It shows a friendly full-body 3D cartoon human, rounded gray dashboard panels, and bright green progress accents. The character can resemble the player or act as their personal companion. Everyone starts in a plain white tank top and gray pants, with a few initial appearance choices; earned cosmetics provide later personalization.
+
+The current interface uses the later blue/yellow/purple pixel-arcade reference, while keeping smooth character artwork and the white player grid.
 
 ## Why This Matters to the Learner
 The learner sometimes lacks motivation to do everyday things. They want to make positive actions fun by giving them visible rewards and character progression.
@@ -36,11 +38,12 @@ The demonstrable moment is completing a quest, seeing rewards and progress updat
 - Quest completion awards XP and coins, removes the quest, and advances level progress.
 - A small cosmetic shop: coins purchase items, some items require a certain level, and equipped items visibly change the character.
 - Saved character, quest, and reward progress between visits.
+- Favorite quest shortcuts and simple per-quest skill levels/counts.
+- Level-up coin bonuses and distinct completion/purchase/advancement feedback.
 
-Exact reward amounts, level thresholds, customization options, cosmetic presentation, and save behavior will be defined in the PRD and technical spec.
+Current reward amounts, level thresholds, customization options, cosmetics and save behavior are defined in the PRD and technical spec.
 
 ## Later
-- Favorites for quickly finding frequently used catalog quests.
 - An ongoing quest log separate from dashboard daily quests.
 - Detailed personal skill stats.
 - Achievements and milestone reward chests containing random cosmetics. The broader vision includes a large collection, rare duplicates, and potentially converting duplicates into coins.

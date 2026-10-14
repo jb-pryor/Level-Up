@@ -19,14 +19,14 @@ Build mode: fast
   Learner check: Open `http://127.0.0.1:5173`, create a character, switch Male/Female and both hairstyles, try colors/expressions, and report fitting or layout problems. Check the development clothing preview on both bodies.
   Commit: `Add character creation and fitted avatar renderer`
 
-- [ ] **2. Complete quests to unlock, buy, and wear rewards**
+- [x] **2. Complete quests to unlock, buy, and wear rewards**
   Becomes usable: The real catalog-to-quest-to-reward loop, including leveling, shopping, and the hanger-accessed wardrobe.
   Why now: Delivers the distinctive purpose immediately after the character risk is resolved, rather than leaving rewards until final polish.
   PRD ref: `prd.md > Quest Catalog`, `prd.md > Daily Quests and Completion`, `prd.md > XP, Levels, and Coins`, `prd.md > Shop`, `prd.md > Wardrobe`
   Spec ref: `spec.md > Quest Catalog`, `spec.md > Daily Quests`, `spec.md > Shop`, `spec.md > Wardrobe`, `spec.md > Player Rules and Save Adapter`, `spec.md > Data Model`
   Build: Add the 15-quest starter catalog with category search, daily quest controls and duplicate errors; implement guarded reward/purchase/equip actions, player summary, feedback, six-item shop, wardrobe and accessible dialogs. Three ordinary completions must fund the level-2 green shirt; purchases do not automatically equip.
   Verify (mechanical): Run focused Node reward/purchase/equip tests and production build. Verify duplicate completion/purchase guards, removal without rewards, re-add, search, level locks, affordability, and visible equipment changes. Check dialog keyboard behavior through an available browser or record learner-assisted evidence.
-  Learner check: Add three ordinary quests, check them off, confirm level 2/30 coins, buy the green shirt, equip it from the hanger, and try a duplicate add and deleting an unfinished quest.
+  Learner check: Add three ordinary quests, check them off, confirm level 2/55 coins, buy the green shirt, equip it from the hanger, and try a duplicate add and deleting an unfinished quest.
   Commit: `Add quests rewards shop and wardrobe`
 
 - [ ] **3. Restore progress and finish the complete experience**
@@ -43,7 +43,7 @@ Build mode: fast
 
 - [x] Early usable behavior explored — after slice 1; learner tried character/wardrobe screens, requested layout and styling changes, and confirmed the revised appearance looks good. Character raster cleanup explicitly deferred.
 - [x] Integrated reward journey explored — learner tested rewards, purchases and clothing, iterated on animation/sound/theme, and confirmed ready to move on.
-- [ ] Final kick-the-tires exploration and feedback completed — after slice 3
+- [ ] Final kick-the-tires exploration and feedback completed — after slice 3; saving confirmed by learner, UI revisions incorporated, full keyboard/narrow-screen review pending
 
 ## Final Review
 
@@ -115,3 +115,31 @@ Activity mode: not established
 - Removed redundant shop wardrobe button; retained player hanger and purchase-dialog Wardrobe access. Added playful quest-specific roast descriptions and completion messages for all 15 quests, plus level-up flavor; objectives and rewards stay unchanged.
 
 - Learner approved the current experience and requested proceeding to persistence. Slice 2 verification passes (14 tests and production build); its required Git checkpoint is pending because this session cannot write Git metadata.
+
+- Slice 2 checkpoint verified: `34b1db2 Add quests rewards shop and wardrobe`. Proceeding to same-device saving in slice 3.
+
+- Slice 3 implementation: versioned localStorage save/load validates appearance, safe balances, quest/ownership/unread IDs and matching owned equipment. Storage failures show a retry warning; unreadable saves stay untouched until explicit fresh-start recovery. Save round-trip, invalid-data and failure tests pass; all 18 tests and production build pass. Browser refresh, responsive layout and final interaction verification remain learner-assisted; final review and slice-3 commit pending.
+
+- Learner confirmed refresh restoration works. Catalog refinement removes add-status paragraphs, keeps a fixed Added/disabled button state, and sorts active quests below available quests in addition order within category/search results. Final visual review continues.
+
+- Added daily-quest pagination at five quests per page, with previous/next controls and page count. Removing/completing the last quest on a page clamps to the last remaining page. Total active count and saved quest ordering are preserved.
+
+- Daily quest panel reserves five fixed row slots, including shorter pages and the empty state. Hidden row spacers prevent panel shrinking; pagination reserves the same height with or without arrows. Production build passes.
+
+- Added requested centered level-up acknowledgement dialog with 25 bonus coins per gained level, while retaining character orbit effects and existing fanfare. Bonus is awarded once in quest completion rules and saved immediately; reopening a save grants no extra bonus. Three ordinary quests now yield 55 coins (30 quest coins plus 25 level bonus). Mystery boxes remain deferred. All 18 tests/build pass.
+
+- Level advancement popup now enlarges the original blue/purple arcade banner with yellow heading, level, coin reward and Close. Removed duplicate small banner over player; retained orbit/aura effects and fanfare.
+
+- Learner expanded scope with simple per-quest skill stats: saved completion counts, 1 skill XP per completion, level every five completions, bars and hover/focus counts. Added animated left-edge launcher and right-hand stats tab; active quest badge is green. Older saves migrate with empty stats while keeping existing progress. Stats/counter/migration tests and build pass; learner visual review pending.
+
+- Replaced daily quest pagination per learner request: all active quests appear in one growing list. List and empty state reserve at least five row heights, so zero/one quest never shrinks the panel below the five-quest size. Removed page controls/state and invisible placeholder rows.
+
+- Desktop player card now sticks at a vertically centered scroll position using its measured height; ResizeObserver tracks responsive size changes. Stacked mobile layout stays in normal flow. Build passes; learner scroll verification pending.
+
+- Added learner-requested three-column desktop layout and sticky catalog/favorites rail. Favorites persist independently of active quests; catalog toggle adds/removes shortcuts, and shortcuts change Added back to Add quest after completion. Older saves migrate with empty favorites. Build and favorite/re-add/save tests pass; visual layout review remains learner-assisted.
+
+- Created original 16-grid gold pixel coin SVG with purple outline and yellow highlights, reused through CoinIcon in wallet, shop/prices/purchase controls, quest rewards, level bonuses and animated coin particles. Build passes.
+
+- Daily quests complete only through the checkbox; task text no longer labels/toggles it. Added drag/drop reordering with destination highlighting and Alt+Up/Down keyboard movement. Reducer validates both active IDs; reordering preserves rewards/counts and persists through the existing save. All 24 tests/build pass. Desktop drag interaction awaits learner review.
+
+- Planning cleanup consolidated current behavior into PRD/scope/spec: three-column sticky layout, saved favorites, simple skill stats, checkbox-only completion/reordering, five-row minimum without pagination, 25-coin level bonuses, purchase dialog/new-item counter, pixel coin and distinct sounds. Corrected obsolete component/file references and old reward totals. Persistence and refinements await Git checkpoint; final review/app map remain incomplete.

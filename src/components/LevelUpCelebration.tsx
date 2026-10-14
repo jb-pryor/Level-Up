@@ -1,20 +1,25 @@
+import { CoinIcon } from './CoinIcon';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { playSound } from '../game/soundEffects';
+import { Modal } from './Modal';
 
 export function LevelUpCelebration({ level }: { level: number }) {
   const previous=useRef(level);
   const [celebration,setCelebration]=useState<{level:number;id:number;reduced:boolean}|null>(null);
+  const [advancement,setAdvancement]=useState<{level:number;coins:number}|null>(null);
   useEffect(()=>{
     const advanced=level>previous.current;
+    const levelsGained=level-previous.current;
     previous.current=level;
     if(!advanced)return;
     playSound('level');
+    setAdvancement({level,coins:levelsGained*25});
     setCelebration({level,id:Date.now(),reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches});
     const timer=setTimeout(()=>setCelebration(null),2400);
     return()=>clearTimeout(timer);
   },[level]);
-  if(!celebration)return null;
-  return <div className={`level-up-celebration ${celebration.reduced?'reduced-motion':''}`} key={celebration.id}>
+  if(!celebration&&!advancement)return null;
+  return <>{advancement&&<Modal title="Level up!" className="level-advancement-dialog" onClose={()=>setAdvancement(null)}><div className="level-up-banner level-up-banner-expanded"><span>LEVEL UP!</span><strong>LEVEL {advancement.level}</strong><small>Slightly less NPC. Nicely done.</small><p className="level-bonus"><CoinIcon/> +{advancement.coins} GOLD COINS</p><button className="primary" onClick={()=>setAdvancement(null)}>Close</button></div></Modal>}{celebration&&<div className={`level-up-celebration ${celebration.reduced?'reduced-motion':''}`} key={celebration.id}>
     <div className="level-up-visuals" aria-hidden="true"><div className="level-up-aura"/><div className="level-up-ring ring-one"/><div className="level-up-ring ring-two"/>
       {Array.from({length:18},(_,i)=>{
         const angle=i*Math.PI*2/18;
@@ -24,6 +29,5 @@ export function LevelUpCelebration({ level }: { level: number }) {
       })}
       <span className="level-up-xp xp-left">✦ XP</span><span className="level-up-xp xp-right">XP ✦</span>
     </div>
-    <div className="level-up-banner" role="status"><span>LEVEL UP!</span><strong>LEVEL {celebration.level}</strong><small>Slightly less NPC. Nicely done.</small></div>
-  </div>;
+  </div>}</>;
 }

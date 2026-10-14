@@ -1,5 +1,5 @@
 // Original synthesized arcade effects. No external samples or audio downloads.
-export type SoundName = 'click' | 'purchase' | 'quest' | 'transfer' | 'level';
+export type SoundName = 'click' | 'reorder' | 'add-quest' | 'purchase' | 'quest' | 'transfer' | 'level';
 let context: AudioContext | null=null;
 let master: GainNode | null=null;
 let enabled=true;
@@ -39,6 +39,18 @@ export function playSound(name:SoundName){
     note(1700,now,.019,.24,'square',420);
     note(850,now,.028,.13,'triangle',190);
     note(210,now,.016,.08,'sine',110);
+    return;
+  }
+  if(name==='reorder'){
+    // Rounded two-syllable budoop for a task finding its new place.
+    note(240,now,.065,.14,'sine',170);
+    note(390,now+.075,.13,.16,'sine',560);
+    note(780,now+.08,.09,.025,'triangle');
+    return;
+  }
+  if(name==='add-quest'){
+    // A bright two-note quest-book chime with soft bell overtones.
+    [880,1318.51].forEach((f,i)=>{note(f,now+i*.09,.32,.13,'sine');note(f*2,now+i*.09,.2,.035,'sine');note(f*3,now+i*.09,.12,.012,'sine')});
     return;
   }
   if(name==='purchase'){

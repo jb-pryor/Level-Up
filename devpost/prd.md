@@ -19,10 +19,12 @@ Sources: `scope.md > Who It's For`, `The Unique Kernel`, and `The POC Boundary`.
 Sources: `scope.md > The Core Loop` and `What "Working" Looks Like`.
 
 ## Screens and Layout
-- **Character setup:** Character preview on the left; name, gender, and appearance controls on the right. Changes update the preview before setup is finished.
-- **Dashboard:** Character on the left. Name, level, and XP bar at the top center. Daily quests to the right of the character in a checkable to-do list. The coin wallet sits in the top-right header, immediately to the right of Edit character. The dashboard has no greeting or Your next chapter heading; its player and quest panels start near the top. The character scales with viewport height to reduce scrolling. Quest Catalog and Shop controls sit directly above the right-hand daily-quest panel. Quest Catalog opens the larger book popup; Shop replaces the panel inline. Daily quests and Back to quests return to the list. A clothing-hanger button below the character replaces the daily quest panel with the wardrobe. Confirming an outfit returns that panel to quests.
-- **Shared right-hand panel:** Daily quests, shop, and wardrobe are mutually exclusive views in the same area. Quest Catalog opens a larger book popup over the dashboard and returns to the underlying view when closed. Switching views preserves player progress. Completion rewards retain their acknowledgement dialog. Questbook and personal stats buttons are deferred with their features.
-Source: `scope.md > The POC Boundary`.
+- **Character setup:** Smooth cartoon preview on the left; name, Male/Female and appearance controls on the right.
+- **Desktop dashboard:** Three columns: sticky player card on the left, central workspace, and slim sticky catalog/favorites rail on the right. The player card stays vertically centered when space permits. The rail stays within the viewport and scrolls internally if favorites are long. Smaller screens stack the layout.
+- **Header:** Level Up branding, centered tagline, sound toggle, Edit character, and coin wallet. No dashboard greeting.
+- **Central workspace:** Daily quests, Shop and Personal Stats tabs. Edit clothes under the player opens the wardrobe in this same workspace; Confirm/Cancel return to quests. No separate Personal Stats launcher or Outfit Preview badge.
+- **Quest Catalog:** The right-rail button opens a larger book dialog over the current view. Closing it returns to that view. The empty daily-list Browse quests button also opens it.
+- **Dialogs:** Quest completion, level advancement and purchase each have explicit close controls. Navigation does not discard saved progress.
 
 ## Look and Feel
 Use the learner's Canva mockup as the character-style reference: a friendly full-body human with a 3D cartoon appearance. This describes the visual appearance, not a requirement for a rotatable character or a particular rendering technology.
@@ -43,52 +45,52 @@ Acceptance criteria:
 Source: `scope.md > The POC Boundary`.
 
 ### Quest Catalog
-Show the catalog as a smooth, non-pixelated open quest book: parchment pages, a leather-like cover, a quest list on the left, and selected quest details/objective/XP/add action on the right. Home, heart (health), and people (social positivity) bookmark tabs run down its right edge. Keep search by quest wording within the selected category. Each row shows a quest name, XP reward, and Add action. Bigger or harder tasks receive larger rewards. Search filters the selected category; clearing it restores that category's list.
+Use an open-book layout in the arcade theme, with category bookmarks for Home improvement, Health and Social positivity. The left page lists quests and XP; the right page shows the selected quest's description, objective, reward, Favorite toggle and Add quest button. Search is case-insensitive within the selected category. Descriptions use playful roast humor while objectives remain clear.
 
 Acceptance criteria:
-- Changing categories displays the relevant quests.
-- Searching for a listed task finds it; no matches shows a clear empty result.
-- Adding a quest makes it appear in daily quests with the same name and XP reward.
-- Trying to add an existing daily quest shows a small contextual message beside the catalog Add action without creating a second copy. Do not show a large red warning bar on the dashboard.
-- Completing or deleting a quest allows it to be added again.
-Source: `scope.md > The Core Loop` and `The POC Boundary`.
+- The 15 starter quests are divided evenly across the three categories; search/no-results states work.
+- Add quest creates one active occurrence. The button becomes disabled **Added ✓**, without separate added-status paragraphs or a dashboard warning banner.
+- Active quests move below available quests in the catalog, ordered by their position in the daily list.
+- Completing/deleting makes Add quest available again.
+- Favorite/unfavorite updates the right-rail shortcuts without changing active quests or rewards.
 
 ### Daily Quests and Completion
-Display each quest with its name, XP reward, completion checkbox, and delete button. Show XP alone on quest rows; coins remain part of the reward. A centered completion dialog stays open until dismissed with its Close button: “Quest: Clean your room, completed!” and “Reward: +35 XP · +10 coins.” While the dialog is open, displayed XP and coins stay at their previous values. Closing it releases a stronger burst of green XP particles with trails from the popup toward the XP bar as it fills; coin particles travel toward the wallet while its number counts up quickly. The XP bar and wallet pulse as rewards arrive. A level-up fills the current bar, rolls over, and carries remaining XP forward. Reduced-motion users receive immediate values and the popup without particles.
+Show the full active list without pagination. Reserve at least five row heights even with zero or one quest; grow for longer lists. Each row shows name, XP, checkbox and delete control. Show only XP on the row.
+
+Only the checkbox completes a quest; clicking its name does not. Drag a row above/below another to reorder it. Focused task names also support Alt+Up/Down. Reordering saves the order and earns nothing. A short budoop plays only when the order changes.
+
+A centered quest-completion dialog shows the task name, a task-specific humorous message, XP and coins. It stays open until dismissed. Displayed XP/wallet values wait until Close, then green XP trails flow to the bar and pixel coins fly to the wallet while values count up. The bar carries XP overflow through level rollover. Actual rewards are awarded and saved immediately, independently of animation. Reduced-motion mode skips moving particles and count animation.
 
 Acceptance criteria:
-- Checking a quest removes it, awards its XP and coins once, and visibly updates XP progress and coin balance.
-- Repeated clicks on the same completion cannot award rewards twice.
-- Deleting removes a quest without rewards and does not alter existing progress.
-- Unfinished quests stay through later days and return visits. Nothing resets at midnight or automatically recurs.
-- An empty list invites the player to add a quest from the catalog.
-- No real-life proof or verification is requested; completion is based on honesty.
-Source: `scope.md > The Core Loop` and `Explicitly Cut`.
+- Completion removes the quest and awards its rewards and one skill XP exactly once.
+- Repeated completion cannot duplicate rewards; deletion and reordering award nothing.
+- Unfinished quests persist across days and visits; no midnight reset or automatic recurrence.
+- Empty state links to the catalog.
+- Completion uses honesty, without real-life proof.
 
 ### XP, Levels, and Coins
-XP advances levels; coins are spent on cosmetics without reducing XP or level. Level requirements and coin prices are separate conditions for purchases. The learner wants approximately three ordinary quests to reach level 2 and afford a first cosmetic. Larger quests may achieve this sooner.
+Character XP determines level; coins buy cosmetics without reducing XP. Each 100 character XP gains a level, preserving overflow.
 
-Agreed starter values:
-- Small quest: 15 XP and 5 coins; ordinary quest: 35 XP and 10 coins; larger quest: 60 XP and 20 coins.
-- Each level requires 100 more XP. The bar displays progress within the current level, preserving overflow.
-- A first purchasable cosmetic costs 30 coins and requires level 2. Three ordinary quests yield 105 XP and 30 coins, reaching level 2 with 5 XP toward level 3.
-- The shop also contains an item requiring level 3 to demonstrate later unlocks.
+Starter quest rewards are 15 XP/5 coins, 35 XP/10 coins, or 60 XP/20 coins. Each crossed level adds **25 bonus coins**. Three ordinary quests yield 105 XP, level 2 with 5 overflow XP, and **55 coins** (30 quest coins plus 25 level bonus). Emerald tee costs 30 coins and requires level 2; some cosmetics require level 3.
 
 Acceptance criteria:
-- XP earned across the level threshold increments the level and preserves remaining XP.
-- A level-up updates eligible shop items and, as the displayed XP crosses the new level after reward dismissal, plays a roughly 2.4-second character-centered celebration: hovering/swirl XP sparks, aura, expanding rings, and a LEVEL UP/new-level banner. Reduced-motion mode shows a static banner.
-- Purchases deduct only coins; XP and level remain unchanged.
-Source: `scope.md > The Unique Kernel` and `What "Working" Looks Like`.
+- Level bonuses are awarded once by completion, saved immediately, and never re-awarded by refresh or dialog dismissal.
+- When displayed XP crosses a level after quest acknowledgement, retain the character aura/rings/orbiting XP and fanfare, and open an enlarged blue/purple level-up banner centered on screen. It shows level, bonus coins and Close; no duplicate small banner over the player.
+- Reduced-motion mode retains understandable static feedback.
+- Purchases alter only coins and ownership.
 
 ### Shop
-Show a small collection using Shirts, Pants, Hats, Shoes tabs matching the wardrobe interface. Locked items use entirely grayed-out anonymous cards showing only a mystery/lock symbol and required level, with no actual image, item name, description, or price. Reaching the required level reveals the appearance, name, description, price, and purchase controls. Unlocked but unaffordable items remain visible. Buying adds it to the wardrobe rather than automatically equipping it.
+Use Shirts, Pants, Hats and Shoes tabs. Six paid starter cosmetics are available: Emerald tee (30 coins/level 2), Blue horizon (45/3), Midnight pants (30/2), Trail pants (45/3), Fresh sneakers (40/2), Quest cap (50/3).
+
+Locked cards are gray and anonymous, showing a mystery/lock symbol and unlock level, without actual art, name, description or price. Unlocked items reveal those details. Unaffordable and owned items remain visible with disabled purchase controls.
 
 Acceptance criteria:
-- Items below the player's level requirement visibly state the required level and cannot be bought.
-- Items the player cannot afford visibly indicate insufficient coins and cannot be bought.
-- A successful purchase deducts the price once and marks the item as owned.
-- Owned items cannot be bought again; repeated purchase clicks do not double-charge.
-Source: `scope.md > The POC Boundary`.
+- Successful purchase deducts coins once and adds ownership without automatically equipping.
+- It plays cha-ching instead of the regular click and opens an item-picture/name/description dialog with Equip, Wardrobe and Close.
+- Equip applies the purchased item to its slot; Wardrobe opens clothing editing; Close leaves it owned but unequipped.
+- Each purchased item adds to a yellow new-item counter on wardrobe entry buttons. Equip/Close retain the count; opening the wardrobe clears it.
+- Locked, unaffordable and duplicate purchases cannot charge coins.
+- No redundant Open wardrobe button below shop cards.
 
 ### Wardrobe
 The hanger button replaces the daily quest area with clothing editing. Four tabs are ordered Shirts, Pants, Hats, Shoes. Each tab displays clickable item pictures with names below them; selecting an item reveals its description and previews it on the character. Confirm outfit applies the selection and restores quests; Cancel restores the previously equipped outfit. No clothing dropdowns. Equip one owned item per category; changes visibly update the character. Retain the starting white tank top and gray pants as available choices. A no-hat choice and a no-shoes choice preserve the unadorned starting character.
@@ -101,22 +103,23 @@ Acceptance criteria:
 Source: `scope.md > The POC Boundary` and `Inspiration & Identity`.
 
 ### Same-Device Progress
-No sign-in is required. Preserve the name, appearance, daily quests, XP, level, coins, owned cosmetics, and equipped outfit in the same browser on the same device.
+Automatically save appearance/name, ordered active quests, total XP, coins, owned items, equipment, unread-item IDs, favorites and per-quest completion counts in the current browser. Level and skill levels are derived.
 
 Acceptance criteria:
-- Reloading or reopening in that browser restores the saved state without repeating setup.
-- No cross-device access or synchronization is promised.
-- Clearing browser data may remove progress; a brief setup note explains the local saving boundary.
-- If progress cannot be saved, show a clear warning that current changes may not survive reopening rather than claiming a successful save.
-Source: `scope.md > What "Working" Looks Like`.
+- Refresh/reopen at the same address restores progress without setup or replaying rewards.
+- No cross-device or concurrent cross-tab synchronization is promised; clearing site data can remove progress.
+- Storage failure warns that session changes may be lost and offers Retry saving.
+- An unreadable/unsupported save stays untouched until the user chooses Start fresh and creates a replacement character.
+- Existing saves without new fields preserve earlier progress and start favorites/skill history empty. Historical completions cannot be reconstructed.
+- Sound preference and view/draft/dialog selection are session-only.
 
 ## Product Decisions
 - Keep the main loop personal; households are not needed to prove it.
 - Daily quests persist until completed or deleted, reflecting when a task actually needs doing.
 - Show only XP on quest rows for a clean display; reveal both XP and coins after completion.
-- Block duplicate active quests with the learner's specified message.
+- Prevent duplicate active quests with a disabled Added button; reducer guards remain.
 - Allow deletion without rewards.
-- Separate purchasing from equipping through a hanger-accessed wardrobe.
+- Separate purchase from equip; offer immediate Equip in the purchase dialog as well as the hanger wardrobe.
 - Include shirts, pants, shoes, and hats; defer jewelry and layered jackets.
 - Aim for the first level-up and affordable cosmetic after roughly three ordinary quests.
 - Starter rewards are 15 XP/5 coins, 35 XP/10 coins, and 60 XP/20 coins; each level requires 100 additional XP, and the first cosmetic costs 30 coins at level 2.
@@ -126,10 +129,10 @@ Source: `scope.md > What "Working" Looks Like`.
 - During build feedback, replaced the earlier independent gender/body choices with Male and Female options mapped to their respective bases. Hairstyles remain available for either character. The second base should have a subtly narrower waist and fuller hips, matching the existing cartoon style, with long hair as its initial presentation. Clothing must fit each base separately.
 
 ## What We're Building
-Character setup, one dashboard, catalog tabs and search, persistent daily quests, XP and coin rewards, levels, a small level-gated shop, a wardrobe with visible outfit changes, and same-device saving. The demo must show adding and completing quests, reaching an unlock, purchasing, equipping, and restoring saved progress.
+Character setup, one dashboard, catalog tabs and search, persistent daily quests, XP and coin rewards, levels, a small level-gated shop, a wardrobe with visible outfit changes, saved favorites, per-quest skill stats, and same-device saving. The demo must show adding and completing quests, reaching an unlock, purchasing, equipping, and restoring saved progress.
 
 ## Deferred From the POC
-Questbook, favorites, detailed personal stats, achievements, random reward chests, large catalogs, households/parties, leaderboards, jewelry, layered jackets, and cross-device accounts. They expand the personal reward loop rather than being required to demonstrate it.
+Questbook, multi-attribute personal stats beyond per-quest skills, milestone achievements, random reward chests, large catalogs, households/parties, leaderboards, jewelry, layered jackets, and cross-device accounts. They expand the personal reward loop rather than being required to demonstrate it.
 
 ## Possible Later Enhancements
 Expand the quest and cosmetic collections. Add milestone reward chests and shared household contribution tracking after the personal experience works.
@@ -138,15 +141,19 @@ Expand the quest and cosmetic collections. Add milestone reward chests and share
 No creature transformations in this version; the learner wants to preserve an appealing human character. No automatic recurrence or daily reset. No verification of real-world task completion. No public deployment requirement or full production account system.
 
 ## Sound Feedback
-
-Original arcade-style effects accompany button/tab clicks, quest completion, reward transfer after closing the acknowledgement dialog, and actual level-up celebrations. The click should have a short dry block-game feel; reward collection uses rapid rising “dup-dup-dup” ticks. A header sound toggle mutes all effects. Sound must not affect earned rewards or block the app if unavailable.
+Original locally synthesized cues include regular button ticks, a two-note Add quest ding, task-reorder budoop, quest-completion chime, reward-transfer dup ticks, purchase cha-ching and level-up fanfare. A header toggle mutes all effects. No sound autoplays before user interaction, and unavailable audio must not block gameplay.
 
 ## States and Boundaries
-First use shows setup; returning use restores the dashboard. Empty daily quests point to the catalog. Search with no matches explains that nothing matched. Duplicate additions, missing names, locked items, insufficient coins, and save failures produce visible explanations. Completion, level-up, purchase, and equip actions produce visible feedback. Closing a window retains progress.
+First use shows setup; a valid save restores the dashboard. Empty daily quests invite catalog browsing. Search has a no-results state. Added quests, missing names, locked/unaffordable/owned items and storage errors have clear states. Reward dialogs acknowledge successful actions. Favorites persist after completion and can be re-added; skill XP advances independently of character XP.
 
 ## Asset Review Updates
-
-The learner requested white tank tops on both bases, replacing the initial gray-shirt direction, and explicitly authorized code-based silhouette cleanup. Cleaned PNGs are in `output/imagegen/clean-bases/`. The fixed-pose appearance is established, but clothing overlays and interchangeable hair must be fitted to these updated bases before the technical spec can claim support.
+Fixed-pose smooth cartoon artwork and fitted appearance/clothing layers are implemented. The learner deferred character cutout/overlay alignment polish for later photo-editor work. Keep original assets, preserve both body bases, and verify fit before expanding clothing.
 
 ## Open Questions
-- **Before technical spec approval:** Agree on the small appearance-option and cosmetic set, and verify that the desired cartoon character can support those visible changes within the proof-of-concept budget. Exact asset feasibility belongs in the technical plan; it must not silently downgrade the agreed character style.
+No unresolved product decision blocks the current proof of concept. Final responsive/keyboard/drag review, asset polish, code walkthrough/app map and shipping preparation remain. Expanding catalogs and mystery boxes are later decisions.
+
+## Personal Stats
+Each quest has its own skill name, level and progress bar. Every completion earns one skill XP; five completions gain a skill level. Level is 1 + floor(completions / 5), with progress completions % 5. Hover or keyboard focus shows lifetime completion count in a pixel tooltip. Access through the Personal Stats workspace tab. Skills grant no additional coins or character XP. Old saves start counts at zero without inventing history.
+
+## Favorite Quest Shortcuts
+The right rail contains Quest Catalog and all saved favorite quests. Each shortcut shows task name, XP, remove-favorite control and Add quest. Active favorites show disabled Added; completing or deleting re-enables Add quest. Adding uses the same quest sound and duplicate guard as the catalog. Unfavoriting never removes active tasks or progress.

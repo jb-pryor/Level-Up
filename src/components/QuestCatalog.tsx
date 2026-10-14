@@ -2,14 +2,20 @@ import { useState } from 'react';
 import type { Category, Player } from '../types';
 import { quests, questCategories } from '../data/quests';
 import { questHumor } from '../data/questHumor';
+import { playSound } from '../game/soundEffects';
 
 function CategoryIcon({category}:{category:Category}) {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{category==='home'?<><path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10M9 21v-7h6v7"/></>:category==='health'?<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>:<><circle cx="9" cy="7" r="3"/><path d="M3 21v-4a6 6 0 0 1 12 0v4M16 4a3 3 0 0 1 0 6M17 12a5 5 0 0 1 4 5v4"/></>}</svg>;
 }
-export function QuestCatalog({player,onAdd}:{player:Player;onAdd:(id:string)=>void}) {
+export function QuestCatalog({player,onAdd,onFavorite}:{player:Player;onAdd:(id:string)=>void;onFavorite:(id:string)=>void}) {
   const [category,setCategory]=useState<Category>('home'),[search,setSearch]=useState(''),[selectedId,setSelectedId]=useState<string|null>(null);
-  const [addStatus,setAddStatus]=useState<{id:string;message:string}|null>(null);
-  const filtered=quests.filter(q=>q.category===category&&q.name.toLowerCase().includes(search.trim().toLowerCase()));
+  const filtered=quests.filter(q=>q.category===category&&q.name.toLowerCase().includes(search.trim().toLowerCase())).sort((a,b)=>{
+    const aIndex=player.activeQuestIds.indexOf(a.id),bIndex=player.activeQuestIds.indexOf(b.id);
+    if(aIndex<0&&bIndex<0)return 0;
+    if(aIndex<0)return -1;
+    if(bIndex<0)return 1;
+    return aIndex-bIndex;
+  });
   const selected=filtered.find(q=>q.id===selectedId)??filtered[0];
   const categoryLabel=questCategories.find(c=>c.id===category)!.label;
   return <div className="quest-book">
@@ -20,7 +26,7 @@ export function QuestCatalog({player,onAdd}:{player:Player;onAdd:(id:string)=>vo
         {!filtered.length&&<p className="book-no-results">No quests match this search. Try another word or chapter.</p>}
         <span className="book-page-number">{category==='home'?'01':category==='health'?'03':'05'} / QUESTS</span>
       </section>
-      <section className="book-page book-right" aria-label="Quest details"><span className="book-chapter">YOUR NEXT MISSION</span>{selected?<><div className="book-detail-emblem"><CategoryIcon category={category}/></div><h3 className="book-detail-title">{selected.name}</h3><p className="book-description">{questHumor[selected.id]?.description}</p><div className="book-objective"><span>OBJECTIVE</span><p>{selected.name}</p></div><div className="book-reward"><span>COMPLETION REWARD</span><strong>✦ +{selected.xp} XP</strong></div><div className="book-add-area">{player.activeQuestIds.includes(selected.id)&&<p className="book-added">✓ Already in your daily quests</p>}<button className="primary book-add" onClick={()=>{setAddStatus({id:selected.id,message:player.activeQuestIds.includes(selected.id)?'This quest is already in your daily quests.':'Added to your daily quests!'});onAdd(selected.id)}}>Add quest <span>+</span></button><p className="book-add-feedback" role="status">{addStatus?.id===selected.id?addStatus.message:''}</p><p className="book-hint">Complete it in real life, then check it off.</p></div></>:<div className="book-detail-empty"><span>✧</span><p>A new quest is waiting to be discovered.</p></div>}
+      <section className="book-page book-right" aria-label="Quest details"><span className="book-chapter">YOUR NEXT MISSION</span>{selected?<><div className="book-detail-emblem"><CategoryIcon category={category}/></div><h3 className="book-detail-title">{selected.name}</h3><p className="book-description">{questHumor[selected.id]?.description}</p><div className="book-objective"><span>OBJECTIVE</span><p>{selected.name}</p></div><div className="book-reward"><span>COMPLETION REWARD</span><strong>✦ +{selected.xp} XP</strong></div><div className="book-add-area"><button className="quiet-button quest-favorite" aria-pressed={player.favoriteQuestIds.includes(selected.id)} onClick={()=>onFavorite(selected.id)}>{player.favoriteQuestIds.includes(selected.id)?'★ Favorited':'☆ Favorite quest'}</button><button className="primary book-add" data-sound="add-quest" disabled={player.activeQuestIds.includes(selected.id)} onClick={()=>{if(player.activeQuestIds.includes(selected.id))return;setSelectedId(selected.id);onAdd(selected.id);playSound('add-quest')}}>{player.activeQuestIds.includes(selected.id)?'Added':'Add quest'} <span>{player.activeQuestIds.includes(selected.id)?'✓':'+'}</span></button><p className="book-hint">Complete it in real life, then check it off.</p></div></>:<div className="book-detail-empty"><span>✧</span><p>A new quest is waiting to be discovered.</p></div>}
         <span className="book-page-number">{category==='home'?'02':category==='health'?'04':'06'} / DETAILS</span>
       </section>
     </div>

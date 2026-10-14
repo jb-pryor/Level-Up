@@ -82,3 +82,77 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .purchase-dialog > h3 { font-family: LevelPixel, monospace; color: #302099; font-size: 1.35rem; }
 .purchase-actions { display: flex; justify-content: center; gap: .7rem; flex-wrap: wrap; margin-top: 1.5rem; }
 .purchase-actions button { min-width: 110px; }
+
+.storage-warning { margin: 1rem auto; padding: 1rem; width: min(94%, 1280px); border: 3px solid #30219a; background: #ffeb74; color: #292163; line-height: 1.6; }
+.storage-warning button { margin: .5rem; }
+
+/* One growing list with space for at least five quest rows. */
+.daily-quest-card { --quest-row-height: 68px; --quest-row-gap: 12px; --quest-list-min-height: calc(5 * var(--quest-row-height) + 4 * var(--quest-row-gap)); }
+.daily-quest-card .daily-list { display: grid; grid-auto-rows: minmax(var(--quest-row-height), auto); align-content: start; min-height: var(--quest-list-min-height); gap: var(--quest-row-gap); margin-bottom: 0; }
+.daily-quest-card .daily-list li { min-height: var(--quest-row-height); margin-bottom: 0; }
+.daily-quest-card .empty-state { min-height: var(--quest-list-min-height); margin-bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+@media (max-width: 650px) { .daily-quest-card { --quest-row-height: 88px; } }
+
+/* Enlarged version of the original blue arcade level banner. */
+.game-modal.level-advancement-dialog { width: min(640px, calc(100vw - 40px)); padding: 0; background: #30219a; border: 4px solid #fff; box-shadow: 8px 8px 0 #b5adff; overflow: visible; }
+.level-advancement-dialog .modal-heading { position: absolute; right: 12px; top: 12px; z-index: 2; margin: 0; }
+.level-advancement-dialog .modal-heading h2 { display: none; }
+.level-advancement-dialog .level-up-banner-expanded { position: static; transform: none; width: 100%; border: 0; box-shadow: none; padding: 58px 24px 36px; animation: none; }
+.level-up-banner-expanded > span { font-size: clamp(36px, 7vw, 58px); }
+.level-up-banner-expanded > strong { font-size: 28px; margin-top: 22px; }
+.level-up-banner-expanded > small { font-size: 15px; margin-top: 18px; }
+.level-up-banner-expanded .level-bonus { font-family: LevelPixel, monospace; color: #ffeb39; font-size: 20px; margin: 32px 0; line-height: 1.6; }
+.level-up-banner-expanded .primary { margin: auto; min-width: 150px; justify-content: center; }
+.task-count { background: #d2f7b0; color: #28531e; border-color: #568342; }
+.player-card { position: relative; }
+.personal-stats-launch { position: absolute; left: -12px; top: 170px; z-index: 3; font-size: 12px; padding: 12px 10px; transition: transform .4s ease, opacity .4s ease; }
+.personal-stats-launch.stats-absorbed { transform: translateX(100px) scale(.65); opacity: 0; pointer-events: none; }
+.panel-nav:has(button:nth-child(4)) { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.skill-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.skill-card { position: relative; padding: 18px; background: #fffaf1; border: 2px solid #9690c1; box-shadow: 3px 3px 0 #d8d2e7; }
+.skill-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.skill-heading h3 { font-family: LevelPixel, monospace; font-size: 14px; color: #30219a; margin: 0; line-height: 1.6; }
+.skill-heading > span { color: #28531e; font-size: 11px; white-space: nowrap; }
+.skill-objective { color: #626780; font-size: 12px; margin: 12px 0; }
+.skill-track { height: 16px; border: 2px solid #8580be; background: #e3edff; }
+.skill-track > div { height: 100%; background: #99e85c; transition: width .4s ease; }
+.skill-progress { font-size: 11px; margin: 10px 0 0; color: #47752c; }
+.skill-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); z-index: 5; padding: 12px; background: #30219a; color: #ffeb39; border: 3px solid white; box-shadow: 4px 4px 0 #8d78b7; font: 12px/1.6 LevelPixel,monospace; white-space: nowrap; visibility: hidden; pointer-events: none; }
+.skill-card:hover .skill-tooltip,.skill-card:focus .skill-tooltip { visibility: visible; }
+@media(max-width:650px) { .skill-grid { grid-template-columns: 1fr; } .panel-nav:has(button:nth-child(4)) { grid-template-columns: repeat(2,minmax(0,1fr)); } .personal-stats-launch { left: 8px; top: 145px; } }
+@media(prefers-reduced-motion:reduce) { .personal-stats-launch,.skill-track > div { transition: none; } }
+
+/* Keep the desktop character centered while the right workspace scrolls. */
+@media (min-width: 651px) {
+  .dashboard-grid > .player-card { position: sticky; top: max(16px, calc(50svh - var(--player-card-height, 620px) / 2)); align-self: start; }
+}
+
+/* Three-column workspace with a compact catalog/favorites rail. */
+.dashboard { max-width: 1600px; padding-left: 24px; padding-right: 24px; }
+.dashboard-grid { grid-template-columns: minmax(245px, .8fr) minmax(0, 1.65fr) minmax(190px, .55fr); gap: 22px; }
+.quest-zone { min-width: 0; }
+.favorites-rail { align-self: start; background: #eef7ff; border: 4px solid #30219a; box-shadow: 6px 6px 0 #176da3; padding: 14px; }
+.rail-catalog { width: 100%; justify-content: center; font-size: 14px; padding: 15px 8px; line-height: 1.7; }
+.favorites-rail h2 { font: 16px/1.6 LevelPixel,monospace; margin: 24px 0 14px; color: #30219a; }
+.favorites-empty { font-size: 12px; line-height: 1.8; color: #626780; }
+.favorites-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.favorites-list li { padding: 12px; border: 2px solid #9690c1; background: #fffaf1; }
+.favorite-heading { display: flex; align-items: start; gap: 6px; justify-content: space-between; }
+.favorite-heading h3 { font-size: 12px; line-height: 1.6; margin: 0; }
+.favorite-remove { border: 0; padding: 0; color: #6951b0; background: transparent; font-size: 20px; }
+.favorite-xp { display: block; font-size: 11px; color: #47752c; margin: 10px 0; }
+.favorites-list .quiet-button { width: 100%; font-size: 12px; padding: 10px 5px; }
+.quest-favorite { margin-bottom: 16px; width: 100%; }
+@media(min-width:1101px) { .favorites-rail { position: sticky; top: 20px; max-height: calc(100svh - 40px); overflow-y: auto; scrollbar-width: thin; } }
+@media(max-width:1100px) and (min-width:651px) { .dashboard-grid { grid-template-columns: 260px minmax(0,1fr); } .favorites-rail { grid-column: 2; } }
+@media(max-width:650px) { .dashboard { padding-left: 16px; padding-right: 16px; } .dashboard-grid { grid-template-columns: minmax(0,1fr); } .favorites-rail { grid-row: 2; } }
+
+.pixel-coin { display: inline-block; width: 1.3em; height: 1.3em; flex-shrink: 0; vertical-align: -.25em; image-rendering: pixelated; }
+.reward-particle.coins { background: transparent; border: 0; box-shadow: none; width: 22px; height: 22px; padding: 0; }
+.reward-particle.coins .pixel-coin { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 4px #ffd83d99); }
+.daily-list li[draggable] { cursor: grab; }
+.daily-list .quest-check { cursor: inherit; }
+.quest-drag-label { user-select: none; }
+.daily-list li.quest-dragging { opacity: .45; cursor: grabbing; }
+.daily-list li.quest-drop-target { border-color: #30219a; box-shadow: 0 -4px 0 #ffeb39, 0 4px 0 #ffeb39; }
+.quest-check input { cursor: pointer; flex-shrink: 0; }
