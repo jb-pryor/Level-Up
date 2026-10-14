@@ -1,0 +1,5 @@
+# Outfit source prompt
+
+Built-in image-generation tool, one call per base. The guy/girl suffix identifies the referenced base. Code-based extraction and fitting were previously explicitly authorized.
+
+Edit the reference fixed-pose cartoon avatar into an asset-source outfit version. SAME face identity, eyes, body shape, pose, hands and exact 1024x1536 framing and coordinates. Replace white tank top with a plain short-sleeved GRAY crewneck T-shirt, completely covering the tank top. Keep gray pants. Add white low-top sneakers with green details that cover the existing bare feet. Add a simple forest-green baseball cap, front-facing, fitted to the bald head. Change ONLY the mouth expression to calm neutral closed-mouth, no smile or teeth, same friendly face. Background transparent; no text, shadows or extra objects. Assets will be cut from this image for individually interchangeable shirt, shoe, cap and mouth layers, so maintain absolute alignment with the source and do not resize the head or body.
