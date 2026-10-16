@@ -20,7 +20,7 @@ Sources: `scope.md > The Core Loop` and `What "Working" Looks Like`.
 
 ## Screens and Layout
 - **Character setup:** Smooth cartoon preview on the left; name, Male/Female and appearance controls on the right.
-- **Desktop dashboard:** Three columns: sticky player card on the left, central workspace, and slim sticky catalog/favorites rail on the right. The player card stays vertically centered when space permits. The rail stays within the viewport and scrolls internally if favorites are long. Smaller screens stack the layout.
+- **Desktop dashboard:** Three columns: sticky player card on the left, central workspace, and slim sticky catalog/favorites rail on the right. Both desktop side panels use the same 20px sticky top offset to stay aligned during scrolling. The rail stays within the viewport and scrolls internally if favorites are long. Smaller screens stack the layout.
 - **Header:** Level Up branding, centered tagline, sound toggle, Edit character, and coin wallet. No dashboard greeting.
 - **Central workspace:** Daily quests, Shop and Personal Stats tabs. Edit clothes under the player opens the wardrobe in this same workspace; Confirm/Cancel return to quests. No separate Personal Stats launcher or Outfit Preview badge.
 - **Quest Catalog:** The right-rail button opens a larger book dialog over the current view. Closing it returns to that view. The empty daily-list Browse quests button also opens it.
@@ -45,7 +45,7 @@ Acceptance criteria:
 Source: `scope.md > The POC Boundary`.
 
 ### Quest Catalog
-Use an open-book layout in the arcade theme, with category bookmarks for Home improvement, Health and Social positivity. The left page lists quests and XP; the right page shows the selected quest's description, objective, reward, Favorite toggle and Add quest button. Search is case-insensitive within the selected category. Descriptions use playful roast humor while objectives remain clear.
+Use an open-book layout in the arcade theme, with category bookmarks for Home improvement, Health and Social positivity. The left page lists quests and XP; the right page shows the selected quest's description, objective, reward, Add quest button, with an outlined purple favorite star in the top-right of the selected quest’s detail page; favorited stars fill purple. Search is case-insensitive within the selected category. Descriptions use playful roast humor while objectives remain clear.
 
 Acceptance criteria:
 - The 15 starter quests are divided evenly across the three categories; search/no-results states work.
@@ -157,3 +157,11 @@ Each quest has its own skill name, level and progress bar. Every completion earn
 
 ## Favorite Quest Shortcuts
 The right rail contains Quest Catalog and all saved favorite quests. Each shortcut shows task name, XP, remove-favorite control and Add quest. Active favorites show disabled Added; completing or deleting re-enables Add quest. Adding uses the same quest sound and duplicate guard as the catalog. Unfavoriting never removes active tasks or progress.
+
+## Reset Player
+A red Reset player button below Edit clothes opens a confirmation dialog: “Are you sure you want to delete your player? This cannot be undone.” Reset deletes this app’s saved player and returns to character creation, clearing all progression, quests, cosmetics, favorites and skills. Cancel, Escape or dismissal preserve progress. If deleting storage fails, keep the existing player and show an error.
+
+Favorite limit: allow at most four favorite quests. Attempting a fifth shows a temporary “Limit of 4 favorites” message beside the detail-page star. Removing favorites is always allowed. Earlier saves with more than four retain them until manually reduced, but cannot add more.
+
+## Background Music
+An original mellow chiptune loop plays only after enabling the fixed bottom-right Music on/off button. It uses a separate mixer from sound effects, starts off on each visit, and loops quietly beneath gameplay. No external song samples or network requests are required.

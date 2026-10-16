@@ -56,3 +56,10 @@ test('favorite quests survive saving and older saves migrate without favorites',
   assert.deepEqual(loadPlayer(store).player.favoriteQuestIds,[]);
   player.favoriteQuestIds=['walk','walk'];store.raw=JSON.stringify({schemaVersion:1,player});assert.equal(loadPlayer(store).status,'invalid');
 });
+
+test('explicit reset deletes only this app save and reports storage deletion failure',async()=>{
+  const {deletePlayerSave}=await import('./save.ts');
+  const removed=[];assert.equal(deletePlayerSave({removeItem(key){removed.push(key)}}),true);
+  assert.deepEqual(removed,[SAVE_KEY]);
+  assert.equal(deletePlayerSave({removeItem(){throw Error('blocked')}}),false);
+});

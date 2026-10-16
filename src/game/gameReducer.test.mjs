@@ -85,3 +85,20 @@ test('reordering moves active quests only and never awards or changes other prog
   const down=gameReducer(moved,{type:'reorder',questId:'laundry',targetId:'room',after:true});assert.deepEqual(down.player.activeQuestIds,['dishes','room','laundry']);
   assert.strictEqual(gameReducer(s,{type:'reorder',questId:'missing',targetId:'room',after:false}),s);
 });
+
+test('confirmed reset discards all player state and allows fresh character creation',()=>{
+  const reset=gameReducer(firstLevel(),{type:'reset-player'});
+  assert.deepEqual(reset,initialGame);
+  const fresh=gameReducer(reset,{type:'create',appearance:{...defaultAppearance,name:'Fresh'}});
+  assert.equal(fresh.player.totalXp,0);assert.equal(fresh.player.coins,0);
+  assert.deepEqual(fresh.player.ownedItemIds,[]);assert.deepEqual(fresh.player.questCompletions,{});
+});
+
+test('favorite limit blocks a fifth addition but allows removing and replacing favorites',()=>{
+  let s=create();for(const questId of ['dishes','room','laundry','bed'])s=gameReducer(s,{type:'favorite',questId});
+  assert.equal(s.player.favoriteQuestIds.length,4);
+  assert.strictEqual(gameReducer(s,{type:'favorite',questId:'walk'}),s);
+  s=gameReducer(s,{type:'favorite',questId:'room'});
+  s=gameReducer(s,{type:'favorite',questId:'walk'});
+  assert.deepEqual(s.player.favoriteQuestIds,['dishes','laundry','bed','walk']);
+});

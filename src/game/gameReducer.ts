@@ -6,9 +6,10 @@ import { levelFor } from './progression.ts';
 
 export type Reward = { questName: string; xp: number; coins: number; previousXp: number; previousCoins: number };
 export type GameState = { player: Player | null; notice: { sequence: number; message: string; error: boolean; reward?: Reward; purchaseItemId?: string } | null };
-export type Action = {type:'clear-notice'|'open-wardrobe'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
+export type Action = {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
 export const initialGame: GameState = {player:null,notice:null};
 export function gameReducer(state: GameState, action: Action): GameState {
+  if(action.type==='reset-player')return {...initialGame};
   if(action.type==='clear-notice')return {...state,notice:null};
   const feedback = (message: string, error=false, player=state.player, reward?: Reward): GameState => ({player,notice:{sequence:(state.notice?.sequence??0)+1,message,error,reward}});
   if(action.type==='create') {
@@ -27,6 +28,7 @@ export function gameReducer(state: GameState, action: Action): GameState {
   if(action.type==='edit')return action.appearance.name.trim()?feedback('Character updated.',false,{...p,...action.appearance,name:action.appearance.name.trim()}):feedback('Enter a player name.',true);
   if(action.type==='add'||action.type==='delete'||action.type==='complete'||action.type==='favorite') {
     const quest=quests.find(q=>q.id===action.questId);if(!quest)return feedback('That quest is unavailable.',true);
+    if(action.type==='favorite'&&!p.favoriteQuestIds.includes(quest.id)&&p.favoriteQuestIds.length>=4)return state;
     if(action.type==='favorite')return {...state,player:{...p,favoriteQuestIds:p.favoriteQuestIds.includes(quest.id)?p.favoriteQuestIds.filter(id=>id!==quest.id):[...p.favoriteQuestIds,quest.id]}};
     const active=p.activeQuestIds.includes(quest.id);
     if(action.type==='add')return active?feedback('Quest already in your daily quests!',true):feedback(`${quest.name} added.`,false,{...p,activeQuestIds:[...p.activeQuestIds,quest.id]});

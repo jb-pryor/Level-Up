@@ -45,3 +45,10 @@ export function loadBrowserPlayer():LoadResult {
 export function saveBrowserPlayer(player:Player):boolean {
   try{return savePlayer(window.localStorage,player)}catch{return false}
 }
+
+export function deletePlayerSave(storage:Pick<Storage,'removeItem'>):boolean {
+  try{storage.removeItem(SAVE_KEY);return true}catch{return false}
+}
+export function deleteBrowserPlayerSave():boolean {
+  try{return deletePlayerSave(window.localStorage)}catch{return false}
+}

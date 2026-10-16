@@ -1,3 +1,13 @@
+// Same pixel artwork as public/icons/pixel-coin.svg, drawn inline to avoid image-load failures.
 export function CoinIcon() {
-  return <img className="pixel-coin" src="/icons/pixel-coin.svg" alt="" aria-hidden="true" width="24" height="24"/>;
+  return <svg className="pixel-coin" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true" focusable="false" width="24" height="24">
+  <path fill="#30219a" d="M5 0h6v1h2v1h1v2h1v2h1v5h-1v2h-1v1h-2v1H4v-1H2v-2H1v-2H0V5h1V3h1V2h1V1h2z"/>
+  <path fill="#b46d13" d="M5 1h6v1h2v2h1v2h1v5h-1v2h-2v1H4v-1H2v-3H1V5h1V3h2V2h1z"/>
+  <path fill="#ffcc26" d="M5 1h5v1h2v2h1v2h1v4h-1v2h-2v1H5v-1H3v-2H2V5h1V3h2z"/>
+  <path fill="#fff3a4" d="M5 2h5v1H5zM3 4h2v1H4v3H3z"/>
+  <path fill="#e79a16" d="M6 4h4v1h1v5h-1v1H6v-1H5V5h1z"/>
+  <path fill="#fff078" d="M6 4h3v1H7v4H6z"/>
+  <path fill="#ffe83d" d="M8 5h2v5H8z"/>
+  <path fill="#fff3a4" d="M4 10h1v1H4z"/>
+  </svg>;
 }

@@ -143,3 +143,17 @@ Activity mode: not established
 - Daily quests complete only through the checkbox; task text no longer labels/toggles it. Added drag/drop reordering with destination highlighting and Alt+Up/Down keyboard movement. Reducer validates both active IDs; reordering preserves rewards/counts and persists through the existing save. All 24 tests/build pass. Desktop drag interaction awaits learner review.
 
 - Planning cleanup consolidated current behavior into PRD/scope/spec: three-column sticky layout, saved favorites, simple skill stats, checkbox-only completion/reordering, five-row minimum without pagination, 25-coin level bonuses, purchase dialog/new-item counter, pixel coin and distinct sounds. Corrected obsolete component/file references and old reward totals. Persistence and refinements await Git checkpoint; final review/app map remain incomplete.
+
+- Fixed broken-image coin placeholders reported in shop wallet/prices. Shared CoinIcon now draws the same gold pixel artwork inline as SVG, removing image-request dependence for every coin instance. Production build passes.
+
+- Replaced full-width Favorite Quest action with a separate purple outline/fill star button at the top-right of each catalog row. Favorite and row-selection buttons are siblings to avoid nested controls. Build passes.
+
+- Added red Reset player control below Edit clothes with explicit Reset/Cancel confirmation. Removes only this app save before resetting session state; storage deletion failure preserves player and shows an error. Tests use mock storage and do not touch learner progress. All 26 tests and production build pass.
+
+- Compacted desktop character setup into remaining viewport height below the header: smaller form spacing, flexible full-body preview, matching-height panels and no setup footer. Short/narrow screens retain scrolling; form has overflow fallback for zoom/errors. Corrected obsolete local-save note. Build passes; visual fit awaits learner review.
+
+- Aligned desktop side panels using the same 20px sticky top offset. Removed player vertical-centering measurement, which previously caused mismatched gaps relative to the favorites rail. Build passes.
+
+- Capped new favorites at four in UI and reducer. A fifth attempt displays a temporary Limit of 4 favorites tooltip beside the star; unfavoriting always works. Existing favorites are not silently removed.
+
+- Added original mellow eight-bar chiptune loop with separate bottom-right Music on/off control. Independent Web Audio mixer, opt-in/session-only playback, bounded lookahead scheduling and rapid-toggle cleanup. Audio scheduling test and build pass; musical preference/volume await learner listening feedback.
