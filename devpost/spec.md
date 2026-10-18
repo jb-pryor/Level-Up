@@ -131,6 +131,7 @@ type PlayerSave = {
     ownedItemIds: string[];
     newItemIds: string[];
     questCompletions: Record<string, number>;
+    questCooldowns: Record<string, number>; // Home quest ID -> unlock timestamp (ms)
     favoriteQuestIds: string[];
     equipped: { shirt: string; pants: string; shoes: string | null; hat: string | null };
   };
@@ -218,3 +219,7 @@ At the learner’s request, simple per-quest skills are now included. Each real 
 The desktop dashboard uses player, central workspace, and slim right rail columns. The rail contains the Quest Catalog dialog trigger and saved favorite quests; the catalog trigger is removed from workspace tabs. Each catalog quest has a favorite toggle. Rail Add quest buttons use the same duplicate guard and quest chime, display disabled Added while active, and become available again after completion/removal. Unfavoriting never removes an active quest or progress. Rail sticks within the viewport and scrolls internally when its favorite list is long; smaller screens stack the rail. Older saves initialize favorites as empty without losing progress.
 
 Completion awards 25 bonus coins per crossed character level and increments questCompletions for that quest once. Skill level is 1 + floor(count / 5); progress is count % 5. Save validation checks known, unique favorite IDs and known nonnegative safe-integer completion counts. Missing favorite/history fields in older version-1 saves migrate to empty values without changing prior progress.
+
+Home cooldown implementation: questCooldown.ts defines 12 hours and countdown formatting. Complete records now + 12h for home quests in the same player update as rewards; add rejects attempts before expiry. Catalog/FavoriteQuests share cooldown calculations and a once-per-second display clock, plus focus refresh. Only the deadline is saved; ticking writes no player data. Save validation accepts known home IDs and nonnegative safe-integer deadlines; older version-1 saves migrate to empty cooldowns.
+
+Male shirt assets: scripts/fit_male_shirts.py reads each source alpha bounding box and resamples into a shared shirt envelope on a 1024×1536 canvas, writing public/avatars/shirts/fitted/<color>.png without altering sources. maleShirts.ts maps stable item IDs to these fitted files. Avatar uses fitted shirt SVG overlays above the direct male base; ItemPicture uses the same images. Wardrobe shirt choices derive from cosmetics.ts. maleOnly cosmetics are filtered by Shop/Wardrobe and guarded on purchase/equip/save; changing body clears an incompatible equipped shirt but retains ownership.

@@ -157,3 +157,23 @@ Activity mode: not established
 - Capped new favorites at four in UI and reducer. A fifth attempt displays a temporary Limit of 4 favorites tooltip beside the star; unfavoriting always works. Existing favorites are not silently removed.
 
 - Added original mellow eight-bar chiptune loop with separate bottom-right Music on/off control. Independent Web Audio mixer, opt-in/session-only playback, bounded lookahead scheduling and rapid-toggle cleanup. Audio scheduling test and build pass; musical preference/volume await learner listening feedback.
+
+- Added learner-requested 12-hour home-only re-add cooldown. Starts on successful completion, not add/delete; saved timestamp drives live catalog/favorite countdowns and reducer guard. Other categories remain immediately repeatable. Old saves preserve progress with empty deadlines. Updated repeated-home tests to advance past cooldown; boundary/delete/other-category/save migration tests pass. All 32 tests and production build pass; visual timer review pending.
+
+- Personal Stats now lists only quests with at least one recorded completion. New players see an invitation to complete their first quest; existing skill counts and progression are unchanged. Build passes.
+
+- Integrated eight learner-edited male base PNGs into direct-image renderer with four complexion choices and two expressions. Male overlays/unsupported controls paused for explicit base test; female keeps existing customization. Checked alpha and dimensions (1019–1024 wide, 1536–1543 high); observed colored edge artifacts and left originals untouched. Complexion save/migration tested; learner alignment review pending.
+
+- Added 320ms male PNG crossfade with subtle scale transformation for complexion/expression changes. Replacement decodes before display, stale requests/timers cancel on rapid changes/unmount, and reduced-motion users get an immediate swap. Original PNGs untouched; production build passes.
+
+- Refined male PNG transformation to a quick 160ms swap with one soft blue-white lightning flash and quiet blup/zip cue. No input lock; replacement still decodes before display, rapid sounds are throttled, initial render is silent, and reduced-motion hides the flash. All 33 tests/build pass; visual/audio preference awaits learner review.
+
+- Switched male avatar and complexion previews to six Aligned-Avatars PNGs; all verified 1024×1536 with alpha. Removed fourth complexion option, changed selector to three columns, and migrate old complexion 4 to 1 without resetting progress. Source images untouched. Tests/build pass.
+
+- Replaced male transformation aura/rings/sparks with a 300ms fade-out, blue alpha-contour outline, and fade-in. SVG morphology traces the actual PNG silhouette; reduced-motion swaps immediately. Electric zip remains. Production build passes.
+
+- Integrated learner eye PNGs as fitted iris overlays on aligned male bases, with Brown/Blue/Green/Gray/Red choices. Scaled/positioned source pairs in SVG with per-eye clipping; original eye/base PNGs unchanged. Inspected a composed blue-eye face preview. Female keeps prior three color options. Eye layer follows base transition; save validation supports five colors.
+
+- Added all eleven user-supplied male shirt colors with shared fitted 1024×1536 canvas and common collar/sleeve/hem envelope. Inspected composites of all eleven on aligned male base; no exposed tank edges. Shop/purchase Equip/wardrobe share fitted assets; originals preserved and generation script included. Nine new male-only tees at 30 coins/level 2; original green/blue keep IDs/prices/unlocks and female behavior. All 36 tests and build pass; learner multi-complexion playtest pending.
+
+- Tightened all eleven fitted male shirts by about 3% in width/height (553×451 envelope), preserving common center and collar position. Regenerated from originals and inspected orange-shirt composite for neckline, sleeves and hem coverage. Build passes.

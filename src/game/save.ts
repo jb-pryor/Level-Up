@@ -9,16 +9,18 @@ const oneOf=(v:unknown,choices:string[])=>typeof v==='string'&&choices.includes(
 const ids=(v:unknown,allowed:string[]):v is string[]=>Array.isArray(v)&&v.every(id=>oneOf(id,allowed))&&new Set(v).size===v.length;
 export function validPlayer(v:unknown):v is Player {
   if(!record(v)||typeof v.name!=='string'||!v.name.trim()||!oneOf(v.gender,['male','female'])||v.bodyId!==(v.gender==='male'?'base-a':'base-b'))return false;
-  if(!oneOf(v.hairStyleId,['short-swept','long'])||!oneOf(v.hairColorId,['brown','black','blonde'])||!oneOf(v.eyeColorId,['brown','blue','green'])||!oneOf(v.expressionId,['smile','neutral']))return false;
+  if(!oneOf(v.complexionId,['1','2','3']))return false;
+  if(!oneOf(v.hairStyleId,['short-swept','long'])||!oneOf(v.hairColorId,['brown','black','blonde'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
   if(![v.totalXp,v.coins].every(n=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0))return false;
   if(!ids(v.activeQuestIds,quests.map(q=>q.id))||!ids(v.ownedItemIds,cosmetics.map(c=>c.id))||!ids(v.newItemIds,v.ownedItemIds)||!record(v.equipped))return false;
   if(!ids(v.favoriteQuestIds,quests.map(q=>q.id)))return false;
+  if(!record(v.questCooldowns)||!Object.entries(v.questCooldowns).every(([id,end])=>quests.some(q=>q.id===id&&q.category==='home')&&typeof end==='number'&&Number.isSafeInteger(end)&&end>=0))return false;
   if(!record(v.questCompletions)||!Object.entries(v.questCompletions).every(([id,count])=>quests.some(q=>q.id===id)&&typeof count==='number'&&Number.isSafeInteger(count)&&count>=0))return false;
   for(const slot of ['shirt','pants','hat','shoes'] as const){
     const id=v.equipped[slot];
     if((slot==='shirt'||slot==='pants')&&id==='starter')continue;
     if((slot==='hat'||slot==='shoes')&&id===null)continue;
-    if(typeof id!=='string'||!v.ownedItemIds.includes(id)||!cosmetics.some(c=>c.id===id&&c.slot===slot))return false;
+    if(typeof id!=='string'||!v.ownedItemIds.includes(id)||!cosmetics.some(c=>c.id===id&&c.slot===slot&&(!c.maleOnly||v.gender==='male')))return false;
   }
   return true;
 }
@@ -30,7 +32,7 @@ export function loadPlayer(storage:StoragePort):LoadResult {
     const data:unknown=JSON.parse(raw);
     if(!record(data)||data.schemaVersion!==1||!record(data.player))return {status:'invalid',player:null};
     // Older saves have no completion history; preserve progress without inventing counts.
-    const player={...data.player,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
+    const player={...data.player,complexionId:data.player.complexionId===undefined||data.player.complexionId==='4'?'1':data.player.complexionId,questCooldowns:data.player.questCooldowns===undefined?{}:data.player.questCooldowns,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
     if(!validPlayer(player))return {status:'invalid',player:null};
     return {status:'ready',player};
   }catch{return {status:'invalid',player:null}}

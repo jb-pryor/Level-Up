@@ -1,9 +1,10 @@
 // Original synthesized arcade effects. No external samples or audio downloads.
-export type SoundName = 'click' | 'reorder' | 'add-quest' | 'purchase' | 'quest' | 'transfer' | 'level';
+export type SoundName = 'click' | 'transform' | 'reorder' | 'add-quest' | 'purchase' | 'quest' | 'transfer' | 'level';
 let context: AudioContext | null=null;
 let master: GainNode | null=null;
 let enabled=true;
 const active=new Set<OscillatorNode>();
+let lastTransform=-Infinity;
 
 export function soundEnabled(){return enabled;}
 export function setSoundEnabled(value:boolean){
@@ -41,6 +42,14 @@ export function playSound(name:SoundName){
     note(210,now,.016,.08,'sine',110);
     return;
   }
+  if(name==='transform'){
+    if(now-lastTransform<.09)return;lastTransform=now;
+    // Thin electric buzz sweeping downward: ziiip, without a rounded blip.
+    note(2900,now,.27,.12,'sawtooth',320);
+    note(3100,now+.008,.25,.045,'square',360);
+    note(1700,now,.24,.07,'sine',450);
+    return;
+  }
   if(name==='reorder'){
     // Rounded two-syllable budoop for a task finding its new place.
     note(240,now,.065,.14,'sine',170);
@@ -71,4 +80,12 @@ export function playSound(name:SoundName){
   const melody=[523.25,659.25,783.99,1046.5,783.99,1046.5,1318.51,1567.98];
   melody.forEach((f,i)=>{note(f,now+i*.1,i===melody.length-1 ? .42 : .14,.085,'triangle');note(f/2,now+i*.1,.13,.023,'square')});
   [523.25,659.25,783.99].forEach(f=>note(f,now+.85,.5,.025,'sine'));
+}
+
+// Trigger on the selection gesture, rather than waiting for PNG decoding.
+export async function playTransformationSound(){
+  unlockAudio();
+  if(!enabled||!context)return;
+  try{if(context.state==='suspended')await context.resume()}catch{return}
+  playSound('transform');
 }

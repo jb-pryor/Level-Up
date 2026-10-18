@@ -223,3 +223,28 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .music-error { background: #eef7ff; color: #30219a; padding: 8px; font-size: 11px; }
 .favorites-rail { scroll-padding-bottom: 65px; }
 @media(max-width:650px) { .music-control { bottom: 12px; right: 12px; } .music-control button { font-size: 11px; padding: 10px; } }
+
+.wardrobe-hanger { display: inline-block; width: 1.3em; height: 1.05em; vertical-align: -.12em; margin-right: .25em; }
+
+.avatar-png-base { object-fit: contain; object-position: center; }
+.complexion-options { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.complexion-options button { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 10px; }
+.complexion-options img { width: 48px; height: 60px; object-fit: cover; object-position: top; }
+.base-preview-note { color: #626780; font-size: 11px; line-height: 1.6; }
+
+.avatar-transition { position: relative; isolation: isolate; }
+.avatar-transition > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; transform-origin: center 65%; }
+/* Quick fade through the actual PNG silhouette, with a blue contour. */
+.avatar-transition .avatar-outgoing { animation: avatar-outline-out 300ms ease-in-out both; }
+.avatar-transition .avatar-incoming { animation: avatar-outline-in 300ms ease-in-out both; }
+.avatar-blue-outline { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; animation: avatar-outline-glow 300ms ease-in-out both; }
+@keyframes avatar-outline-out { 0% { opacity: 1; } 45%,100% { opacity: 0; } }
+@keyframes avatar-outline-in { 0%,50% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes avatar-outline-glow { 0% { opacity: 0; } 35%,60% { opacity: 1; } 100% { opacity: 0; } }
+@media(prefers-reduced-motion:reduce) { .avatar-blue-outline,.avatar-transition .avatar-outgoing { display: none; } .avatar-transition .avatar-incoming { animation: none; } }
+
+.avatar-eye-overlay { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.avatar-eye-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+.avatar-shirt-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }

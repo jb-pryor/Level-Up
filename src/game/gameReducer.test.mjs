@@ -4,7 +4,7 @@ import { gameReducer, initialGame } from './gameReducer.ts';
 import { levelFor, xpIntoLevel } from './progression.ts';
 import { defaultAppearance } from '../types.ts';
 const create=()=>gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'James'}});
-function complete(state,id){return gameReducer(gameReducer(state,{type:'add',questId:id}),{type:'complete',questId:id});}
+function complete(state,id){const now=Math.max(Date.now(),...Object.values(state.player.questCooldowns));return gameReducer(gameReducer(state,{type:'add',questId:id,now}),{type:'complete',questId:id,now});}
 function firstLevel(){return ['dishes','room','laundry'].reduce(complete,create());}
 
 test('three ordinary quests reach level 2, 5 overflow XP and 55 coins including level bonus',()=>{
@@ -73,7 +73,7 @@ test('favorites stay saved independently of active quests and can be re-added af
   let s=gameReducer(create(),{type:'favorite',questId:'dishes'});
   assert.deepEqual(s.player.favoriteQuestIds,['dishes']);assert.equal(s.player.coins,0);
   s=complete(s,'dishes');assert.deepEqual(s.player.favoriteQuestIds,['dishes']);assert.deepEqual(s.player.activeQuestIds,[]);
-  s=gameReducer(s,{type:'add',questId:'dishes'});assert.deepEqual(s.player.activeQuestIds,['dishes']);
+  s=gameReducer(s,{type:'add',questId:'dishes',now:s.player.questCooldowns.dishes});assert.deepEqual(s.player.activeQuestIds,['dishes']);
   s=gameReducer(s,{type:'favorite',questId:'dishes'});assert.deepEqual(s.player.favoriteQuestIds,[]);assert.deepEqual(s.player.activeQuestIds,['dishes']);
 });
 
@@ -101,4 +101,17 @@ test('favorite limit blocks a fifth addition but allows removing and replacing f
   s=gameReducer(s,{type:'favorite',questId:'room'});
   s=gameReducer(s,{type:'favorite',questId:'walk'});
   assert.deepEqual(s.player.favoriteQuestIds,['dishes','laundry','bed','walk']);
+});
+
+test('every supplied male shirt can be bought and equipped; male-only shirts reject female equips',()=>{
+  for(const color of ['green','blue','black','gray','navy','orange','pink','purple','red','white','yellow']){
+    let s=firstLevel();s={...s,player:{...s.player,totalXp:500,coins:500}};
+    const id=`${color}-shirt`;s=gameReducer(s,{type:'buy',itemId:id});assert(s.player.ownedItemIds.includes(id));
+    s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:id}});assert.equal(s.player.equipped.shirt,id);
+    if(!['green','blue'].includes(color)){
+      const female=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
+      assert.equal(female.player.equipped.shirt,'starter');assert(female.player.ownedItemIds.includes(id));
+      const blocked=gameReducer(female,{type:'equip',outfit:{...female.player.equipped,shirt:id}});assert.strictEqual(blocked.player,female.player);
+    }
+  }
 });

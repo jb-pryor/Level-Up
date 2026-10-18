@@ -51,7 +51,7 @@ Acceptance criteria:
 - The 15 starter quests are divided evenly across the three categories; search/no-results states work.
 - Add quest creates one active occurrence. The button becomes disabled **Added ✓**, without separate added-status paragraphs or a dashboard warning banner.
 - Active quests move below available quests in the catalog, ordered by their position in the daily list.
-- Completing/deleting makes Add quest available again.
+- Deleting makes Add quest available again immediately. Completing a Home improvement quest starts its 12-hour cooldown; Health/Social quests can be re-added immediately.
 - Favorite/unfavorite updates the right-rail shortcuts without changing active quests or rewards.
 
 ### Daily Quests and Completion
@@ -153,10 +153,10 @@ Fixed-pose smooth cartoon artwork and fitted appearance/clothing layers are impl
 No unresolved product decision blocks the current proof of concept. Final responsive/keyboard/drag review, asset polish, code walkthrough/app map and shipping preparation remain. Expanding catalogs and mystery boxes are later decisions.
 
 ## Personal Stats
-Each quest has its own skill name, level and progress bar. Every completion earns one skill XP; five completions gain a skill level. Level is 1 + floor(completions / 5), with progress completions % 5. Hover or keyboard focus shows lifetime completion count in a pixel tooltip. Access through the Personal Stats workspace tab. Skills grant no additional coins or character XP. Old saves start counts at zero without inventing history.
+Each quest has its own skill name, level and progress bar, shown only after its first recorded completion. If no skills are unlocked, invite the player to complete a quest. Every completion earns one skill XP; five completions gain a skill level. Level is 1 + floor(completions / 5), with progress completions % 5. Hover or keyboard focus shows lifetime completion count in a pixel tooltip. Access through the Personal Stats workspace tab. Skills grant no additional coins or character XP. Old saves start counts at zero without inventing history.
 
 ## Favorite Quest Shortcuts
-The right rail contains Quest Catalog and all saved favorite quests. Each shortcut shows task name, XP, remove-favorite control and Add quest. Active favorites show disabled Added; completing or deleting re-enables Add quest. Adding uses the same quest sound and duplicate guard as the catalog. Unfavoriting never removes active tasks or progress.
+The right rail contains Quest Catalog and all saved favorite quests. Each shortcut shows task name, XP, remove-favorite control and Add quest. Active favorites show disabled Added; deleting re-enables Add quest; completion re-enables it after the home cooldown, or immediately for Health/Social. Adding uses the same quest sound and duplicate guard as the catalog. Unfavoriting never removes active tasks or progress.
 
 ## Reset Player
 A red Reset player button below Edit clothes opens a confirmation dialog: “Are you sure you want to delete your player? This cannot be undone.” Reset deletes this app’s saved player and returns to character creation, clearing all progression, quests, cosmetics, favorites and skills. Cancel, Escape or dismissal preserve progress. If deleting storage fails, keep the existing player and show an error.
@@ -165,3 +165,12 @@ Favorite limit: allow at most four favorite quests. Attempting a fifth shows a t
 
 ## Background Music
 An original mellow chiptune loop plays only after enabling the fixed bottom-right Music on/off button. It uses a separate mixer from sound effects, starts off on each visit, and loops quietly beneath gameplay. No external song samples or network requests are required.
+
+## Home Quest Cooldowns
+The five current Home improvement quests start an individual 12-hour cooldown only when completed. Active tasks show Added; completed home tasks show a live HH:MM:SS countdown in the catalog Add button and favorite shortcut. Re-add is disabled and guarded until the saved deadline expires, then returns to Add quest. Time away/refresh does not restart or pause the cooldown. Deletion starts no cooldown. No automatic re-add or midnight reset. Health and Social quests remain repeatable immediately. Older saves initialize empty cooldowns without applying them retroactively.
+
+## Male PNG Base Test
+The learner supplied six aligned male PNGs: three complexion IDs, each with smile/neutral. The current files are in public/avatars/new-male-bases/Aligned-Avatars/. Male creation/editing now offers complexion and expression, loading the matching complete PNG directly without old hair, eye filters, expression patches or clothing overlays. Existing outfit/appearance data is preserved for future fitted layers. Female customization retains the prior renderer. Complexion is saved; older saves default to complexion 1. All six aligned assets use a 1024×1536 transparent canvas. Older saved complexion 4 maps to complexion 1 while retaining progression.
+
+## Male Shirt Playtest Inventory
+All eleven supplied shirt colors are fitted to the aligned male bases: green, blue, black, gray, navy, orange, pink, purple, red, white and yellow. Green/blue keep their previous IDs, prices and unlocks; nine new male-only tees cost 30 coins at level 2. Shop previews, purchase-dialog Equip and wardrobe preview/Confirm use the same fitted PNGs. Starter tank removes the shirt overlay. Female retains the original green/blue variants; new colors stay hidden and cannot be equipped on that body. Switching to Female while wearing a male-only tee equips the starter tank and retains ownership. Pants/hat/shoe male overlays remain pending.

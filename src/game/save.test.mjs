@@ -63,3 +63,37 @@ test('explicit reset deletes only this app save and reports storage deletion fai
   assert.deepEqual(removed,[SAVE_KEY]);
   assert.equal(deletePlayerSave({removeItem(){throw Error('blocked')}}),false);
 });
+
+test('home cooldown deadlines survive saving; older saves migrate without retroactive timers',()=>{
+  const player=progressed(),store=storage();assert(savePlayer(store,player));
+  assert.deepEqual(loadPlayer(store).player.questCooldowns,player.questCooldowns);
+  delete player.questCooldowns;store.raw=JSON.stringify({schemaVersion:1,player});
+  assert.deepEqual(loadPlayer(store).player.questCooldowns,{});
+  player.questCooldowns={gym:123};store.raw=JSON.stringify({schemaVersion:1,player});assert.equal(loadPlayer(store).status,'invalid');
+});
+
+test('complexion selection survives saving, old saves default to one, invalid IDs fail',()=>{
+  const player={...progressed(),complexionId:'3',expressionId:'neutral'},store=storage();
+  assert(savePlayer(store,player));assert.equal(loadPlayer(store).player.complexionId,'3');
+  assert.equal(loadPlayer(store).player.expressionId,'neutral');
+  delete player.complexionId;store.raw=JSON.stringify({schemaVersion:1,player});
+  assert.equal(loadPlayer(store).player.complexionId,'1');
+  player.complexionId='missing';store.raw=JSON.stringify({schemaVersion:1,player});assert.equal(loadPlayer(store).status,'invalid');
+});
+
+test('removed fourth complexion maps to first without losing existing progress',()=>{
+  const player={...progressed(),complexionId:'4'},store=storage(JSON.stringify({schemaVersion:1,player}));
+  assert.deepEqual(loadPlayer(store).player,{...player,complexionId:'1'});
+});
+
+test('all supplied eye colors round-trip without changing complexion or expression',()=>{
+  for(const eyeColorId of ['brown','blue','green','gray','red']){
+    const player={...progressed(),eyeColorId},store=storage();
+    assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
+  }
+});
+
+test('new fitted male shirt ownership and equipment survive saving',()=>{
+  const player={...progressed(),ownedItemIds:['orange-shirt'],newItemIds:['orange-shirt'],equipped:{shirt:'orange-shirt',pants:'starter',hat:null,shoes:null}},store=storage();
+  assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
+});

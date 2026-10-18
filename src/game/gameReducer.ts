@@ -1,3 +1,4 @@
+import { HOME_COOLDOWN_MS, cooldownRemaining } from './questCooldown.ts';
 import type { Appearance, Outfit, Player } from '../types.ts';
 import { starterOutfit } from '../types.ts';
 import { quests } from '../data/quests.ts';
@@ -6,7 +7,7 @@ import { levelFor } from './progression.ts';
 
 export type Reward = { questName: string; xp: number; coins: number; previousXp: number; previousCoins: number };
 export type GameState = { player: Player | null; notice: { sequence: number; message: string; error: boolean; reward?: Reward; purchaseItemId?: string } | null };
-export type Action = {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
+export type Action = {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string;now?:number} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
 export const initialGame: GameState = {player:null,notice:null};
 export function gameReducer(state: GameState, action: Action): GameState {
   if(action.type==='reset-player')return {...initialGame};
@@ -15,7 +16,7 @@ export function gameReducer(state: GameState, action: Action): GameState {
   if(action.type==='create') {
     if(state.player)return feedback('Your player already exists.',true);
     if(!action.appearance.name.trim())return feedback('Enter a player name.',true);
-    return feedback('Your adventure starts now.',false,{...action.appearance,name:action.appearance.name.trim(),totalXp:0,coins:0,activeQuestIds:[],ownedItemIds:[],newItemIds:[],questCompletions:{},favoriteQuestIds:[],equipped:{...starterOutfit}});
+    return feedback('Your adventure starts now.',false,{...action.appearance,name:action.appearance.name.trim(),totalXp:0,coins:0,activeQuestIds:[],ownedItemIds:[],newItemIds:[],questCompletions:{},questCooldowns:{},favoriteQuestIds:[],equipped:{...starterOutfit}});
   }
   const p=state.player;if(!p)return state;
   if(action.type==='open-wardrobe')return {player:{...p,newItemIds:[]},notice:null};
@@ -25,12 +26,14 @@ export function gameReducer(state: GameState, action: Action): GameState {
     order.splice(order.indexOf(action.targetId)+(action.after?1:0),0,action.questId);
     return {...state,player:{...p,activeQuestIds:order}};
   }
-  if(action.type==='edit')return action.appearance.name.trim()?feedback('Character updated.',false,{...p,...action.appearance,name:action.appearance.name.trim()}):feedback('Enter a player name.',true);
+  if(action.type==='edit')return action.appearance.name.trim()?feedback('Character updated.',false,{...p,...action.appearance,name:action.appearance.name.trim(),equipped:action.appearance.gender==='female'&&cosmetics.find(c=>c.id===p.equipped.shirt)?.maleOnly?{...p.equipped,shirt:'starter'}:p.equipped}):feedback('Enter a player name.',true);
   if(action.type==='add'||action.type==='delete'||action.type==='complete'||action.type==='favorite') {
     const quest=quests.find(q=>q.id===action.questId);if(!quest)return feedback('That quest is unavailable.',true);
     if(action.type==='favorite'&&!p.favoriteQuestIds.includes(quest.id)&&p.favoriteQuestIds.length>=4)return state;
     if(action.type==='favorite')return {...state,player:{...p,favoriteQuestIds:p.favoriteQuestIds.includes(quest.id)?p.favoriteQuestIds.filter(id=>id!==quest.id):[...p.favoriteQuestIds,quest.id]}};
+    const now=action.now??Date.now();
     const active=p.activeQuestIds.includes(quest.id);
+    if(action.type==='add'&&!active&&cooldownRemaining(p,quest,now)>0)return feedback('This home quest is resting. Try again when its 12-hour timer ends.',true);
     if(action.type==='add')return active?feedback('Quest already in your daily quests!',true):feedback(`${quest.name} added.`,false,{...p,activeQuestIds:[...p.activeQuestIds,quest.id]});
     if(!active)return state;
     const remaining=p.activeQuestIds.filter(id=>id!==quest.id);
@@ -42,10 +45,11 @@ export function gameReducer(state: GameState, action: Action): GameState {
     const coins=p.coins+quest.coins+bonusCoins;
     if(!Number.isSafeInteger(totalXp)||!Number.isSafeInteger(coins))return feedback('Your progress could not be updated.',true);
     const level=levelFor(totalXp),levelUp=level>levelFor(p.totalXp);
-    return feedback(`+${quest.xp} XP · +${quest.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions}},{questName:quest.name,xp:quest.xp,coins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
+    return feedback(`+${quest.xp} XP · +${quest.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:quest.xp,coins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
   }
   if(action.type==='buy') {
     const item=cosmetics.find(c=>c.id===action.itemId);if(!item)return feedback('That item is unavailable.',true);
+    if(item.maleOnly&&p.gender!=='male')return feedback('This shirt currently fits the male body only.',true);
     if(p.ownedItemIds.includes(item.id))return feedback('You already own this item.',true);
     if(levelFor(p.totalXp)<item.requiredLevel)return feedback(`Unlocks at level ${item.requiredLevel}.`,true);
     if(p.coins<item.price)return feedback('Not enough coins yet.',true);
@@ -58,7 +62,7 @@ export function gameReducer(state: GameState, action: Action): GameState {
     if((slot==='shirt'||slot==='pants')&&id==='starter')continue;
     if((slot==='shoes'||slot==='hat')&&id===null)continue;
     const item=cosmetics.find(c=>c.id===id&&c.slot===slot);
-    if(!item||!p.ownedItemIds.includes(item.id))return feedback('Equip items you own in the matching clothing category.',true);
+    if(!item||!p.ownedItemIds.includes(item.id)||(item.maleOnly&&p.gender!=='male'))return feedback('Equip items you own in the matching clothing category.',true);
   }
   return feedback('Outfit equipped. Looking good!',false,{...p,equipped:{...action.outfit}});
 }

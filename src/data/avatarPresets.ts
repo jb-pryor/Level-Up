@@ -1,7 +1,7 @@
 import type { BodyId } from '../types';
 export const colors = {
   hair: { brown: '#75442d', black: '#292323', blonde: '#ba8643' },
-  eyes: { brown: '#6e431f', blue: '#427ea3', green: '#52805b' },
+  eyes: { brown: '#6e431f', blue: '#427ea3', green: '#52805b', gray: '#8b919b', red: '#ba3644' },
 };
 export const avatarPresets: Record<BodyId, { eyes: [number, number, number][]; pants: string; hairTransform: Record<'short-swept' | 'long', string> }> = {
   'base-a': {
