@@ -1,3 +1,4 @@
+import type { ShoeId } from './data/maleShoes';
 import type { ShirtId } from './data/maleShirts';
 export type BodyId = 'base-a' | 'base-b';
 export type Appearance = {
@@ -10,7 +11,7 @@ export type Appearance = {
   eyeColorId: 'brown' | 'blue' | 'green' | 'gray' | 'red';
   expressionId: 'smile' | 'neutral';
 };
-export type Outfit = { shirt: ShirtId; pants: 'starter' | 'dark-pants' | 'olive-pants'; shoes: null | 'sneakers'; hat: null | 'cap' };
+export type Outfit = { shirt: ShirtId; pants: 'starter' | 'dark-pants' | 'olive-pants'; shoes: null | ShoeId; hat: null | 'cap' };
 export const starterOutfit: Outfit = { shirt: 'starter', pants: 'starter', shoes: null, hat: null };
 export const defaultAppearance: Appearance = { name: '', gender: 'male', bodyId: 'base-a', complexionId: '1', hairStyleId: 'short-swept', hairColorId: 'brown', eyeColorId: 'brown', expressionId: 'smile' };
 

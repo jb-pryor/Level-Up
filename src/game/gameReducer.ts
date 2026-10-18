@@ -26,7 +26,15 @@ export function gameReducer(state: GameState, action: Action): GameState {
     order.splice(order.indexOf(action.targetId)+(action.after?1:0),0,action.questId);
     return {...state,player:{...p,activeQuestIds:order}};
   }
-  if(action.type==='edit')return action.appearance.name.trim()?feedback('Character updated.',false,{...p,...action.appearance,name:action.appearance.name.trim(),equipped:action.appearance.gender==='female'&&cosmetics.find(c=>c.id===p.equipped.shirt)?.maleOnly?{...p.equipped,shirt:'starter'}:p.equipped}):feedback('Enter a player name.',true);
+  if(action.type==='edit') {
+    if(!action.appearance.name.trim())return feedback('Enter a player name.',true);
+    const equipped={...p.equipped};
+    if(action.appearance.gender==='female'){
+      if(cosmetics.find(c=>c.id===equipped.shirt)?.maleOnly)equipped.shirt='starter';
+      if(cosmetics.find(c=>c.id===equipped.shoes)?.maleOnly)equipped.shoes=null;
+    }
+    return feedback('Character updated.',false,{...p,...action.appearance,name:action.appearance.name.trim(),equipped});
+  }
   if(action.type==='add'||action.type==='delete'||action.type==='complete'||action.type==='favorite') {
     const quest=quests.find(q=>q.id===action.questId);if(!quest)return feedback('That quest is unavailable.',true);
     if(action.type==='favorite'&&!p.favoriteQuestIds.includes(quest.id)&&p.favoriteQuestIds.length>=4)return state;

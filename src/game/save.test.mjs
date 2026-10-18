@@ -109,3 +109,10 @@ test('bald male choice persists together with the remembered hair color',()=>{
   const player={...progressed(),hairStyleId:'bald',hairColorId:'gray'},store=storage();
   assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
 });
+
+test('all new male shoe selections survive saving',()=>{
+  for(const shoes of ['black-red-shoes','black-white-shoes','blue-white-shoes','brown-shoes','green-yellow-shoes']){
+    const player={...progressed(),ownedItemIds:[shoes],newItemIds:[],equipped:{shirt:'starter',pants:'starter',hat:null,shoes}},store=storage();
+    assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
+  }
+});

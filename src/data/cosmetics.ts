@@ -14,5 +14,10 @@ export const cosmetics: Cosmetic[] = [
   {id:'dark-pants',name:'Midnight pants',description:'A charcoal finish that goes with every win.',slot:'pants',price:30,requiredLevel:2},
   {id:'olive-pants',name:'Trail pants',description:'Earthy olive tones for everyday exploration.',slot:'pants',price:45,requiredLevel:3},
   {id:'sneakers',name:'Fresh sneakers',description:'White sneakers with green details. Ready for the next step.',slot:'shoes',price:40,requiredLevel:2},
+  {id:'black-red-shoes',name:'Ember sneakers',description:'Black and red sneakers. A little fire in every step.',slot:'shoes',price:40,requiredLevel:2,maleOnly:true},
+  {id:'black-white-shoes',name:'Monochrome sneakers',description:'Black and white. Clean looks, messy quest log.',slot:'shoes',price:40,requiredLevel:2,maleOnly:true},
+  {id:'blue-white-shoes',name:'Blue streak sneakers',description:'Blue and white sneakers for your next adventure.',slot:'shoes',price:40,requiredLevel:2,maleOnly:true},
+  {id:'brown-shoes',name:'Trail sneakers',description:'Brown sneakers for getting out and getting things done.',slot:'shoes',price:40,requiredLevel:2,maleOnly:true},
+  {id:'green-yellow-shoes',name:'High score sneakers',description:'Green and yellow. Ready for another high score.',slot:'shoes',price:40,requiredLevel:2,maleOnly:true},
   {id:'cap',name:'Quest cap',description:'A green cap for a little extra player energy.',slot:'hat',price:50,requiredLevel:3},
 ];

@@ -1,4 +1,4 @@
-import { maleSneakersPath } from '../data/maleShoes';
+import { maleShoePath } from '../data/maleShoes';
 import { cosmetics } from '../data/cosmetics';
 import { maleShirtPath } from '../data/maleShirts';
 import { useId, useState } from 'react';
@@ -12,7 +12,7 @@ const items: Record<Slot, Item[]> = {
   shirt: [{id:'starter',name:'Starter tank',description:'Your white tank top. Every adventure starts somewhere.'},...cosmetics.filter(item=>item.slot==='shirt')],
   pants: [{id:'starter',name:'Starter gray',description:'Simple gray pants. A clean slate for your journey.'},{id:'dark-pants',name:'Midnight pants',description:'A charcoal finish that goes with every win.'},{id:'olive-pants',name:'Trail pants',description:'Earthy olive tones for everyday exploration.'}],
   hat: [{id:null,name:'No hat',description:'Let your hairstyle take the spotlight.'},{id:'cap',name:'Quest cap',description:'A green cap for a little extra player energy.'}],
-  shoes: [{id:null,name:'Barefoot',description:'Keep the original look.'},{id:'sneakers',name:'Fresh sneakers',description:'White sneakers with green details. Ready for the next step.'}],
+  shoes: [{id:null,name:'Barefoot',description:'Keep the original look.'},...cosmetics.filter(item=>item.slot==='shoes')],
 };
 
 export function ItemPicture({ appearance, slot, item }: { appearance: Appearance; slot: Slot; item: Item }) {
@@ -26,7 +26,7 @@ export function ItemPicture({ appearance, slot, item }: { appearance: Appearance
   if(slot==='shirt'&&item.id==='starter')clip=appearance.bodyId==='base-a'?'M400 457 L435 444 Q430 530 512 530 Q592 530 590 444 L625 457 L628 525 L652 601 L637 726 L662 857 Q512 880 363 857 L388 726 L373 601 L397 525 Z':'M411 466 L431 461 Q434 540 512 540 Q590 540 593 461 L612 466 L619 530 L634 585 L619 715 L657 810 Q512 844 368 810 L406 715 L390 585 L405 530 Z';
   if(slot==='pants'){viewBox='315 815 400 605';clip=avatarPresets[appearance.bodyId].pants;if(item.id!=='starter')filter=item.id==='dark-pants'?matrix(.13,.14,.15):matrix(.28,.31,.19);}
   if(slot==='hat'){href=base+'-hat.png';viewBox='320 0 390 265';}
-  if(slot==='shoes'){href=appearance.gender==='male'?maleSneakersPath:base+'-shoes.png';viewBox=appearance.gender==='male'?'220 1345 590 191':'250 1340 520 195';}
+  if(slot==='shoes'){href=appearance.gender==='male'?maleShoePath(item.id)!:base+'-shoes.png';viewBox=appearance.gender==='male'?'220 1345 590 191':'250 1340 520 195';}
   return <svg viewBox={viewBox} aria-hidden="true" className="wardrobe-picture"><defs>{clip&&<clipPath id={`${uid}-clip`}><path d={clip}/></clipPath>}{filter&&<filter id={`${uid}-filter`} colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values={filter}/></filter>}</defs><image href={href} width="1024" height="1536" clipPath={clip?`url(#${uid}-clip)`:undefined} filter={filter?`url(#${uid}-filter)`:undefined}/></svg>;
 }
 

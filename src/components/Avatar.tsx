@@ -1,4 +1,4 @@
-import { maleSneakersPath } from '../data/maleShoes';
+import { maleShoePath } from '../data/maleShoes';
 import { MaleHair } from './MaleHair';
 import { maleShirtPath } from '../data/maleShirts';
 import { EyeOverlay } from './EyeOverlay';
@@ -15,7 +15,7 @@ export function Avatar({ appearance, outfit = starterOutfit }: { appearance: App
   const matrix = (r: number, g: number, b: number) => `${r} ${r} ${r} 0 0 ${g} ${g} ${g} 0 0 ${b} ${b} ${b} 0 0 0 0 0 1 0`;
   const hairMatrix = appearance.hairColorId === 'black' ? matrix(.10,.09,.09) : matrix(.62,.43,.19);
   const eyeMatrix = appearance.eyeColorId === 'blue' ? matrix(.18,.36,.49) : matrix(.23,.40,.26);
-  if(appearance.gender==='male')return <TransitioningAvatar overlay={<>{appearance.hairStyleId!=='bald'&&<MaleHair color={appearance.hairColorId}/>}<EyeOverlay color={appearance.eyeColorId}/>{maleShirtPath(outfit.shirt)&&<svg className="avatar-shirt-overlay" viewBox="0 0 1024 1536" aria-hidden="true"><image href={maleShirtPath(outfit.shirt)!} width="1024" height="1536"/></svg>}{outfit.shoes==='sneakers'&&<svg className="avatar-shoes-overlay" viewBox="0 0 1024 1536" aria-hidden="true"><image href={maleSneakersPath} width="1024" height="1536"/></svg>}</>} src={`/avatars/new-male-bases/Aligned-Avatars/Complexion-${appearance.complexionId}-${appearance.expressionId}.png`} alt={`${appearance.name||'Your character'}, complexion ${appearance.complexionId}, ${appearance.expressionId==='smile'?'smiling':'neutral expression'}`} />;
+  if(appearance.gender==='male')return <TransitioningAvatar overlay={<>{appearance.hairStyleId!=='bald'&&<MaleHair color={appearance.hairColorId}/>}<EyeOverlay color={appearance.eyeColorId}/>{maleShirtPath(outfit.shirt)&&<svg className="avatar-shirt-overlay" viewBox="0 0 1024 1536" aria-hidden="true"><image href={maleShirtPath(outfit.shirt)!} width="1024" height="1536"/></svg>}{maleShoePath(outfit.shoes)&&<svg className="avatar-shoes-overlay" viewBox="0 0 1024 1536" aria-hidden="true"><image href={maleShoePath(outfit.shoes)!} width="1024" height="1536"/></svg>}</>} src={`/avatars/new-male-bases/Aligned-Avatars/Complexion-${appearance.complexionId}-${appearance.expressionId}.png`} alt={`${appearance.name||'Your character'}, complexion ${appearance.complexionId}, ${appearance.expressionId==='smile'?'smiling':'neutral expression'}`} />;
   return <svg viewBox="0 -90 1024 1626" role="img" aria-label={`${appearance.name || 'Your character'}, ${appearance.hairStyleId === 'long' ? 'long' : 'short'} ${appearance.hairColorId} hair, ${appearance.expressionId === 'smile' ? 'smiling' : 'neutral expression'}`} className="avatar">
     <defs>
       <filter id={`${uid}-hair`} colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values={hairMatrix}/></filter>

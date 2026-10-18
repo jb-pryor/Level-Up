@@ -183,3 +183,6 @@ Character settings expand naturally down the page without their own scrollbar. O
 
 ## Male Sneaker Asset Update
 Fresh sneakers retains its existing item ID, 40-coin price and level-2 requirement. Male shop thumbnails, purchase popup, wardrobe and equipped avatar now use the learner’s supplied shoes, fitted to the aligned male base. Existing sneaker owners automatically see the updated asset. Barefoot removes the layer. Female retains its previous body-specific sneaker artwork.
+
+## Additional Male Shoe Styles
+Five supplied variants join the original Fresh sneakers: Ember (black/red), Monochrome (black/white), Blue streak (blue/white), Trail (brown), and High score (green/yellow). All cost 40 coins at level 2 and use the existing buy/equip/wardrobe flow. New variants are male-only; female retains its previous sneakers. Switching to Female clears incompatible equipped shoes while retaining ownership.

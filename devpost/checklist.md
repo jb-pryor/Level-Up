@@ -187,3 +187,5 @@ Activity mode: not established
 - Reduced dashboard space between feet and side-by-side Wardrobe/Reset controls from 58px to 12px to keep the controls in view, preserving character scale and headroom. Production build passes.
 
 - Replaced male Fresh sneakers art with supplied shoes. Fitted taller source canvas to aligned male coordinates and inspected ankle/toe coverage in a composite. Shared fitted asset across avatar/shop/purchase popup/wardrobe; kept ID/price/unlock/ownership and female artwork intact. Buy/equip/barefoot test passes; originals preserved.
+
+- Added five supplied male shoe variants at level 2/40 coins. Verified source canvases and corrected 1–2px placement differences in fitted copies using original sneakers as reference. Inspected all six pairs on all three complexion bases; originals preserved. Shared asset mapping covers shop, purchase popup, wardrobe and avatar; save/equip/body-switch guards verified. All 42 tests/build pass.
