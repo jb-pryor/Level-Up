@@ -180,3 +180,6 @@ Male character creation/editing now offers Black, Gray, Brown and Blonde swoosh 
 
 ## Setup Layout and Hair Selection Refinement
 Character settings expand naturally down the page without their own scrollbar. On desktop the left character preview sticks 20px below the viewport top, sized to fit the screen, while the document scrolls; narrow screens stack normally. Male hairstyle cards show picture previews for Bald and Swoosh, with a reusable grid for later styles. Bald hides the hair layer without discarding the remembered color. Hair color and hairstyle selections persist. Female retains its existing hairstyle controls.
+
+## Male Sneaker Asset Update
+Fresh sneakers retains its existing item ID, 40-coin price and level-2 requirement. Male shop thumbnails, purchase popup, wardrobe and equipped avatar now use the learner’s supplied shoes, fitted to the aligned male base. Existing sneaker owners automatically see the updated asset. Barefoot removes the layer. Female retains its previous body-specific sneaker artwork.

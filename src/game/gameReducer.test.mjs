@@ -115,3 +115,13 @@ test('every supplied male shirt can be bought and equipped; male-only shirts rej
     }
   }
 });
+
+test('sneaker purchase supports equip and barefoot without altering other outfit slots',()=>{
+  let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:'sneakers'});
+  assert.equal(s.player.coins,15);assert(s.player.ownedItemIds.includes('sneakers'));
+  const original=s.player.equipped;
+  s=gameReducer(s,{type:'equip',outfit:{...original,shoes:'sneakers'}});assert.equal(s.player.equipped.shoes,'sneakers');
+  assert.equal(s.player.equipped.shirt,original.shirt);assert.equal(s.player.equipped.pants,original.pants);
+  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:null}});assert.equal(s.player.equipped.shoes,null);
+  assert(s.player.ownedItemIds.includes('sneakers'));
+});

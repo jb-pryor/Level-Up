@@ -252,3 +252,5 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .player-card .player-bottom-actions > button { flex: 1; min-width: 0; margin: 0 0 3px; padding: 11px 6px; font-size: 11px; white-space: nowrap; }
 .player-bottom-actions .wardrobe-hanger { margin-right: 2px; }
 @media(max-width:900px) and (min-width:651px) { .player-card .player-bottom-actions > button { font-size: 9px; padding: 10px 3px; } .player-bottom-actions { gap: 7px; } }
+
+.avatar-shoes-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }

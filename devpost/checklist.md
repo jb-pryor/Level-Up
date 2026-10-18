@@ -185,3 +185,5 @@ Activity mode: not established
 - Added 60px headwear space above dashboard avatar (44px on small screens), extending player card while preserving character scale and sticky offset. Keeps swoosh hair clear of XP bar and reserves space for future taller hats. Build passes.
 
 - Reduced dashboard space between feet and side-by-side Wardrobe/Reset controls from 58px to 12px to keep the controls in view, preserving character scale and headroom. Production build passes.
+
+- Replaced male Fresh sneakers art with supplied shoes. Fitted taller source canvas to aligned male coordinates and inspected ankle/toe coverage in a composite. Shared fitted asset across avatar/shop/purchase popup/wardrobe; kept ID/price/unlock/ownership and female artwork intact. Buy/equip/barefoot test passes; originals preserved.
