@@ -186,3 +186,6 @@ Fresh sneakers retains its existing item ID, 40-coin price and level-2 requireme
 
 ## Additional Male Shoe Styles
 Five supplied variants join the original Fresh sneakers: Ember (black/red), Monochrome (black/white), Blue streak (blue/white), Trail (brown), and High score (green/yellow). All cost 40 coins at level 2 and use the existing buy/equip/wardrobe flow. New variants are male-only; female retains its previous sneakers. Switching to Female clears incompatible equipped shoes while retaining ownership.
+
+## Male Default Pants Asset Update
+The supplied pants-default.png becomes the male starter pants via a fitted overlay, visible during setup and on the dashboard. Fitting widens upper hips slightly and tapers to existing cuff placement on all three complexion bases. Starter gray stays free; existing Midnight and Trail pants use the same fitted silhouette with their established color filters. Wardrobe/shop thumbnails share this layer. Female pants remain unchanged; original source is preserved.

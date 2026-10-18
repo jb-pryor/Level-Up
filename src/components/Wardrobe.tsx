@@ -1,3 +1,4 @@
+import { MalePants } from './MalePants';
 import { maleShoePath } from '../data/maleShoes';
 import { cosmetics } from '../data/cosmetics';
 import { maleShirtPath } from '../data/maleShirts';
@@ -18,6 +19,7 @@ const items: Record<Slot, Item[]> = {
 export function ItemPicture({ appearance, slot, item }: { appearance: Appearance; slot: Slot; item: Item }) {
   const uid=useId().replace(/[^a-zA-Z0-9]/g,'');
   if(item.id===null)return <span className="wardrobe-none" aria-hidden="true">—</span>;
+  if(appearance.gender==='male'&&slot==='pants')return <MalePants pants={item.id as Outfit['pants']} thumbnail/>;
   if(appearance.gender==='male'&&slot==='shirt'&&maleShirtPath(item.id))return <svg viewBox="210 420 610 510" aria-hidden="true" className="wardrobe-picture"><image href={maleShirtPath(item.id)!} width="1024" height="1536"/></svg>;
   const base=`/avatars/${appearance.bodyId}`;
   const matrix=(r:number,g:number,b:number)=>`${r} ${r} ${r} 0 0 ${g} ${g} ${g} 0 0 ${b} ${b} ${b} 0 0 0 0 0 1 0`;
@@ -36,7 +38,7 @@ export function Wardrobe({ appearance, draft, ownedItemIds, onChange, onConfirm,
   const selected=available.find(item=>item.id===draft[tab])!;
   return <section className="quest-card wardrobe-panel" aria-label="Wardrobe">
     <div className="wardrobe-heading"><div><span className="eyebrow">MAKE IT YOURS</span><h2>Your wardrobe</h2></div></div>
-    <p className="muted">{appearance.gender==='male'?'Try your new shirts on. Pants and hats are still waiting for fitted male layers.':'Pick a piece and see it on your player.'}</p>
+    <p className="muted">{appearance.gender==='male'?'Try your new shirts on. Hats are still waiting for fitted male layers.':'Pick a piece and see it on your player.'}</p>
     <div className="wardrobe-tabs" role="tablist" aria-label="Clothing categories">{categories.map(({slot,label})=><button key={slot} type="button" role="tab" id={`wardrobe-tab-${slot}`} aria-selected={tab===slot} aria-controls="wardrobe-items" onClick={()=>setTab(slot)} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const index=categories.findIndex(c=>c.slot===slot);const next=categories[(index+(event.key==='ArrowRight'?1:3))%4].slot;setTab(next);document.getElementById(`wardrobe-tab-${next}`)?.focus()}}} tabIndex={tab===slot?0:-1}>{label}</button>)}</div>
     <div id="wardrobe-items" className="wardrobe-grid" role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
     <div className="wardrobe-description" aria-live="polite"><strong>{selected.name}</strong><p>{selected.description}</p></div>
