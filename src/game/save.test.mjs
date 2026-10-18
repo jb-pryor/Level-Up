@@ -97,3 +97,15 @@ test('new fitted male shirt ownership and equipment survive saving',()=>{
   const player={...progressed(),ownedItemIds:['orange-shirt'],newItemIds:['orange-shirt'],equipped:{shirt:'orange-shirt',pants:'starter',hat:null,shoes:null}},store=storage();
   assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
 });
+
+test('all four supplied male hair colors preserve appearance through saving',()=>{
+  for(const hairColorId of ['black','gray','brown','blonde']){
+    const player={...progressed(),hairColorId},store=storage();
+    assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
+  }
+});
+
+test('bald male choice persists together with the remembered hair color',()=>{
+  const player={...progressed(),hairStyleId:'bald',hairColorId:'gray'},store=storage();
+  assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
+});

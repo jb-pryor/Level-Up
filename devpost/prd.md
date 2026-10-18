@@ -174,3 +174,9 @@ The learner supplied six aligned male PNGs: three complexion IDs, each with smil
 
 ## Male Shirt Playtest Inventory
 All eleven supplied shirt colors are fitted to the aligned male bases: green, blue, black, gray, navy, orange, pink, purple, red, white and yellow. Green/blue keep their previous IDs, prices and unlocks; nine new male-only tees cost 30 coins at level 2. Shop previews, purchase-dialog Equip and wardrobe preview/Confirm use the same fitted PNGs. Starter tank removes the shirt overlay. Female retains the original green/blue variants; new colors stay hidden and cannot be equipped on that body. Switching to Female while wearing a male-only tee equips the starter tank and retains ownership. Pants/hat/shoe male overlays remain pending.
+
+## Male Swoosh Hair
+Male character creation/editing now offers Black, Gray, Brown and Blonde swoosh hair using the supplied PNGs. Three new colors are fitted to the black reference’s alpha bounds and 1024×1800 canvas; the shared renderer places it on the aligned 1024×1536 male head. Original files remain intact. Hair color persists, and female retains its existing styles and three colors. Pending male hats remain unapplied until fitted.
+
+## Setup Layout and Hair Selection Refinement
+Character settings expand naturally down the page without their own scrollbar. On desktop the left character preview sticks 20px below the viewport top, sized to fit the screen, while the document scrolls; narrow screens stack normally. Male hairstyle cards show picture previews for Bald and Swoosh, with a reusable grid for later styles. Bald hides the hair layer without discarding the remembered color. Hair color and hairstyle selections persist. Female retains its existing hairstyle controls.

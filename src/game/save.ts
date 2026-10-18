@@ -10,7 +10,7 @@ const ids=(v:unknown,allowed:string[]):v is string[]=>Array.isArray(v)&&v.every(
 export function validPlayer(v:unknown):v is Player {
   if(!record(v)||typeof v.name!=='string'||!v.name.trim()||!oneOf(v.gender,['male','female'])||v.bodyId!==(v.gender==='male'?'base-a':'base-b'))return false;
   if(!oneOf(v.complexionId,['1','2','3']))return false;
-  if(!oneOf(v.hairStyleId,['short-swept','long'])||!oneOf(v.hairColorId,['brown','black','blonde'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
+  if(!oneOf(v.hairStyleId,['short-swept','long','bald'])||!oneOf(v.hairColorId,['brown','black','blonde','gray'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
   if(![v.totalXp,v.coins].every(n=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0))return false;
   if(!ids(v.activeQuestIds,quests.map(q=>q.id))||!ids(v.ownedItemIds,cosmetics.map(c=>c.id))||!ids(v.newItemIds,v.ownedItemIds)||!record(v.equipped))return false;
   if(!ids(v.favoriteQuestIds,quests.map(q=>q.id)))return false;

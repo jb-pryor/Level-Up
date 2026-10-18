@@ -177,3 +177,11 @@ Activity mode: not established
 - Added all eleven user-supplied male shirt colors with shared fitted 1024×1536 canvas and common collar/sleeve/hem envelope. Inspected composites of all eleven on aligned male base; no exposed tank edges. Shop/purchase Equip/wardrobe share fitted assets; originals preserved and generation script included. Nine new male-only tees at 30 coins/level 2; original green/blue keep IDs/prices/unlocks and female behavior. All 36 tests and build pass; learner multi-complexion playtest pending.
 
 - Tightened all eleven fitted male shirts by about 3% in width/height (553×451 envelope), preserving common center and collar position. Regenerated from originals and inspected orange-shirt composite for neckline, sleeves and hem coverage. Build passes.
+
+- Added four supplied male swoosh hair colors; fitted Brown/Blonde/Gray to untouched black-reference bounds. Adapted taller reference canvas to aligned male head, inspected four-color composite, and added male color swatches plus save support for gray. Female rendering stays unchanged. All tests/build pass; learner live fit review pending.
+
+- Removed desktop setup viewport-lock/internal form scrolling. Right settings extend with document; left preview stays sticky at 20px on wider screens. Added picture-based male Bald/Swoosh hairstyle cards and persisted bald selection; existing hair color retained. Build and save tests pass; live layout review pending.
+
+- Added 60px headwear space above dashboard avatar (44px on small screens), extending player card while preserving character scale and sticky offset. Keeps swoosh hair clear of XP bar and reserves space for future taller hats. Build passes.
+
+- Reduced dashboard space between feet and side-by-side Wardrobe/Reset controls from 58px to 12px to keep the controls in view, preserving character scale and headroom. Production build passes.

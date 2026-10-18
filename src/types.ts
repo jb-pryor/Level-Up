@@ -5,8 +5,8 @@ export type Appearance = {
   gender: 'male' | 'female';
   bodyId: BodyId;
   complexionId: '1' | '2' | '3';
-  hairStyleId: 'short-swept' | 'long';
-  hairColorId: 'brown' | 'black' | 'blonde';
+  hairStyleId: 'short-swept' | 'long' | 'bald';
+  hairColorId: 'brown' | 'black' | 'blonde' | 'gray';
   eyeColorId: 'brown' | 'blue' | 'green' | 'gray' | 'red';
   expressionId: 'smile' | 'neutral';
 };
