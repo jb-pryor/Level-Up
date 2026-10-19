@@ -34,7 +34,8 @@ export function loadPlayer(storage:StoragePort):LoadResult {
     // Older saves have no completion history; preserve progress without inventing counts.
     const player={...data.player,complexionId:data.player.complexionId===undefined||data.player.complexionId==='4'?'1':data.player.complexionId,questCooldowns:data.player.questCooldowns===undefined?{}:data.player.questCooldowns,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
     if(!validPlayer(player))return {status:'invalid',player:null};
-    return {status:'ready',player};
+    // Keep the earliest two favorites after the household layout reduces the cap.
+    return {status:'ready',player:{...player,favoriteQuestIds:player.favoriteQuestIds.slice(0,2)}};
   }catch{return {status:'invalid',player:null}}
 }
 export function savePlayer(storage:StoragePort,player:Player):boolean {

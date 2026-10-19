@@ -94,13 +94,13 @@ test('confirmed reset discards all player state and allows fresh character creat
   assert.deepEqual(fresh.player.ownedItemIds,[]);assert.deepEqual(fresh.player.questCompletions,{});
 });
 
-test('favorite limit blocks a fifth addition but allows removing and replacing favorites',()=>{
-  let s=create();for(const questId of ['dishes','room','laundry','bed'])s=gameReducer(s,{type:'favorite',questId});
-  assert.equal(s.player.favoriteQuestIds.length,4);
+test('favorite limit blocks a third addition but allows removing and replacing favorites',()=>{
+  let s=create();for(const questId of ['dishes','room'])s=gameReducer(s,{type:'favorite',questId});
+  assert.equal(s.player.favoriteQuestIds.length,2);
   assert.strictEqual(gameReducer(s,{type:'favorite',questId:'walk'}),s);
   s=gameReducer(s,{type:'favorite',questId:'room'});
   s=gameReducer(s,{type:'favorite',questId:'walk'});
-  assert.deepEqual(s.player.favoriteQuestIds,['dishes','laundry','bed','walk']);
+  assert.deepEqual(s.player.favoriteQuestIds,['dishes','walk']);
 });
 
 test('every supplied male shirt can be bought and equipped; male-only shirts reject female equips',()=>{

@@ -256,3 +256,60 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .avatar-shoes-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
 .avatar-pants-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* Separate household entry beneath the two favorite shortcuts. */
+.favorites-rail { background: transparent; border: 0; box-shadow: none; padding: 0; }
+.favorites-main,.household-rail-box { background: #eef7ff; border: 4px solid #30219a; box-shadow: 6px 6px 0 #176da3; padding: 14px; }
+.household-rail-box { margin-top: 20px; }
+.household-rail-box h2 { margin-top: 0; }
+.household-rail-box p { font-size: 12px; line-height: 1.7; color: #626780; }
+.household-rail-box .primary { width: 100%; justify-content: center; font-size: 13px; }
+.household-modal { width: min(650px,calc(100vw - 32px)); }
+.household-modal h3 { font: 18px/1.7 LevelPixel,monospace; color: #30219a; margin-top: 16px; }
+.household-modal p { line-height: 1.8; }
+
+.household-connection { background: #dfeaff; border: 2px solid #8b82b4; padding: 14px; margin: 18px 0; color: #30219a; font-size: 13px; line-height: 1.7; }
+
+.account-form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 16px; min-width: 0; }
+.account-form label { display: grid; gap: 7px; color: #34266c; font-weight: bold; }
+.account-form input { box-sizing: border-box; width: 100%; min-width: 0; padding: 12px; border: 2px solid #8b82b4; border-radius: 0; background: white; color: #302653; font: inherit; }
+.account-form input:focus-visible { outline: 3px solid #5b42bf; outline-offset: 2px; }
+.account-form small,.account-note { font-size: 12px; font-weight: normal; line-height: 1.6; }
+.account-form .primary { margin-top: 6px; justify-content: center; }
+.account-links { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 20px; }
+.account-links .quiet-button { font-size: 11px; }
+.account-text-button { background: transparent; border: 0; padding: 8px 0; font: inherit; color: #49309b; text-decoration: underline; cursor: pointer; }
+.account-error { border-left: 4px solid #a72e50; padding: 8px 12px; background: #ffe7ee; color: #88223c; }
+.account-form fieldset:disabled { opacity: .65; }
+
+.household-modal { width: min(850px,calc(100vw - 32px)); }
+.household-entry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+.household-entry-grid form { padding: 18px; background: #e0eaff; border: 2px solid #8b82b4; }
+.household-entry-grid button { width: 100%; font-size: 12px; }
+.household-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.household-title h3 { overflow-wrap: anywhere; }
+.household-member-count { flex-shrink: 0; background: #d5f7af; color: #3b6c2e; padding: 8px 12px; border: 2px solid #648948; font-size: 12px; }
+.household-invite { margin: 18px 0; padding: 14px; background: #e0eaff; border: 2px solid #8b82b4; }
+.household-invite summary { font-weight: bold; color: #30219a; cursor: pointer; }
+.household-invite input { display: block; width: 100%; box-sizing: border-box; margin-top: 8px; padding: 10px; border: 2px solid #8b82b4; background: white; color: #30219a; font: inherit; }
+.household-controls { display: flex; flex-wrap: wrap; gap: 12px; }
+.household-controls button { font-size: 11px; }
+.household-tabs { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 24px 0; }
+.household-tabs .quiet-button { flex: 1; font-size: 13px; }
+.household-tabs button[aria-pressed=true] { background: #ffeb43; }
+.household-rows { display: grid; gap: 14px; }
+.household-row { display: flex; align-items: center; gap: 16px; border: 2px solid #9a8cb9; background: #fffaf0; padding: 14px; box-shadow: 3px 3px 0 #d6cce5; min-width: 0; }
+.household-row > div:not(.household-portrait) { min-width: 0; overflow-wrap: anywhere; }
+.household-row p { margin: 5px 0; font-size: 13px; }
+.household-row time { display: block; color: #6e6386; font-size: 11px; }
+.household-row-level { color: #497f32; font-size: 12px; }
+.household-row > .household-row-level { margin-left: auto; white-space: nowrap; }
+.household-portrait { position: relative; width: 64px; height: 72px; flex: 0 0 64px; overflow: hidden; border: 2px solid #8b82b4; background: #e0eaff; }
+.household-portrait .avatar { position: absolute; width: 144px; height: 216px; max-width: none; max-height: none; min-height: 0; margin: 0; left: -40px; top: 6px; }
+.household-empty { text-align: center; padding: 24px; border: 2px dashed #9a8cb9; background: #e0eaff; }
+.household-empty > span { color: #8060bd; font-size: 30px; }
+.household-refresh-note { font-size: 11px; }
+.household-load-more { display: block; margin: 20px auto; }
+.household-leave-confirm { padding: 14px; border: 2px solid #b84e68; background: #ffe7ee; }
+.household-account > .quiet-button { margin-top: 20px; }
+@media(max-width:600px) { .household-entry-grid { grid-template-columns: 1fr; } .household-row { gap: 10px; padding: 10px; } .household-portrait { flex-basis: 52px; width: 52px; } .household-portrait .avatar { left: -46px; } }

@@ -116,3 +116,8 @@ test('all new male shoe selections survive saving',()=>{
     assert(savePlayer(store,player));assert.deepEqual(loadPlayer(store).player,player);
   }
 });
+
+test('household layout migration keeps the first two favorites without losing other progress',()=>{
+  const player={...progressed(),favoriteQuestIds:['dishes','walk','room','bed']},store=storage(JSON.stringify({schemaVersion:1,player}));
+  assert.deepEqual(loadPlayer(store).player,{...player,favoriteQuestIds:['dishes','walk']});
+});

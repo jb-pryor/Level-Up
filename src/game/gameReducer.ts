@@ -37,7 +37,7 @@ export function gameReducer(state: GameState, action: Action): GameState {
   }
   if(action.type==='add'||action.type==='delete'||action.type==='complete'||action.type==='favorite') {
     const quest=quests.find(q=>q.id===action.questId);if(!quest)return feedback('That quest is unavailable.',true);
-    if(action.type==='favorite'&&!p.favoriteQuestIds.includes(quest.id)&&p.favoriteQuestIds.length>=4)return state;
+    if(action.type==='favorite'&&!p.favoriteQuestIds.includes(quest.id)&&p.favoriteQuestIds.length>=2)return state;
     if(action.type==='favorite')return {...state,player:{...p,favoriteQuestIds:p.favoriteQuestIds.includes(quest.id)?p.favoriteQuestIds.filter(id=>id!==quest.id):[...p.favoriteQuestIds,quest.id]}};
     const now=action.now??Date.now();
     const active=p.activeQuestIds.includes(quest.id);

@@ -161,7 +161,7 @@ The right rail contains Quest Catalog and all saved favorite quests. Each shortc
 ## Reset Player
 A red Reset player button below Edit clothes opens a confirmation dialog: “Are you sure you want to delete your player? This cannot be undone.” Reset deletes this app’s saved player and returns to character creation, clearing all progression, quests, cosmetics, favorites and skills. Cancel, Escape or dismissal preserve progress. If deleting storage fails, keep the existing player and show an error.
 
-Favorite limit: allow at most four favorite quests. Attempting a fifth shows a temporary “Limit of 4 favorites” message beside the detail-page star. Removing favorites is always allowed. Earlier saves with more than four retain them until manually reduced, but cannot add more.
+Favorite limit: allow at most two favorite quests. Attempting a third shows a temporary “Limit of 2 favorites” message beside the detail-page star. Removing favorites is always allowed. Earlier saves retain their first two favorites; active quests and other progress are preserved.
 
 ## Background Music
 An original mellow chiptune loop plays only after enabling the fixed bottom-right Music on/off button. It uses a separate mixer from sound effects, starts off on each visit, and loops quietly beneath gameplay. No external song samples or network requests are required.
@@ -189,3 +189,12 @@ Five supplied variants join the original Fresh sneakers: Ember (black/red), Mono
 
 ## Male Default Pants Asset Update
 The supplied pants-default.png becomes the male starter pants via a fitted overlay, visible during setup and on the dashboard. Fitting widens upper hips slightly and tapers to existing cuff placement on all three complexion bases. Starter gray stays free; existing Midnight and Trail pants use the same fitted silhouette with their established color filters. Wardrobe/shop thumbnails share this layer. Female pants remain unchanged; original source is preserved.
+
+## Household Expansion
+A separate right-rail Household box opens a regular dialog, not the quest book. Favorites are capped at two to reserve space. Register with a unique account username, email and password; sign in using email/password. Player display names remain independently editable and non-unique. Password recovery uses email; task reminders are deferred.
+
+Signed-in users create a named household or join using an invite code; each account can belong to one household. Any member can copy the household code; the owner can replace it. Codes expire after seven days. Members shows the member count, avatar heads, display names, usernames and levels. Activity shows newest completions first, with avatar head, display name, level, quest and local date/time. Older activity loads in batches of 30. Data refreshes every 30 seconds while visible, and manually.
+
+Only successful quests completed while signed in with a loaded household membership are shared; previous local history is not uploaded. Personal coins, clothing ownership and tasks stay local. Pending activity is saved separately per account, retries with stable event IDs, and retains its original household and appearance snapshot. Household errors must not block personal rewards. Members can leave; a lone owner can delete the household after confirmation, removing shared activity. An owner cannot delete while other members remain.
+
+Learner confirmed a signed-in account screenshot. Create/join/member/activity flows and password-recovery delivery still need live learner verification. Avatar heads use appearance layers; shared clothing is deferred because it is not part of the current profile snapshot.
