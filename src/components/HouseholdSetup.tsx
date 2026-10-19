@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 import type { AccountState } from '../auth/useAccount';
 
 type Mode = 'signin' | 'signup' | 'forgot';
-export function HouseholdSetup({ account, displayName, household }: { account: AccountState; displayName?: string; household: HouseholdState }) {
+export function HouseholdSetup({ account, displayName, household, beforeSignOut }: { account: AccountState; displayName?: string; household: HouseholdState; beforeSignOut?:()=>Promise<boolean> }) {
   const [mode, setMode] = useState<Mode>('signin');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -57,7 +57,7 @@ export function HouseholdSetup({ account, displayName, household }: { account: A
   const signOut = async () => {
     if (!supabase || busy) return;
     setBusy(true); setError(''); setMessage('');
-    try { const { error } = await supabase.auth.signOut({ scope: 'local' }); if (error) throw error; }
+    try { if(beforeSignOut&&!await beforeSignOut()){setError('Your player has not finished saving. Retry syncing before signing out.');return;} const { error } = await supabase.auth.signOut({ scope: 'local' }); if (error) throw error; }
     catch { setError('Could not sign out. Check your connection and try again.'); }
     finally { setBusy(false); }
   };
@@ -70,7 +70,7 @@ export function HouseholdSetup({ account, displayName, household }: { account: A
     {message && <p className="household-connection" role="status">{message}</p>}
     {account.session && !recovery ? <>
       <p>Signed in as <strong>@{String(account.session.user.user_metadata.username || 'player')}</strong>.</p>
-      <p>Your player name remains {displayName ? <strong>{displayName}</strong> : 'independent of your username'}. Your character and progress are still saved in this browser.</p>
+      <p>Your player name remains {displayName ? <strong>{displayName}</strong> : 'independent of your username'}. Your character and progress are saved to this account.</p>
       <HouseholdPanel key={account.session.user.id} state={household} userId={account.session.user.id}/>
       <button className="quiet-button" disabled={busy} onClick={signOut}>{busy ? 'Signing out…' : 'Sign out'}</button>
     </> : <>

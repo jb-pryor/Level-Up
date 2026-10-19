@@ -313,3 +313,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .household-leave-confirm { padding: 14px; border: 2px solid #b84e68; background: #ffe7ee; }
 .household-account > .quiet-button { margin-top: 20px; }
 @media(max-width:600px) { .household-entry-grid { grid-template-columns: 1fr; } .household-row { gap: 10px; padding: 10px; } .household-portrait { flex-basis: 52px; width: 52px; } .household-portrait .avatar { left: -46px; } }
+
+.account-save-status { display: flex; align-items: center; justify-content: center; gap: 14px; color: #493881; font-size: 11px; padding: 4px 16px; }
+.account-save-status button { font-size: 11px; }
+.account-save-gate { max-width: 760px; margin: 40px auto; }
+.account-save-gate .account-text-button { margin-top: 18px; }
+.account-header-button { font-size: 11px; }

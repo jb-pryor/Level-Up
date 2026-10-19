@@ -53,3 +53,7 @@ Canonical scope, PRD, technical spec and build checklist are in `devpost/`. Pers
 Use the same browser and address (`http://127.0.0.1:5173`) when returning. Other browsers, private windows, hosts or ports have separate storage. Clearing site data removes progress; there is no cloud backup or cross-device sync. If saving fails, an on-screen warning offers Retry saving while the current session stays usable. An unreadable save is preserved until you explicitly choose Start fresh and create a new character.
 
 For the demo, leave an unfinished quest and equip a purchased shirt, then refresh to show everything restored. To check narrow layout, resize the browser and open the quest catalog, shop and wardrobe. Character/clothing image polish remains deferred.
+
+### Account saving setup
+
+Email accounts and households use Supabase. To enable private account-owned character/progress saving, apply `supabase/migrations/002_account_player_saves.sql` after migration 001. See `supabase/README.md` for setup and cross-device testing. Existing guests are linked explicitly; signed-in accounts load their own player and save automatically. Keep `.env.local` ignored and use only the publishable browser key.

@@ -1,3 +1,5 @@
+import { usePlayerSave, type PlayerSaveState } from './account/usePlayerSave';
+import type { AccountState } from './auth/useAccount';
 import { useHousehold } from './household/useHousehold';
 import { useAccount } from './auth/useAccount';
 import { MusicToggle } from './components/MusicToggle';
@@ -18,16 +20,39 @@ import { levelFor, xpIntoLevel } from './game/progression';
 import type { Outfit } from './types';
 import { starterOutfit } from './types';
 import { cosmetics } from './data/cosmetics';
-import { loadBrowserPlayer, saveBrowserPlayer, deleteBrowserPlayerSave } from './game/save';
+
 import { RewardEffects } from './components/RewardEffects';
 import { useAnimatedNumber } from './game/useAnimatedNumber';
 import { playSound, setSoundEnabled, soundEnabled, unlockAudio, playTransformationSound } from './game/soundEffects';
 
 const HouseholdSetup=lazy(()=>import('./components/HouseholdSetup').then(module=>({default:module.HouseholdSetup})));
 
-export default function App() {
+export default function App(){
   const account=useAccount();
-  const [loaded]=useState(loadBrowserPlayer);
+  if(account.loading)return <main className="dashboard"><section className="quest-card" role="status"><h2>Loading your account…</h2></section></main>;
+  return <PlayerSession key={account.session?.user.id??'guest'} account={account}/>;
+}
+function PlayerSession({account}:{account:AccountState}){
+  const saves=usePlayerSave(account);
+  if(saves.stage!=='ready')return <SaveGate account={account} saves={saves}/>;
+  return <GameApp key={saves.generation} account={account} saves={saves}/>;
+}
+function SaveGate({account,saves}:{account:AccountState;saves:PlayerSaveState}){
+  const household=useHousehold(account.session,null);
+  const [accountOpen,setAccountOpen]=useState(false);
+  return <main className="dashboard"><section className="quest-card account-save-gate">
+    <h2>{saves.stage==='loading'?'Loading your player…':saves.stage==='link'?'Your account, your player.':saves.stage==='conflict'?'Your player has newer progress.':'Your player could not be loaded'}</h2>
+    {saves.error&&<p role="alert">{saves.error}</p>}
+    {saves.stage==='link'&&<><p>{saves.candidate?<>Link <strong>{saves.candidate.name}</strong> and their XP, coins, clothes and quests to <strong>@{String(account.session?.user.user_metadata.username||'your account')}</strong>? This is a one-time choice.</>:'This account has no saved player yet. Create one to start your adventure.'}</p><div className="household-controls">{saves.candidate&&<button className="primary" onClick={()=>void saves.link(true)}>Link this player</button>}<button className="quiet-button" onClick={()=>void saves.link(false)}>{saves.candidate?'Start a new player':'Create my player'}</button></div></>}
+    {saves.stage==='conflict'&&<><p>Download your local backup before loading the account’s latest save. This keeps older progress from overwriting another device.</p><div className="household-controls"><button className="quiet-button" onClick={saves.downloadBackup}>Download local backup</button><button className="primary" onClick={()=>{if(window.confirm('Load the latest account save? Your unsynced local progress will be archived in this browser, rather than merged.'))void saves.load(true);}}>Load account save</button></div></>}
+    {saves.stage==='error'&&<button className="primary" onClick={()=>void saves.load()}>Retry loading</button>}
+    {saves.status&&<p role="status">{saves.status}</p>}
+    <button className="account-text-button" onClick={()=>setAccountOpen(true)}>Account</button>
+    {(accountOpen||account.recovery)&&<Modal title="Account" onClose={()=>{setAccountOpen(false);account.finishRecovery();}}><Suspense fallback={<p>Loading account…</p>}><HouseholdSetup account={account} household={household} beforeSignOut={async()=>true}/></Suspense></Modal>}
+  </section></main>;
+}
+function GameApp({account,saves}:{account:AccountState;saves:PlayerSaveState}) {
+  const loaded=saves.seed;
   const [recoveryNeeded,setRecoveryNeeded]=useState(loaded.status==='invalid');
   const [saveFailed,setSaveFailed]=useState(loaded.status==='unavailable');
   const [game,dispatch]=useReducer(gameReducer,{player:loaded.player,notice:null});
@@ -36,8 +61,8 @@ export default function App() {
   const completedClicks=useRef(new Set<string>());
   useEffect(()=>{completedClicks.current.clear();},[player]);
   useEffect(()=>{
-    if(player&&!recoveryNeeded)setSaveFailed(!saveBrowserPlayer(player));
-  },[player,recoveryNeeded]);
+    if(player&&!recoveryNeeded)setSaveFailed(!saves.save(player));
+  },[player,recoveryNeeded,saves.save]);
   const [soundOn,setSoundOn]=useState(soundEnabled);
   useEffect(()=>{
     const click=(event:MouseEvent)=>{
@@ -63,8 +88,11 @@ export default function App() {
   const [editing,setEditing]=useState(false);
   const [resetOpen,setResetOpen]=useState(false);
   const [resetError,setResetError]=useState(false);
-  const resetPlayer=()=>{
-    if(!deleteBrowserPlayerSave()){setResetError(true);return;}
+  const [resetBusy,setResetBusy]=useState(false);
+  const resetPlayer=async()=>{
+    if(resetBusy)return;setResetBusy(true);
+    if(!await saves.reset()){setResetError(true);setResetBusy(false);return;}
+    setResetBusy(false);
     dispatch({type:'reset-player'});setResetOpen(false);setResetError(false);
     setEditing(false);setCatalogOpen(false);setPanel('quests');
     setDraftOutfit({...starterOutfit});setClaimedSequence(0);setSaveFailed(false);
@@ -90,9 +118,10 @@ export default function App() {
     rewardSource.current={x:rect.left+rect.width/2,y:rect.top+rect.height/2};
     dispatch({type:'complete',questId,now});
   };
-  return <><header className="app-header"><a href="#" className="brand" onClick={e=>e.preventDefault()}><span className="brand-icon">↑</span>Level Up<span className="brand-dot">.</span></a><span className="header-note">SMALL ACTIONS. BIG ADVENTURES.</span><div className="header-player-actions"><button className="quiet-button sound-toggle" aria-pressed={soundOn} aria-label={soundOn?'Mute sound effects':'Enable sound effects'} onClick={()=>{const next=!soundOn;setSoundOn(next);setSoundEnabled(next);if(next){unlockAudio();playSound('click')}}}>{soundOn?'Sound on':'Sound off'}</button>{player&&<>{!editing&&<button className="quiet-button" onClick={()=>{setEditing(true);setCatalogOpen(false);openPanel('quests')}}>Edit character</button>}<div className="coin-balance" ref={coinTarget} aria-label={`${Math.round(displayedCoins)} coins`}><span aria-hidden="true"><CoinIcon/> {Math.round(displayedCoins)} coins</span></div></>}</div></header>
+  return <><header className="app-header"><a href="#" className="brand" onClick={e=>e.preventDefault()}><span className="brand-icon">↑</span>Level Up<span className="brand-dot">.</span></a><span className="header-note">SMALL ACTIONS. BIG ADVENTURES.</span><div className="header-player-actions"><button className="quiet-button account-header-button" onClick={()=>setHouseholdOpen(true)}>{account.session?'Account':'Sign in'}</button><button className="quiet-button sound-toggle" aria-pressed={soundOn} aria-label={soundOn?'Mute sound effects':'Enable sound effects'} onClick={()=>{const next=!soundOn;setSoundOn(next);setSoundEnabled(next);if(next){unlockAudio();playSound('click')}}}>{soundOn?'Sound on':'Sound off'}</button>{player&&<>{!editing&&<button className="quiet-button" onClick={()=>{setEditing(true);setCatalogOpen(false);openPanel('quests')}}>Edit character</button>}<div className="coin-balance" ref={coinTarget} aria-label={`${Math.round(displayedCoins)} coins`}><span aria-hidden="true"><CoinIcon/> {Math.round(displayedCoins)} coins</span></div></>}</div></header>
+    {account.session&&<div className="account-save-status" role="status">{saves.status||'Account save ready'} <button className="account-text-button" onClick={()=>void saves.flush()}>Sync now</button></div>}
     {household.syncError&&!householdOpen&&<div className="storage-warning" role="status">{household.syncError} <button className="quiet-button" onClick={household.retry}>Retry household sync</button></div>}
-    {saveFailed&&<div className="storage-warning" role="alert">Progress cannot be saved in this browser right now. Your current session still works, but changes may be lost when you close or refresh. <button className="quiet-button" onClick={()=>{if(player)setSaveFailed(!saveBrowserPlayer(player));else setSaveFailed(loadBrowserPlayer().status==='unavailable')}}>Retry saving</button></div>}
+    {saveFailed&&<div className="storage-warning" role="alert">Progress cannot be saved in this browser right now. Your current session still works, but changes may be lost when you close or refresh. <button className="quiet-button" onClick={()=>{if(player)setSaveFailed(!saves.save(player));else void saves.flush()}}>Retry saving</button></div>}
     {recoveryNeeded?<main className="dashboard"><section className="quest-card"><h2>Your save could not be loaded</h2><p>The saved data is unreadable or from an unsupported version. It has been left untouched. Starting fresh will replace it once you create a new character.</p><button className="primary" onClick={()=>setRecoveryNeeded(false)}>Start fresh</button></section></main>:!player||editing?<CharacterSetup key={editing?'edit':'new'} initialAppearance={player??undefined} onCancel={editing?()=>setEditing(false):undefined} onCreate={appearance=>{dispatch({type:player?'edit':'create',appearance});setEditing(false)}}/>:
     <main className="dashboard">
       <div className="dashboard-grid"><section className="player-card"><div className="player-title"><h2>{player.name}</h2><span className="level-pill">LEVEL {levelFor(Math.floor(displayedXp))}</span></div><div className="xp-label"><span>{levelFor(Math.floor(displayedXp))===1?'A fresh start':'Keep leveling up'}</span><span>{Math.round(xpIntoLevel(displayedXp))} / 100 XP</span></div><div className="xp-track" ref={xpTarget} role="progressbar" aria-label="XP toward next level" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(xpIntoLevel(displayedXp))}><div style={{width:`${xpIntoLevel(displayedXp)}%`}}/></div><div className="player-avatar-zone"><Avatar appearance={player} outfit={wardrobe?draftOutfit:player.equipped}/><LevelUpCelebration level={levelFor(Math.floor(displayedXp))}/></div><div className="player-bottom-actions"><button className="quiet-button" onClick={openWardrobe}><svg className="wardrobe-hanger" viewBox="0 0 20 18" aria-hidden="true"><path d="M8 4a2 2 0 1 1 4 0c0 1-2 1.5-2 3v1L2 14v2h16v-2l-8-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter"/></svg> Wardrobe {newItemBadge}</button><button className="quiet-button reset-player-button" onClick={()=>{setResetError(false);setResetOpen(true)}}>Reset player</button></div></section>
@@ -105,8 +134,8 @@ export default function App() {
 
       {catalogOpen&&<Modal title="Quest catalog" className="quest-book-modal" onClose={()=>setCatalogOpen(false)}><QuestCatalog player={player} onFavorite={questId=>dispatch({type:'favorite',questId})} onAdd={questId=>dispatch({type:'add',questId,now:Date.now()})}/></Modal>}
     </main>}
-    {(householdOpen||account.recovery)&&<Modal title={account.recovery?"Reset password":"Household"} className="household-modal" onClose={()=>{setHouseholdOpen(false);account.finishRecovery()}}><Suspense fallback={<p role="status">Loading household…</p>}><HouseholdSetup account={account} displayName={player?.name} household={household}/></Suspense></Modal>}
-    {player&&resetOpen&&<Modal title="Reset player?" className="reset-player-dialog" onClose={()=>setResetOpen(false)}><p>Are you sure you want to delete your player? This cannot be undone.</p><p className="muted">Your character, XP, coins, quests, clothes, favorites and skill progress will be deleted from this browser.</p>{resetError&&<p role="alert">Your saved player could not be deleted. Nothing has been reset. Try again when browser storage is available.</p>}<div className="reset-player-actions"><button className="quiet-button" onClick={()=>setResetOpen(false)}>Cancel</button><button className="quiet-button reset-player-button" onClick={resetPlayer}>Reset</button></div></Modal>}
+    {(householdOpen||account.recovery)&&<Modal title={account.recovery?"Reset password":"Household"} className="household-modal" onClose={()=>{setHouseholdOpen(false);account.finishRecovery()}}><Suspense fallback={<p role="status">Loading household…</p>}><HouseholdSetup account={account} displayName={player?.name} household={household} beforeSignOut={saves.flush}/></Suspense></Modal>}
+    {player&&resetOpen&&<Modal title="Reset player?" className="reset-player-dialog" onClose={()=>{if(!resetBusy)setResetOpen(false);}}><p>Are you sure you want to delete your player? This cannot be undone.</p><p className="muted">{account.session?'Your character, XP, coins, quests, clothes, favorites and skill progress will be reset for this account on all devices. Your login and household membership remain.':'Your character, XP, coins, quests, clothes, favorites and skill progress will be deleted from this browser.'}</p>{resetError&&<p role="alert">Your saved player could not be deleted. Nothing has been reset. Try again when browser storage is available.</p>}<div className="reset-player-actions"><button className="quiet-button" disabled={resetBusy} onClick={()=>setResetOpen(false)}>Cancel</button><button className="quiet-button reset-player-button" disabled={resetBusy} onClick={()=>void resetPlayer()}>{resetBusy?'Resetting…':'Reset'}</button></div></Modal>}
     {player&&!editing&&purchaseItem&&<Modal title="New item!" className="purchase-dialog" onClose={()=>dispatch({type:'clear-notice'})}><div className="purchase-picture"><ItemPicture appearance={player} slot={purchaseItem.slot} item={purchaseItem}/></div><h3>{purchaseItem.name}</h3><p>{purchaseItem.description}</p><div className="purchase-actions"><button className="primary" onClick={()=>dispatch({type:'equip',outfit:{...player.equipped,[purchaseItem.slot]:purchaseItem.id}})}>Equip</button><button className="quiet-button" onClick={openWardrobe}>Wardrobe {newItemBadge}</button><button className="quiet-button" onClick={()=>dispatch({type:'clear-notice'})}>Close</button></div></Modal>}
     {player&&!editing&&<RewardEffects notice={game.notice} source={rewardSource} xpTarget={xpTarget} coinTarget={coinTarget} onRelease={setClaimedSequence}/>}
     <MusicToggle/>
