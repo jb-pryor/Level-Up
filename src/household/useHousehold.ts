@@ -84,7 +84,14 @@ export function useHousehold(session:Session|null,player:Player|null) {
       if(current.current.userId===userId&&current.current.player)await update(sharedProfile(current.current.player));
       if(current.current.userId===userId&&persist())setSyncError('');
       if(sent&&current.current.userId===userId)await refresh();
-    }catch(failure){if(current.current.userId===userId)setSyncError(`Household sync paused: ${detail(failure)} Your personal rewards are saved normally. Retry to send pending activity.`);}
+    }catch(failure){
+      if(current.current.userId===userId){
+        const reason=detail(failure);
+        setSyncError(reason.includes('Unknown quest')
+          ? 'Household needs the latest quest database update (migration 004). Your rewards are unaffected and pending activity is kept. After updating Supabase, retry household sync.'
+          : `Household sync paused: ${reason} Your personal rewards are saved normally. Retry to send pending activity.`);
+      }
+    }
     finally{running.current=false;}
   },[userId,refresh]);
   useEffect(()=>{

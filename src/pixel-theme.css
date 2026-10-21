@@ -319,3 +319,57 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .account-save-gate { max-width: 760px; margin: 40px auto; }
 .account-save-gate .account-text-button { margin-top: 18px; }
 .account-header-button { font-size: 11px; }
+
+/* Full-width desktop header keeps its original compact single-row height. */
+.app-header { width: 100%; max-width: none; margin: 0; padding: 23px clamp(16px,2vw,40px); display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 16px 24px; }
+.app-header .brand { grid-column: 1; grid-row: 1; justify-self: start; }
+.app-header .header-player-actions { grid-column: 3; grid-row: 1; justify-self: end; justify-content: flex-end; flex-wrap: nowrap; margin: 0; }
+.app-header .header-note { display: block; position: static; transform: none; grid-column: 2; grid-row: 1; justify-self: center; margin: 0; text-align: center; white-space: nowrap; font-size: clamp(8px,.65vw,10px); letter-spacing: 1px; }
+@media(min-width:1600px) {
+  .app-header { grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); }
+}
+@media(min-width:801px) and (max-width:1100px) {
+  .app-header { gap: 12px; }
+  .app-header .header-note { display: none; }
+  .app-header { grid-template-columns: auto minmax(0,1fr); }
+  .app-header .header-player-actions { grid-column: 2; }
+}
+@media(max-width:800px) {
+  .app-header { grid-template-columns: minmax(0,1fr); padding: 18px 16px; }
+  .app-header .header-player-actions { grid-column: 1; grid-row: 2; justify-self: stretch; justify-content: center; flex-wrap: wrap; }
+  .app-header .header-note { display: none; }
+}
+
+/* Center the tagline on the viewport, independent of the unequal side groups. */
+@media(min-width:1101px) {
+  .app-header .header-note { position: absolute; grid-column: auto; grid-row: auto; justify-self: auto; align-self: auto; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+}
+
+/* Six chapters fit along the book edge without extending beyond its pages. */
+.book-bookmarks { bottom: 20px; gap: 10px; }
+.book-bookmark { height: clamp(56px,10svh,80px); flex-shrink: 0; }
+.book-bookmark svg { width: 24px; height: 24px; }
+.book-bookmark span { font-size: 9px; }
+.bookmark-education { background: #ffe59e; color: #856125; }
+.bookmark-exploration { background: #a8e5dc; color: #326e6b; }
+.bookmark-discovery { background: #d6bbff; color: #684593; }
+@media(max-height:650px) { .book-bookmarks { gap: 7px; } .book-bookmark { height: 56px; } }
+.book-bookmark { flex: 1 1 0; min-height: 48px; max-height: 80px; }
+.book-bookmark span { font-size: 8px; letter-spacing: 0; }
+
+/* Daily stock shares the shop frame, with a quick cartoon-blue transition. */
+.shop-panel { transition: background-color 550ms ease-in-out; }
+.shop-panel.daily-shop-panel { background-color: #a9ddff; }
+.shop-mode-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.shop-mode-toggle svg { width: 15px; height: 17px; flex-shrink: 0; }
+.shop-mode-toggle:disabled { cursor: not-allowed; background: #dddfea; color: #79768b; border-color: #a6a2bc; box-shadow: 3px 3px 0 #b9b6c8; }
+.daily-shop-lock-level { font-size: 9px; }
+.shop-view-content:not([hidden]) { animation: daily-shop-fade 550ms ease-in-out both; }
+.daily-shop-timer { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: #34467f; margin: 24px 0; }
+.daily-shop-timer time { font-family: LevelPixel,monospace; font-size: 18px; font-variant-numeric: tabular-nums; color: #30219a; }
+.daily-shop-empty { min-height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px 20px; border: 2px dashed #719bce; background: #d9efff80; }
+.daily-shop-empty > svg { width: 56px; height: 56px; color: #4f68a0; margin-bottom: 20px; }
+.daily-shop-empty h3 { font: 18px/1.6 LevelPixel,monospace; color: #30219a; }
+.daily-shop-empty p { max-width: 330px; color: #526486; line-height: 1.8; }
+@keyframes daily-shop-fade { from { opacity: 0; } to { opacity: 1; } }
+@media(prefers-reduced-motion:reduce) { .shop-view-content:not([hidden]) { animation: none; } .shop-panel { transition: none; } }

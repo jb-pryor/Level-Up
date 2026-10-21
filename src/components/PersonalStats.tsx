@@ -1,6 +1,6 @@
 import type { Player } from '../types';
 import { quests } from '../data/quests';
-const skillNames:Record<string,string>={dishes:'Dishwasher',room:'Room Ranger',laundry:'Laundry Legend',bed:'Bed Builder','deep-clean':'Kitchen Keeper',walk:'Trail Walker',gym:'Gym Warrior',meal:'Meal Maker',meditate:'Mind Master',yoga:'Yoga Explorer',compliment:'Hype Hero','check-in':'Friend Keeper',meet:'Icebreaker',help:'Helping Hand',thank:'Gratitude Guru'};
+import { skillNames } from '../data/skillNames';
 export function PersonalStats({player}:{player:Player}) {
   const unlockedSkills=quests.filter(quest=>(player.questCompletions[quest.id]??0)>0);
   return <section className="quest-card personal-stats"><span className="eyebrow">YOUR REAL-LIFE SKILL TREE</span><h2>Personal Stats</h2><p className="muted">Every completion earns 1 skill XP. Every 5 skill XP earns a level.</p><div className="skill-grid">{unlockedSkills.map(quest=>{

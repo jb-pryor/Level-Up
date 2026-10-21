@@ -15,5 +15,27 @@ export const quests: Quest[] = [
   {id:'meet',name:'Introduce yourself to someone new',category:'social',xp:35,coins:10},
   {id:'help',name:'Help someone with a task',category:'social',xp:60,coins:20},
   {id:'thank',name:'Send someone a thank-you message',category:'social',xp:15,coins:5},
+  {"id": "study-hour", "name": "Study for one hour", "category": "education", "xp": 60, "coins": 20},
+  {"id": "homework", "name": "Complete one homework assignment", "category": "education", "xp": 35, "coins": 10},
+  {"id": "teacher", "name": "Talk to a teacher about your coursework", "category": "education", "xp": 15, "coins": 5},
+  {"id": "classmate-review", "name": "Review classwork with a classmate", "category": "education", "xp": 35, "coins": 10},
+  {"id": "read-chapter", "name": "Read one chapter of an educational book", "category": "education", "xp": 35, "coins": 10},
+  {"id": "new-area", "name": "Explore a new area for 30 minutes", "category": "exploration", "xp": 35, "coins": 10},
+  {"id": "new-place", "name": "Visit a town or place you have never been", "category": "exploration", "xp": 60, "coins": 20},
+  {"id": "park-trail", "name": "Explore a new park or walking trail", "category": "exploration", "xp": 35, "coins": 10},
+  {"id": "local-landmark", "name": "Visit a local landmark or museum", "category": "exploration", "xp": 35, "coins": 10},
+  {"id": "new-route", "name": "Take a different route on a familiar trip", "category": "exploration", "xp": 15, "coins": 5},
+  {"id": "try-hour", "name": "Spend one hour trying something new", "category": "exploration", "xp": 60, "coins": 20},
+  {"id": "new-hobby", "name": "Spend 30 minutes learning a new hobby", "category": "exploration", "xp": 35, "coins": 10},
+  {"id": "beginner-lesson", "archived": true, "name": "Complete a beginner lesson in a new skill", "category": "exploration", "xp": 35, "coins": 10},
+  {"id": "first-attempt", "name": "Make a first attempt, even if it goes badly", "category": "exploration", "xp": 15, "coins": 5},
+  {"id": "make-something", "archived": true, "name": "Create something using a new technique", "category": "exploration", "xp": 35, "coins": 10},
+  {id:'read-book',name:'Read a book for 30 minutes',category:'education',xp:35,coins:10},
 ];
-export const questCategories = [{id:'home',label:'Home improvement',icon:'⌂'},{id:'health',label:'Health',icon:'♡'},{id:'social',label:'Social positivity',icon:'✧'}] as const;
+export const questCategories = [
+  {id:'home',label:'Home improvement',tabLabel:'Home',icon:'⌂'},
+  {id:'health',label:'Health',tabLabel:'Health',icon:'♡'},
+  {id:'social',label:'Social positivity',tabLabel:'Social',icon:'✧'},
+  {id:'education',label:'Education',tabLabel:'Education',icon:'▤'},
+  {id:'exploration',label:'Exploration',tabLabel:'Explore',icon:'◇'},
+] as const;

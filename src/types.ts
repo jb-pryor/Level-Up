@@ -16,6 +16,6 @@ export const starterOutfit: Outfit = { shirt: 'starter', pants: 'starter', shoes
 export const defaultAppearance: Appearance = { name: '', gender: 'male', bodyId: 'base-a', complexionId: '1', hairStyleId: 'short-swept', hairColorId: 'brown', eyeColorId: 'brown', expressionId: 'smile' };
 
 export type Player = Appearance & { totalXp: number; coins: number; activeQuestIds: string[]; ownedItemIds: string[]; newItemIds: string[]; questCompletions: Record<string, number>; questCooldowns: Record<string, number>; favoriteQuestIds: string[]; equipped: Outfit };
-export type Category = 'home' | 'health' | 'social';
-export type Quest = { id: string; name: string; category: Category; xp: number; coins: number };
+export type Category = 'home' | 'health' | 'social' | 'education' | 'exploration';
+export type Quest = { id: string; name: string; category: Category; xp: number; coins: number; archived?: boolean };
 export type Cosmetic = { id: string; name: string; description: string; slot: keyof Outfit; price: number; requiredLevel: number; maleOnly?: boolean };
