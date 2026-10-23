@@ -218,3 +218,12 @@ Five visible chapters: Home, Health, Social, Education and Explore. Explore incl
 
 ## Basic and Daily Shop
 The existing always-available inventory remains the Basic Shop. Replace its duplicate coin counter with a Daily Shop button; the header wallet remains. Below level 3 the button is disabled/gray with a lock and Level 3 label. At level 3 it toggles to a cartoon-blue Daily Shop with a quick fade; the toggle becomes Basic Shop. Basic retains category tabs and its existing heading/subtitle. Daily uses the heading Daily Shop, a countdown instead of the subtitle, and no category tabs. Stock is currently empty, with a coming-soon empty state; no fake purchases are offered. Planned future rotation has six items (two shirts, two pants, one shoes, one hat); actual registration/rotation awaits artwork. Timer resets at 00:00/12:00 UTC across refreshes/devices.
+
+## Female Base and Long Hair Update
+Use the six supplied bald female PNGs in new-female-bases: Base6/7/8 map to complexions 1/2/3, with happy and neutral expressions. Selecting Female defaults to Bald; Long & Flowing remains selectable, with the same long hairstyle also available for males. Male Swoosh remains unchanged. Both gender setup screens expose complexion/expression controls and preview hairstyle cards. The new long-hair PNG has no baked-in skin or ears; layered rendering restores original ear pixels so every complexion retains its own ears.
+
+## Clothing on Both Avatar Bodies
+Every existing cosmetic is available to female players: eleven shirt colors, both purchasable pants colors, six shoe styles and the cap. Ownership and IDs are shared across bodies; editing gender preserves purchased/equipped items rather than clearing former male-only clothes. A generated female tee cut supplies the female shirt shape and colors; pants, shoes and cap reuse the originals with female placements. Shop, wardrobe, purchase popup and avatar use matching female thumbnails/layers. Starter pants are fitted too. Male clothing artwork is unchanged.
+
+
+Reference clothing collection: seven photo-inspired shirts, sweaters and a flannel are available in the Basic Shop from level 1 (30–40 coins). A single purchase unlocks the matching male and female fitting; owned items equip through the existing wardrobe and persist with player saves.

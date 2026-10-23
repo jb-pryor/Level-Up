@@ -103,15 +103,15 @@ test('favorite limit blocks a third addition but allows removing and replacing f
   assert.deepEqual(s.player.favoriteQuestIds,['dishes','walk']);
 });
 
-test('every supplied male shirt can be bought and equipped; male-only shirts reject female equips',()=>{
+test('every supplied shirt can be bought and equipped on either body without losing ownership',()=>{
   for(const color of ['green','blue','black','gray','navy','orange','pink','purple','red','white','yellow']){
     let s=firstLevel();s={...s,player:{...s.player,totalXp:500,coins:500}};
     const id=`${color}-shirt`;s=gameReducer(s,{type:'buy',itemId:id});assert(s.player.ownedItemIds.includes(id));
     s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:id}});assert.equal(s.player.equipped.shirt,id);
     if(!['green','blue'].includes(color)){
       const female=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
-      assert.equal(female.player.equipped.shirt,'starter');assert(female.player.ownedItemIds.includes(id));
-      const blocked=gameReducer(female,{type:'equip',outfit:{...female.player.equipped,shirt:id}});assert.strictEqual(blocked.player,female.player);
+      assert.equal(female.player.equipped.shirt,id);assert(female.player.ownedItemIds.includes(id));
+      const blocked=gameReducer(female,{type:'equip',outfit:{...female.player.equipped,shirt:id}});assert.equal(blocked.player.equipped.shirt,id);
     }
   }
 });
@@ -126,14 +126,15 @@ test('sneaker purchase supports equip and barefoot without altering other outfit
   assert(s.player.ownedItemIds.includes('sneakers'));
 });
 
-test('all new shoe styles buy and equip on males; changing body removes incompatible shoes but keeps ownership',()=>{
+test('all new shoe styles stay owned and equipped when changing to the female body',()=>{
   for(const id of ['black-red-shoes','black-white-shoes','blue-white-shoes','brown-shoes','green-yellow-shoes']){
     let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,15);assert(s.player.ownedItemIds.includes(id));
     s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});assert.equal(s.player.equipped.shoes,id);
     const female=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
-    assert.equal(female.player.equipped.shoes,null);assert(female.player.ownedItemIds.includes(id));
-    assert.strictEqual(gameReducer(female,{type:'equip',outfit:{...female.player.equipped,shoes:id}}).player,female.player);
-    const freshFemale=gameReducer(create(),{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
-    assert.strictEqual(gameReducer(freshFemale,{type:'buy',itemId:id}).player,freshFemale.player);
+    assert.equal(female.player.equipped.shoes,id);assert(female.player.ownedItemIds.includes(id));
+    assert.equal(gameReducer(female,{type:'equip',outfit:{...female.player.equipped,shoes:id}}).player.equipped.shoes,id);
+    let freshFemale=gameReducer(create(),{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
+    freshFemale={...freshFemale,player:{...freshFemale.player,totalXp:500,coins:500}};
+    assert(gameReducer(freshFemale,{type:'buy',itemId:id}).player.ownedItemIds.includes(id));
   }
 });
