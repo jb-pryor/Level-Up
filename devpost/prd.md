@@ -227,3 +227,6 @@ Every existing cosmetic is available to female players: eleven shirt colors, bot
 
 
 Reference clothing collection: seven photo-inspired shirts, sweaters and a flannel are available in the Basic Shop from level 1 (30–40 coins). A single purchase unlocks the matching male and female fitting; owned items equip through the existing wardrobe and persist with player saves.
+
+
+Wardrobe layout revision: opening Wardrobe slides in a dedicated inventory workspace. The player previews the draft outfit on the left; the center shows owned clothing by category with its own scrolling grid and a persistent Cancel/Confirm footer. The usual catalog/favorites/household rail is replaced by a selected-item image/name/description card and a second name/rarity/stats card. Current items display Common rarity and no active boosts. Confirm equips the draft; Cancel restores the equipped look and both return to daily quests.

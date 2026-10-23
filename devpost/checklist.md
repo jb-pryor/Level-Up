@@ -216,3 +216,11 @@ Activity mode: not established
 
 - [x] Generate seven photo-inspired tops, fit separate male/female transparent overlays, and register them in the Basic Shop and wardrobe.
 - [x] Check outfit composites and verify reference-item purchase/equip/save behavior.
+
+
+### Wardrobe layout revision (October 23)
+
+- [x] Replace the shortcut rail with selected-item preview and rarity/stats cards; share the active category/selection with the inventory.
+- [x] Add a slide-in transition, independently scrolling inventory and persistent Cancel/Confirm footer, including responsive/reduced-motion styles.
+- [x] Verify production build, 72 existing tests, and server-render checks for owned inventory, selection details, empty slots and footer controls.
+- [ ] Learner visual check: open Wardrobe, switch categories/select clothes, scroll the grid, then test Cancel and Confirm. Confirm the two sidebar cards match the selection and the footer stays visible. Browser connection was unavailable during implementation.

@@ -285,3 +285,6 @@ Removed maleOnly flags from the existing catalog items, retaining the restrictio
 
 
 Reference clothing sprites live in public/avatars/shirts/reference-collection. The seven stable IDs in referenceShirts.ts join ShirtId and the cosmetics catalog. ReferenceShirt renders the body-specific canonical 1024×1536 overlay in avatar, shop and wardrobe. Generated originals, prompts and reproducible Pillow fitting script are retained; sleeves are fitted separately from torso length.
+
+
+Wardrobe workspace: GameApp owns the active wardrobe category and draft outfit so Wardrobe and WardrobeDetails render the same selection. Desktop replaces FavoriteQuests with two sticky detail cards and hides the normal panel navigation during editing. A viewport-sized flex panel confines scrolling to the item grid, leaving the action footer visible. Tablet/mobile stack the detail cards below the inventory. CSS entry animation honors reduced motion. Stats are display-only placeholders and do not modify rewards or saved balances.
