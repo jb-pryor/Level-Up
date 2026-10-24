@@ -243,3 +243,7 @@ Activity mode: not established
 
 - [x] Integrate supplied Soft waves PNG hairstyle in four colors, preserving existing styles; verify fitted composites, save/household serialization and build (85 tests pass).
 - [ ] Apply supabase/migrations/005_soft_waves_hair.sql in hosted Supabase to accept long-waves in shared household avatars.
+
+
+- [x] Integrate Curly short in all four colors for both bodies; inspect fitted composites and verify saves/household portrait round trips, 87 tests and production build.
+- [ ] Apply supabase/migrations/006_short_curly_hair.sql in hosted Supabase for new-style household syncing.

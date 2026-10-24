@@ -14,7 +14,7 @@ export function headAppearance(value: unknown, name: string): Appearance {
   const pick = <T extends string>(key: string, options: readonly T[], fallback: T): T => options.includes(p[key] as T) ? p[key] as T : fallback;
   const gender=pick('gender',['male','female'],'male');
   return { ...defaultAppearance, name, gender, bodyId: gender==='male'?'base-a':'base-b',
-    complexionId:pick('complexionId',['1','2','3'],'1'), hairStyleId:pick('hairStyleId',['short-swept','long','long-waves','bald'],'short-swept'),
+    complexionId:pick('complexionId',['1','2','3'],'1'), hairStyleId:pick('hairStyleId',['short-swept','short-curly','long','long-waves','bald'],'short-swept'),
     hairColorId:pick('hairColorId',['brown','black','blonde','gray'],'brown'), eyeColorId:pick('eyeColorId',['brown','blue','green','gray','red'],'brown'), expressionId:pick('expressionId',['smile','neutral'],'smile') };
 }
 export const outboxKey = (userId: string) => `level-up:household-outbox:v1:${userId}`;

@@ -306,3 +306,6 @@ Daily shirt rarity/boost values live in cosmetics.ts and preserve existing owner
 
 
 Soft waves uses hairStyleId long-waves, LongWaves.tsx and longWaves.ts source framing/fit metadata. Original PNGs remain unchanged; brown and other colors have different source framing to normalize displayed size. Save validation and household head parsing accept the new ID. Migration 005_soft_waves_hair.sql expands private.clean_avatar without modifying existing profiles; it must be applied to hosted Supabase for household sync.
+
+
+short-curly is accepted by Appearance, saved-player validation and household portrait parsing. CurlyHair.tsx renders the native 1024×1706 PNG canvas at y=-90, with the existing 0.84 female fit transform. Thumbnails use a tight source crop. Hosted household validation requires migration 006_short_curly_hair.sql, which also retains Soft waves support.

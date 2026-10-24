@@ -248,3 +248,6 @@ Daily-shirt rarity tuning: Planet Muncher, Metallica and Mr. Worldwide are Legen
 
 
 Additional hairstyle: Soft waves appears alongside Bald, Swoosh and Long & flowing. It uses four supplied PNG colorways and separate male/female fits, with female proportions matched against the supplied October 23 reference. Existing hairstyles remain available.
+
+
+Curly short hairstyle: add the supplied black/blonde/brown/gray PNGs as another choice for both genders, preserving all existing styles. Original files stay unchanged; female fitting is slightly smaller.
