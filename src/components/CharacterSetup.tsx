@@ -9,7 +9,7 @@ import { colors } from '../data/avatarPresets';
 export function CharacterSetup({onCreate,initialAppearance=defaultAppearance,onCancel}:{onCreate:(appearance:Appearance)=>void;initialAppearance?:Appearance;onCancel?:()=>void}){
   const [a,setA]=useState(initialAppearance),[error,setError]=useState('');
   const update=<K extends keyof Appearance>(key:K,value:Appearance[K])=>setA(old=>({...old,[key]:value}));
-  const styles: {id:Appearance['hairStyleId'];label:string}[]=[{id:'bald',label:'Bald'},{id:'short-swept',label:'Swoosh'},{id:'long',label:'Long & flowing'}];
+  const styles: {id:Appearance['hairStyleId'];label:string}[]=[{id:'bald',label:'Bald'},{id:'short-swept',label:'Swoosh'},{id:'long',label:'Long & flowing'},{id:'long-waves',label:'Soft waves'}];
   return <main className="setup-layout">
     <section className="character-stage"><div className="stage-caption"><span className="eyebrow">YOUR STORY STARTS HERE</span><h1>A little progress.<br/>A whole new you.</h1><p>Give your everyday wins a character of their own.</p></div><div className="avatar-glow"/><Avatar appearance={a}/><span className="level-pill">✦ LEVEL 1 · A FRESH START</span></section>
     <section className="setup-panel"><span className="eyebrow">CREATE YOUR CHARACTER</span><h2>Meet your player.</h2><p className="muted">Make them feel like you. Or someone you'd love to become.</p>

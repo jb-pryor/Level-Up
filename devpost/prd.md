@@ -245,3 +245,6 @@ Avatar clothing hints: hovering over shirt, pants, equipped shoes or a visible h
 
 
 Daily-shirt rarity tuning: Planet Muncher, Metallica and Mr. Worldwide are Legendary (100 coins), with +12% both rewards, +20% XP, and +20% coins respectively. Cloudscape, Cartoon Chaos and Neon Daydream are Epic (75 coins), with +12% XP, +8% both, and +12% coins. Unique Panda, Green Skull and Take It Slow are Rare (35 coins), with +5% XP, +5% coins, and +3% both. These are initial play-test balance values; smaller dual bonuses trade specialization for flexibility. Existing basic rare boosts and unlock levels stay the same. Boosted quest rewards round up individually; the level-up coin bonus is unaffected.
+
+
+Additional hairstyle: Soft waves appears alongside Bald, Swoosh and Long & flowing. It uses four supplied PNG colorways and separate male/female fits, with female proportions matched against the supplied October 23 reference. Existing hairstyles remain available.

@@ -239,3 +239,7 @@ Activity mode: not established
 
 
 - [x] Apply requested daily-shirt Rare/Epic/Legendary assignments and balanced single/dual boosts; verify all nine purchase prices and actual completion rewards, integer rounding, and no stacking from unequipped owned items.
+
+
+- [x] Integrate supplied Soft waves PNG hairstyle in four colors, preserving existing styles; verify fitted composites, save/household serialization and build (85 tests pass).
+- [ ] Apply supabase/migrations/005_soft_waves_hair.sql in hosted Supabase to accept long-waves in shared household avatars.

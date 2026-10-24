@@ -303,3 +303,6 @@ ClothingTooltips overlays focusable SVG regions on the canonical avatar viewBox 
 
 
 Daily shirt rarity/boost values live in cosmetics.ts and preserve existing ownership IDs. Rarity pricing is derived centrally. Shop bonus text now lists both XP and coin effects for dual-bonus gear; avatar hints expand to separate lines so neither effect is truncated. Reward calculation remains equipped-only and rounds each final currency once.
+
+
+Soft waves uses hairStyleId long-waves, LongWaves.tsx and longWaves.ts source framing/fit metadata. Original PNGs remain unchanged; brown and other colors have different source framing to normalize displayed size. Save validation and household head parsing accept the new ID. Migration 005_soft_waves_hair.sql expands private.clean_avatar without modifying existing profiles; it must be applied to hosted Supabase for household sync.
