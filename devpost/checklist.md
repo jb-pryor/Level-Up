@@ -227,3 +227,6 @@ Activity mode: not established
 
 
 - [x] Apply the approved gradual XP curve across progression, bar capacity, reward rollover and level-up detection; verify boundary/overflow behavior through level 10,000 and run the full test/build checks.
+
+
+- [x] Reorder Basic Shop tees and unlock levels, move other shirts to Daily Shop, implement equipped rare-shirt boosts with integer rounding, and display rarity/bonuses in the shop and Wardrobe. Verified purchase/reward/save tests including level crossing, inactive/unequipped bonuses, coin rounding, and no double rewards.

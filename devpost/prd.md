@@ -233,3 +233,6 @@ Wardrobe layout revision: opening Wardrobe slides in a dedicated inventory works
 
 
 Leveling curve: advancing from levels 1–5 costs 50, 100, 150, 200 and 250 XP respectively; each subsequent level costs 25 XP more than the previous one. Overflow carries forward. Existing test accounts recalculate directly from total XP with no level-preservation migration. The bar keeps its visual size and displays the current level’s capacity. Clothing boosts remain inactive.
+
+
+Shop and first clothing bonuses: Basic Shop shirts list all 11 colored tees first at level 2, followed by Rare Rainbow Spiral (Tie-Dye, +5% quest XP) and Rare Built Different (+5% quest coins) at level 3. Remaining shirts move to Daily Shop, currently displayed together without rotation while the existing 12-hour timer remains. Owned clothes remain in Wardrobe regardless of shop. Bonuses apply only to equipped, owned items; each boosted quest reward rounds up once to an integer. The separate level-up coin bonus stays unchanged.

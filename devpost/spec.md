@@ -291,3 +291,6 @@ Wardrobe workspace: GameApp owns the active wardrobe category and draft outfit s
 
 
 Progression functions centrally define per-level costs, cumulative thresholds, binary-search level lookup and within-level XP. The player bar, accessibility values, reward animation rollover, reward dialog, completion gate, shop requirements and household profile levels derive from this curve. Level 3 / daily-shop unlock now occurs at 150 cumulative XP.
+
+
+Cosmetic metadata now includes shop placement, rarity and integer XP/coin boost percentages. questReward centralizes equipped-owned-item boosts using ceil(base*(100+percent)/100); reducer balances, reward notices and quest XP previews share it. Basic Shop filters out daily stock; Daily Shop reuses Shop cards without category tabs. All daily shirts require level 3. No save schema change: ownership IDs and equipment already persist; metadata is shipped with the app.

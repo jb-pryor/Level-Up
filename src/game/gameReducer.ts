@@ -1,3 +1,4 @@
+import { questReward } from './questReward.ts';
 import { HOME_COOLDOWN_MS, cooldownRemaining } from './questCooldown.ts';
 import type { Appearance, Outfit, Player } from '../types.ts';
 import { starterOutfit } from '../types.ts';
@@ -48,12 +49,13 @@ export function gameReducer(state: GameState, action: Action): GameState {
     if(action.type==='delete')return feedback('Quest removed. No rewards awarded.',false,{...p,activeQuestIds:remaining});
     const completions=(p.questCompletions[quest.id]??0)+1;
     if(!Number.isSafeInteger(completions))return feedback('Your skill progress could not be updated.',true);
-    const totalXp=p.totalXp+quest.xp;
+    const earned=questReward(p,quest);
+    const totalXp=p.totalXp+earned.xp;
     const bonusCoins=(levelFor(totalXp)-levelFor(p.totalXp))*25;
-    const coins=p.coins+quest.coins+bonusCoins;
+    const coins=p.coins+earned.coins+bonusCoins;
     if(!Number.isSafeInteger(totalXp)||!Number.isSafeInteger(coins))return feedback('Your progress could not be updated.',true);
     const level=levelFor(totalXp),levelUp=level>levelFor(p.totalXp);
-    return feedback(`+${quest.xp} XP · +${quest.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:quest.xp,coins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
+    return feedback(`+${earned.xp} XP · +${earned.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:earned.xp,coins:earned.coins,previousXp:p.totalXp,previousCoins:p.coins});
   }
   if(action.type==='buy') {
     const item=cosmetics.find(c=>c.id===action.itemId);if(!item)return feedback('That item is unavailable.',true);
