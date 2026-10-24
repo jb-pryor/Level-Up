@@ -465,3 +465,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 @media(prefers-reduced-motion:reduce) { .clothing-boost-tooltip { transition: none; } }
 
 @media(max-width:650px) { .clothing-boost-tooltip { transform: translateX(-200px); } }
+
+/* Dark daily-shop frame; rarity cards retain their own readable palettes. */
+.shop-panel.daily-shop-panel { background-color: #14121b; }
+.daily-shop-panel .inline-panel-heading > h2,
+.daily-shop-panel .daily-shop-timer,
+.daily-shop-panel .daily-shop-timer time,
+.daily-shop-panel .shop-inline-feedback { color: #fff; }
