@@ -17,13 +17,13 @@ test('delete earns no reward; deleted and completed quests can be added again',(
   let s=gameReducer(create(),{type:'add',questId:'room'});s=gameReducer(s,{type:'delete',questId:'room'});assert.equal(s.player.totalXp,0);assert.equal(s.player.coins,0);s=complete(s,'room');s=complete(s,'room');assert.equal(s.player.totalXp,70);assert.equal(s.player.coins,45);
 });
 test('purchase deducts coins once, preserves XP, and does not auto-equip',()=>{
-  let s=gameReducer(firstLevel(),{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,25);assert.equal(s.player.totalXp,105);assert.deepEqual(s.player.ownedItemIds,['green-shirt']);assert.equal(s.player.equipped.shirt,'starter');s=gameReducer(s,{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,25);assert.equal(s.player.ownedItemIds.length,1);
+  let s=gameReducer(firstLevel(),{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,35);assert.equal(s.player.totalXp,105);assert.deepEqual(s.player.ownedItemIds,['green-shirt']);assert.equal(s.player.equipped.shirt,'starter');s=gameReducer(s,{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,35);assert.equal(s.player.ownedItemIds.length,1);
 });
 test('locked and unaffordable items cannot charge coins',()=>{
   const starting=create();const locked=gameReducer(starting,{type:'buy',itemId:'green-shirt'});assert.strictEqual(locked.player,starting.player);const leveled=firstLevel();const blue=gameReducer(leveled,{type:'buy',itemId:'tie-dye-tee'});assert.strictEqual(blue.player,leveled.player);const lowFunds={...leveled,player:{...leveled.player,coins:0}};const poor=gameReducer(lowFunds,{type:'buy',itemId:'sneakers'});assert.strictEqual(poor.player,lowFunds.player);assert.match(poor.notice.message,/Not enough/);
 });
 test('only owned items in their matching slots can be equipped',()=>{
-  const s=firstLevel();const unowned=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'green-shirt'}});assert.strictEqual(unowned.player,s.player);const bought=gameReducer(s,{type:'buy',itemId:'green-shirt'});const worn=gameReducer(bought,{type:'equip',outfit:{...bought.player.equipped,shirt:'green-shirt'}});assert.equal(worn.player.equipped.shirt,'green-shirt');assert.equal(worn.player.coins,25);const wrong=gameReducer(bought,{type:'equip',outfit:{...bought.player.equipped,pants:'green-shirt'}});assert.strictEqual(wrong.player,bought.player);
+  const s=firstLevel();const unowned=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'green-shirt'}});assert.strictEqual(unowned.player,s.player);const bought=gameReducer(s,{type:'buy',itemId:'green-shirt'});const worn=gameReducer(bought,{type:'equip',outfit:{...bought.player.equipped,shirt:'green-shirt'}});assert.equal(worn.player.equipped.shirt,'green-shirt');assert.equal(worn.player.coins,35);const wrong=gameReducer(bought,{type:'equip',outfit:{...bought.player.equipped,pants:'green-shirt'}});assert.strictEqual(wrong.player,bought.player);
 });
 test('editing character preserves progress, quests, ownership and equipment',()=>{
   let s=gameReducer(firstLevel(),{type:'buy',itemId:'green-shirt'});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'green-shirt'}});s=gameReducer(s,{type:'add',questId:'gym'});const changed=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'New name',gender:'female',bodyId:'base-b',hairStyleId:'long'}});for(const field of ['totalXp','coins','activeQuestIds','ownedItemIds','equipped'])assert.deepEqual(changed.player[field],s.player[field]);assert.equal(changed.player.name,'New name');assert.equal(changed.player.bodyId,'base-b');
@@ -118,7 +118,7 @@ test('every supplied shirt can be bought and equipped on either body without los
 
 test('sneaker purchase supports equip and barefoot without altering other outfit slots',()=>{
   let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:'sneakers'});
-  assert.equal(s.player.coins,15);assert(s.player.ownedItemIds.includes('sneakers'));
+  assert.equal(s.player.coins,35);assert(s.player.ownedItemIds.includes('sneakers'));
   const original=s.player.equipped;
   s=gameReducer(s,{type:'equip',outfit:{...original,shoes:'sneakers'}});assert.equal(s.player.equipped.shoes,'sneakers');
   assert.equal(s.player.equipped.shirt,original.shirt);assert.equal(s.player.equipped.pants,original.pants);
@@ -128,7 +128,7 @@ test('sneaker purchase supports equip and barefoot without altering other outfit
 
 test('all new shoe styles stay owned and equipped when changing to the female body',()=>{
   for(const id of ['black-red-shoes','black-white-shoes','blue-white-shoes','brown-shoes','green-yellow-shoes']){
-    let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,15);assert(s.player.ownedItemIds.includes(id));
+    let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,35);assert(s.player.ownedItemIds.includes(id));
     s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});assert.equal(s.player.equipped.shoes,id);
     const female=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
     assert.equal(female.player.equipped.shoes,id);assert(female.player.ownedItemIds.includes(id));

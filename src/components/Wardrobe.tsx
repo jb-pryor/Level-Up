@@ -43,7 +43,7 @@ export function Wardrobe({ appearance, draft, ownedItemIds, tab, onTabChange, on
     <div className="wardrobe-heading"><div><span className="eyebrow">MAKE IT YOURS</span><h2>Your wardrobe</h2></div></div>
     <p className="muted">Pick a look. Confirm when it feels like you.</p>
     <div className="wardrobe-tabs" role="tablist" aria-label="Clothing categories">{categories.map(({slot,label})=><button key={slot} type="button" role="tab" id={`wardrobe-tab-${slot}`} aria-selected={tab===slot} aria-controls="wardrobe-items" onClick={()=>onTabChange(slot)} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const index=categories.findIndex(c=>c.slot===slot);const next=categories[(index+(event.key==='ArrowRight'?1:3))%4].slot;onTabChange(next);document.getElementById(`wardrobe-tab-${next}`)?.focus()}}} tabIndex={tab===slot?0:-1}>{label}</button>)}</div>
-    <div key={tab} id="wardrobe-items" className="wardrobe-grid" tabIndex={0} role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" data-rarity={cosmetics.find(c=>c.id===item.id)?.rarity??'Common'} type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
+    <div key={tab} id="wardrobe-items" className="wardrobe-grid" tabIndex={0} role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" data-rarity={cosmetics.find(c=>c.id===item.id)?.rarity??'Uncommon'} type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
     <div className="wardrobe-actions"><button className="quiet-button" onClick={onCancel}>Cancel</button><button className="primary" onClick={onConfirm}>Confirm outfit <span>✓</span></button></div>
   </section>;
 }
@@ -53,14 +53,14 @@ export function WardrobeDetails({appearance, draft, tab}: {appearance:Appearance
   const item=wardrobeItems[tab].find(item=>item.id===draft[tab])??wardrobeItems[tab][0];
   const empty=item.id===null;
   const cosmetic=cosmetics.find(c=>c.id===item.id);
-  return <aside className="wardrobe-details" data-rarity={cosmetic?.rarity??'Common'} aria-label="Selected clothing details" aria-live="polite">
+  return <aside className="wardrobe-details" data-rarity={cosmetic?.rarity??'Uncommon'} aria-label="Selected clothing details" aria-live="polite">
     <section className="wardrobe-preview-card">
       <div className="wardrobe-preview-image"><ItemPicture appearance={appearance} slot={tab} item={item}/><span className="item-selected" aria-label="Selected">✓</span></div>
       <div className="wardrobe-preview-copy"><h2>{item.name}</h2><p>{item.description}</p></div>
     </section>
     <section className="wardrobe-stat-card">
       <h2>{item.name}</h2>
-      <dl><div><dt>Rarity</dt><dd>{empty?'—':cosmetic?.rarity??'Common'}</dd></div><div><dt>Coin boost</dt><dd>{cosmetic?.coinBoostPercent?`+${cosmetic.coinBoostPercent}%`:'None'}</dd></div><div><dt>XP boost</dt><dd>{cosmetic?.xpBoostPercent?`+${cosmetic.xpBoostPercent}%`:'None'}</dd></div><div><dt>Other stats</dt><dd>None</dd></div></dl>
+      <dl><div><dt>Rarity</dt><dd>{empty?'—':cosmetic?.rarity??'Uncommon'}</dd></div><div><dt>Coin boost</dt><dd>{cosmetic?.coinBoostPercent?`+${cosmetic.coinBoostPercent}%`:'None'}</dd></div><div><dt>XP boost</dt><dd>{cosmetic?.xpBoostPercent?`+${cosmetic.xpBoostPercent}%`:'None'}</dd></div><div><dt>Other stats</dt><dd>None</dd></div></dl>
       <p className="wardrobe-stat-note">{cosmetic?.xpBoostPercent||cosmetic?.coinBoostPercent?'Active while equipped. Quest rewards round up to whole numbers.':'No active item bonuses.'}</p>
     </section>
   </aside>;

@@ -434,14 +434,19 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 [data-rarity="Rare"] { --rarity-surface: #dceeff; --rarity-art: #c6e3fb; --rarity-border: #6c9acf; --rarity-selected: #c6e3ff; }
 [data-rarity="Epic"] { --rarity-surface: #eee1fc; --rarity-art: #ddc7f5; --rarity-border: #a181c3; --rarity-selected: #dfc9f8; }
 [data-rarity="Legendary"] { --rarity-surface: #ffead3; --rarity-art: #ffdab0; --rarity-border: #ce9a60; --rarity-selected: #ffdab4; }
-.shop-item[data-rarity]:not([data-rarity="Common"]),
-.wardrobe-item[data-rarity]:not([data-rarity="Common"]),
-.wardrobe-details[data-rarity]:not([data-rarity="Common"]) .wardrobe-preview-card,
-.wardrobe-details[data-rarity]:not([data-rarity="Common"]) .wardrobe-stat-card { background: var(--rarity-surface); border-color: var(--rarity-border); }
-.shop-item[data-rarity]:not([data-rarity="Common"]) .shop-item-info,
-.wardrobe-details[data-rarity]:not([data-rarity="Common"]) .wardrobe-preview-copy { background: var(--rarity-surface); }
-.shop-item[data-rarity]:not([data-rarity="Common"]) .shop-picture,
-.wardrobe-details[data-rarity]:not([data-rarity="Common"]) .wardrobe-preview-image { background: var(--rarity-art); border-color: var(--rarity-border); }
-.wardrobe-item[data-rarity]:not([data-rarity="Common"]):hover,
-.wardrobe-item[data-rarity]:not([data-rarity="Common"])[aria-pressed="true"] { background: var(--rarity-selected); border-color: #58419d; }
-.wardrobe-item[data-rarity]:not([data-rarity="Common"])[aria-pressed="true"] { box-shadow: 3px 3px 0 var(--rarity-border); }
+.shop-item[data-rarity]:not([data-rarity="Uncommon"]),
+.wardrobe-item[data-rarity]:not([data-rarity="Uncommon"]),
+.wardrobe-details[data-rarity]:not([data-rarity="Uncommon"]) .wardrobe-preview-card,
+.wardrobe-details[data-rarity]:not([data-rarity="Uncommon"]) .wardrobe-stat-card { background: var(--rarity-surface); border-color: var(--rarity-border); }
+.shop-item[data-rarity]:not([data-rarity="Uncommon"]) .shop-item-info,
+.wardrobe-details[data-rarity]:not([data-rarity="Uncommon"]) .wardrobe-preview-copy { background: var(--rarity-surface); }
+.shop-item[data-rarity]:not([data-rarity="Uncommon"]) .shop-picture,
+.wardrobe-details[data-rarity]:not([data-rarity="Uncommon"]) .wardrobe-preview-image { background: var(--rarity-art); border-color: var(--rarity-border); }
+.wardrobe-item[data-rarity]:not([data-rarity="Uncommon"]):hover,
+.wardrobe-item[data-rarity]:not([data-rarity="Uncommon"])[aria-pressed="true"] { background: var(--rarity-selected); border-color: #58419d; }
+.wardrobe-item[data-rarity]:not([data-rarity="Uncommon"])[aria-pressed="true"] { box-shadow: 3px 3px 0 var(--rarity-border); }
+
+/* Warm daily-shop frame distinguishes the shop mode from blue rare loot. */
+.shop-panel.daily-shop-panel { background-color: #ffd8d6; }
+.daily-shop-panel .daily-shop-timer { color: #88494d; }
+.daily-shop-panel .daily-shop-timer time { color: #8b3549; }

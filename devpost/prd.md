@@ -236,3 +236,6 @@ Leveling curve: advancing from levels 1–5 costs 50, 100, 150, 200 and 250 XP r
 
 
 Shop and first clothing bonuses: Basic Shop shirts list all 11 colored tees first at level 2, followed by Rare Rainbow Spiral (Tie-Dye, +5% quest XP) and Rare Built Different (+5% quest coins) at level 3. Remaining shirts move to Daily Shop, currently displayed together without rotation while the existing 12-hour timer remains. Owned clothes remain in Wardrobe regardless of shop. Bonuses apply only to equipped, owned items; each boosted quest reward rounds up once to an integer. The separate level-up coin bonus stays unchanged.
+
+
+Rarity/pricing revision: all former Common or unclassified purchasable items are labeled Uncommon (20 coins); Rare items cost 35 coins. Future Epic and Legendary prices are 75 and 100. Shop cards show every rarity, Wardrobe uses the same labels, and Daily Shop has a soft red background distinct from blue Rare cards.

@@ -230,3 +230,6 @@ Activity mode: not established
 
 
 - [x] Reorder Basic Shop tees and unlock levels, move other shirts to Daily Shop, implement equipped rare-shirt boosts with integer rounding, and display rarity/bonuses in the shop and Wardrobe. Verified purchase/reward/save tests including level crossing, inactive/unequipped bonuses, coin rounding, and no double rewards.
+
+
+- [x] Apply Uncommon labels, consistent rarity prices (20/35/75/100), and pastel-red Daily Shop styling; verify purchase balances and full build/test checks.

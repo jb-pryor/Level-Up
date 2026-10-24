@@ -294,3 +294,6 @@ Progression functions centrally define per-level costs, cumulative thresholds, b
 
 
 Cosmetic metadata now includes shop placement, rarity and integer XP/coin boost percentages. questReward centralizes equipped-owned-item boosts using ceil(base*(100+percent)/100); reducer balances, reward notices and quest XP previews share it. Basic Shop filters out daily stock; Daily Shop reuses Shop cards without category tabs. All daily shirts require level 3. No save schema change: ownership IDs and equipment already persist; metadata is shipped with the app.
+
+
+rarityPrices centrally maps Uncommon/Rare/Epic/Legendary to 20/35/75/100 coins. Exported cosmetics use that mapping for display and reducer purchase charges. The daily shop frame uses pastel red; item-specific rarity colors remain unchanged.

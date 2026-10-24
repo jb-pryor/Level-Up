@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {cosmetics} from '../data/cosmetics.ts';
+import {cosmetics,rarityPrices} from '../data/cosmetics.ts';
 import {maleShirts} from '../data/maleShirts.ts';
 import {questReward} from './questReward.ts';
 import {gameReducer,initialGame} from './gameReducer.ts';
@@ -32,11 +32,16 @@ test('owning or previewing a shirt does not boost rewards; unequipping stops the
 test('completion uses boosted XP for level gates and awards the unboosted level coin bonus once',()=>{
  let s=wear('tie-dye-tee');s={...s,player:{...s.player,totalXp:264}};
  s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
- assert.equal(s.player.totalXp,301);assert.equal(s.player.coins,1000-30+10+25);assert.equal(s.notice.reward.xp,37);
+ assert.equal(s.player.totalXp,301);assert.equal(s.player.coins,1000-35+10+25);assert.equal(s.notice.reward.xp,37);
  assert.strictEqual(gameReducer(s,{type:'complete',questId:'meal'}),s);
  let raw;savePlayer({setItem:(_,v)=>raw=v},s.player);assert.deepEqual(loadPlayer({getItem:()=>raw}).player,s.player);
 });
 test('coin boosts are reflected in actual balances and completion notices',()=>{
  let s=wear('built-different-tee');s=gameReducer(s,{type:'add',questId:'walk'});s=gameReducer(s,{type:'complete',questId:'walk'});
- assert.equal(s.player.coins,976);assert.equal(s.notice.reward.coins,6);assert.equal(s.player.totalXp,165);
+ assert.equal(s.player.coins,971);assert.equal(s.notice.reward.coins,6);assert.equal(s.player.totalXp,165);
+});
+
+test('rarity sets consistent whole-coin prices across both shops',()=>{
+ assert.deepEqual(rarityPrices,{Uncommon:20,Rare:35,Epic:75,Legendary:100});
+ for(const item of cosmetics){assert(item.rarity);assert.equal(item.price,rarityPrices[item.rarity]);}
 });
