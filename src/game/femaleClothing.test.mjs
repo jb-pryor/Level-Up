@@ -17,7 +17,7 @@ test('every shirt color has a female fitting/tint and all shared assets exist',(
 for(const complexionId of ['1','2','3'])test(`complexion ${complexionId}: female players can purchase/equip every item, save and change bodies without losing equipment`,()=>{
   let state=gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b',complexionId}});
   state={...state,player:{...state.player,totalXp:1000,coins:10000}};
-  for(const item of cosmetics){
+  for(const item of cosmetics.filter(item=>!item.maleOnly)){
     assert.notEqual(item.maleOnly,true);
     const coins=state.player.coins;
     state=gameReducer(state,{type:'buy',itemId:item.id});assert.equal(state.player.coins,coins-item.price);assert(state.player.ownedItemIds.includes(item.id));

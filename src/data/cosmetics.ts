@@ -1,5 +1,15 @@
 import type { Cosmetic } from '../types.ts';
 export const cosmetics: Cosmetic[] = [
+  {id:'pacman-planets-tee',name:'Planet muncher',description:'A whole solar system of snacks. Your chores are still waiting on Earth.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'built-different-tee',name:'Built different',description:'Built different. Still procrastinates the same.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'unique-panda-tee',name:'Unique panda',description:'One of a kind. Like every other person who owns this shirt.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'metallica-tee',name:'Metallica tee',description:'Heavy metal. Light commitment to the task list.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'green-skull-tee',name:'Green skull',description:'A little menace. A surprisingly responsible chore schedule.',slot:'shirt',price:30,requiredLevel:1,maleOnly:true},
+  {id:'worldwide-tee',name:'Mr. Worldwide',description:'Global ambition. Local errands.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'cartoon-chaos-tee',name:'Cartoon chaos',description:'Your brain with seventeen side quests open.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'cloudscape-tee',name:'Cloudscape',description:'Head in the clouds. Feet still expected to do chores.',slot:'shirt',price:30,requiredLevel:1},
+  {id:'take-it-slow-tee',name:'Take it slow',description:'Turtle speed. Progress is progress.',slot:'shirt',price:30,requiredLevel:1,maleOnly:true},
+
   {id:'tie-dye-tee',name:'Rainbow spiral',description:'Every color showed up. Subtlety called in sick.',slot:'shirt',price:30,requiredLevel:1},
   {id:'neon-trip-tee',name:'Neon daydream',description:'A psychedelic tee. Your outfit has more going on than your calendar.',slot:'shirt',price:30,requiredLevel:1},
   {id:'pixel-knit-sweater',name:'Pattern party',description:'A geometric knit with absolutely no indoor voice.',slot:'shirt',price:40,requiredLevel:1},
