@@ -16,6 +16,8 @@ export const redoneMaleShirts: Record<string,{file:string;viewBox:string}> = {
 };
 
 export const redoneFemaleShirts: Record<string,{file:string;viewBox:string}> = {
+  'green-skull-tee': {file:'green-skull-female.png',viewBox:'43 110 1066 1171'},
+  'take-it-slow-tee': {file:'slow-turtle-female.png',viewBox:'44 130 1058 1148'},
   'neon-trip-tee': {file:'blueHallucigenicFemale.png',viewBox:'13 102 1120 1186'},
   'unique-panda-tee': {file:'uniquePandaFemale.png',viewBox:'20 105 1106 1183'},
   'cartoon-chaos-tee': {file:'cartoonRandomFemale.png',viewBox:'43 137 1061 1152'},
