@@ -75,3 +75,15 @@ test('owning multiple upgraded shirts does not stack unequipped bonuses',()=>{
  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'pacman-planets-tee'}});
  assert.deepEqual(questReward(s.player,{xp:60,coins:20}),{xp:68,coins:23});
 });
+
+test('pants rarity boosts apply to completions and add with the equipped shirt before rounding',()=>{
+ const cases=[['lightwash-jeans',37,10],['darkwash-jeans',35,11],['tan-carpenter-pants',37,11],['camo-pants',40,10],['zebra-pants',35,12],['leather-pants',40,12]];
+ for(const [id,xp,coins] of cases){
+  let s=gameReducer(start(),{type:'buy',itemId:id});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:id}});
+  const before=s.player.coins;s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.player.totalXp,150+xp);assert.equal(s.player.coins,before+coins);assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);
+ }
+ let s=wear('tie-dye-tee');s=gameReducer(s,{type:'buy',itemId:'leather-pants'});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:'leather-pants'}});
+ assert.deepEqual(questReward(s.player,{xp:35,coins:10}),{xp:41,coins:12});
+ s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:'starter'}});assert.deepEqual(questReward(s.player,{xp:35,coins:10}),{xp:37,coins:10});
+});

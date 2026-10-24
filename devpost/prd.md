@@ -254,3 +254,6 @@ Curly short hairstyle: add the supplied black/blonde/brown/gray PNGs as another 
 
 
 Six supplied pants designs (light/dark-wash jeans, tan carpenter, leather, camo and zebra) are available in Basic Shop → Pants for both bodies. All are Uncommon, 20 coins, level 2, with no boosts. Purchases unlock both body fits and persist across body changes.
+
+
+Pants rarity tuning: Light-wash (+5% XP), Dark-wash (+5% coins) and Carpenter (+3% both) are Rare, 35 coins, in Basic Shop. Camo (+12% XP) and Zebra (+12% coins) are Epic, 75 coins, in Daily Shop. Leather (+12% both) is Legendary, 100 coins, in Daily Shop. All six now unlock at level 3. Equipped shirt/pants percentages add before one final upward rounding per quest reward; ownership IDs and fits remain unchanged.

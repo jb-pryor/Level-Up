@@ -23,7 +23,7 @@ export function ClothingTooltips({appearance,outfit}:{appearance:Appearance;outf
       const tooltipId=`${uid}-${region.slot}`;
       return <g key={region.slot} className="clothing-hit-region" tabIndex={0} role="group" aria-label={name} aria-describedby={tooltipId} data-dismissed={dismissed===region.slot} onPointerEnter={()=>setDismissed(null)} onPointerLeave={()=>setDismissed(null)} onFocus={()=>setDismissed(null)} onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();setDismissed(region.slot)}}}>
         <rect className="clothing-hit-target" x={region.x} y={region.y} width={region.w} height={region.h}/>
-        <g id={tooltipId} role="tooltip" className="clothing-boost-tooltip">
+        <g id={tooltipId} role="tooltip" className="clothing-boost-tooltip" data-rarity={item?.rarity??'Common'}>
           <path className="clothing-tooltip-connector" d={`M${region.x+region.w-12} ${region.tip+53} H780`}/>
           <rect className="clothing-tooltip-box" x="780" y={region.tip} width="610" height={tooltipHeight} rx="8"/>
           <path className="clothing-tooltip-notch" d={`M780 ${region.tip+40} l-13 13 13 13 Z`}/>

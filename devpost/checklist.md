@@ -250,3 +250,6 @@ Activity mode: not established
 
 
 - [x] Add six new Uncommon pants to the regular shop and wardrobe for both bodies; inspect male/female fit composites, normalize waist/hem differences, and verify purchase/equip/save/body-change behavior plus full tests/build.
+
+
+- [x] Apply pants rarities, prices, shop placement and tier-appropriate boosts; verify completion payouts and combined shirt/pants rounding, existing saves and both body types (90 tests and build pass).

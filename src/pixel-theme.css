@@ -480,3 +480,13 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .wardrobe-details[data-rarity="Common"] .wardrobe-preview-card,
 .wardrobe-details[data-rarity="Common"] .wardrobe-stat-card { background: #f0f0f3; }
 .wardrobe-details[data-rarity="Common"] .wardrobe-preview-image { background: #e4e4e9; }
+
+/* Clothing tags share the soft rarity surfaces used by item cards. */
+.clothing-boost-tooltip { fill: #302347; }
+.clothing-boost-tooltip .clothing-tooltip-name { fill: #302347; }
+.clothing-boost-tooltip[data-rarity="Common"] { --rarity-surface: #e9e9ed; --rarity-border: #9995aa; }
+.clothing-boost-tooltip .clothing-tooltip-box,
+.clothing-boost-tooltip .clothing-tooltip-notch { fill: var(--rarity-surface); fill-opacity: .96; }
+.clothing-boost-tooltip .clothing-tooltip-box { stroke: var(--rarity-border); stroke-width: 3; }
+.clothing-boost-tooltip .clothing-tooltip-connector { stroke: var(--rarity-border); }
+.clothing-boost-tooltip[data-rarity="Legendary"] { --rarity-surface: #ffd09a; --rarity-border: #e89a42; }
