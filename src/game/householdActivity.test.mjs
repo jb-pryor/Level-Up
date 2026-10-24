@@ -5,9 +5,11 @@ import { defaultAppearance } from '../types.ts';
 const userId='10000000-0000-4000-8000-000000000001';
 const profile=sharedProfile({...defaultAppearance,name:'Benjie',totalXp:345,coins:90,equipped:{shirt:'blue-shirt'},activeQuestIds:['walk'],favoriteQuestIds:['dishes']});
 const event={id:'20000000-0000-4000-8000-000000000001',userId,householdId:'30000000-0000-4000-8000-000000000001',questId:'walk',completedAt:'2026-10-18T10:00:00.000Z',profile};
-test('household snapshots include head appearance, name and earned level without private progress',()=>{
+test('household snapshots include appearance, outfit and XP without private balances or quest lists',()=>{
   assert.equal(profile.level,4);assert.equal(profile.displayName,'Benjie');
   assert.deepEqual(Object.keys(profile).sort(),['avatar','displayName','level']);
+  assert.equal(profile.avatar.totalXp,345);assert.equal(profile.avatar.outfit.shirt,'blue-shirt');
+  for(const key of ['coins','ownedItemIds','activeQuestIds','favoriteQuestIds','questCompletions','questCooldowns'])assert.equal(key in profile.avatar,false);
   assert.equal('coins' in profile.avatar,false);assert.equal('equipped' in profile.avatar,false);assert.equal('name' in profile.avatar,false);
 });
 test('retry queue keeps stable event IDs and original account, household, completion time and snapshot',()=>{

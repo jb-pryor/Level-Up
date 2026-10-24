@@ -253,3 +253,11 @@ Activity mode: not established
 
 
 - [x] Apply pants rarities, prices, shop placement and tier-appropriate boosts; verify completion payouts and combined shirt/pants rounding, existing saves and both body types (90 tests and build pass).
+
+
+### Household full-body roster revision
+
+- [x] Add member cards with full outfits, gear tooltips, XP bars, level and foreground-app presence; make Members the default tab and condense account header copy.
+- [x] Preserve full profile snapshots through the activity outbox, handle older profiles, and keep private balances/quests out of shared JSON.
+- [x] Verify 93 client tests, production build and server-render checks for full outfits, XP, tooltips, last seen and legacy fallbacks. Browser preview was unavailable.
+- [ ] Apply supabase/migrations/007_household_full_avatars.sql in hosted Supabase, then open both test accounts and check their member cards after the next 30-second sync. Hosted SQL execution and cross-account visual verification remain pending.

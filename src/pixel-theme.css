@@ -490,3 +490,28 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .clothing-boost-tooltip .clothing-tooltip-box { stroke: var(--rarity-border); stroke-width: 3; }
 .clothing-boost-tooltip .clothing-tooltip-connector { stroke: var(--rarity-border); }
 .clothing-boost-tooltip[data-rarity="Legendary"] { --rarity-surface: #ffd09a; --rarity-border: #e89a42; }
+
+/* Household party roster: full-body cards with live gear inspection. */
+.household-modal { width: min(1120px,calc(100vw - 32px)); }
+.household-account-summary { margin: 0 0 18px; font-size: 13px; color: #665b83; }
+.household-member-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(255px,1fr)); gap: 22px; }
+.household-member-card { position: relative; min-width: 0; border: 3px solid #8d80b5; padding: 18px; background-color: #fff; background-image: linear-gradient(#526c8710 1px,transparent 1px),linear-gradient(90deg,#526c8710 1px,transparent 1px); background-size: 32px 32px; box-shadow: 4px 4px 0 #d1c9e5; }
+.household-member-card:hover,.household-member-card:focus-within { z-index: 3; }
+.household-member-heading { display: flex; gap: 10px; align-items: start; justify-content: space-between; }
+.household-member-heading > div { min-width: 0; }
+.household-member-heading h4 { margin: 0; font: 16px/1.5 LevelPixel,monospace; color: #30219a; overflow-wrap: anywhere; }
+.household-member-heading p { margin: 4px 0; font-size: 11px; color: #766789; overflow-wrap: anywhere; }
+.household-member-level { white-space: nowrap; font: 11px/1.5 LevelPixel,monospace; padding: 6px 8px; color: #30219a; background: #ffeb74; border: 2px solid #8070af; }
+.household-presence { display: flex; align-items: center; gap: 7px; margin: 12px 0; color: #746d83; font-size: 11px; }
+.household-presence > span { width: 8px; height: 8px; background: #aaa3b4; box-shadow: 2px 2px 0 #d4cede; }
+.household-presence.is-active { color: #42722e; }
+.household-presence.is-active > span { background: #79cc4b; box-shadow: 2px 2px 0 #b9e395; }
+.household-member-xp { min-height: 34px; font-size: 11px; color: #6b6590; }
+.household-member-xp .xp-track { height: 10px; margin-top: 7px; border: 2px solid #8177ad; border-radius: 0; background: #e9eef8; }
+.household-member-xp .xp-track > div { background: #a4e963; }
+.household-member-figure { position: relative; padding-top: 35px; display: flex; align-items: center; justify-content: center; }
+.household-member-figure .avatar { height: 365px; width: 100%; max-height: none; min-height: 0; margin: 0; }
+.household-member-figure .clothing-boost-tooltip { transform: translateX(-235px); }
+.household-gear-hint { text-align: center; margin: 12px 0 0; font-size: 10px; line-height: 1.7; color: #7c708c; }
+.household-refresh-note { font-size: 11px; }
+@media(max-width:650px) { .household-member-grid { grid-template-columns: minmax(0,1fr); } .household-member-figure .avatar { height: 380px; } }

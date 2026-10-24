@@ -257,3 +257,6 @@ Six supplied pants designs (light/dark-wash jeans, tan carpenter, leather, camo 
 
 
 Pants rarity tuning: Light-wash (+5% XP), Dark-wash (+5% coins) and Carpenter (+3% both) are Rare, 35 coins, in Basic Shop. Camo (+12% XP) and Zebra (+12% coins) are Epic, 75 coins, in Daily Shop. Leather (+12% both) is Legendary, 100 coins, in Daily Shop. All six now unlock at level 3. Equipped shirt/pants percentages add before one final upward rounding per quest reward; ownership IDs and fits remain unchanged.
+
+
+Household roster redesign: Members is the default tab and shows responsive full-body cards with current equipped clothing, level, per-level XP bar and hover/focus gear modifier hints. Presence is Active for a visible-app profile heartbeat within two minutes; otherwise show elapsed time since last app activity. Visible apps refresh/sync every 30 seconds. Older profiles show explicit missing-XP/outfit fallbacks instead of guessed progress. Account header copy is compact; invites and activity remain available. Only appearance, equipped outfit and total XP are added to shared data; balances, inventory, active quests and completion counts stay private.

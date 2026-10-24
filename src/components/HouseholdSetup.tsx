@@ -64,13 +64,12 @@ export function HouseholdSetup({ account, displayName, household, beforeSignOut 
   if (!supabase) return <p role="alert">Household connection settings are missing. Save .env.local and restart the development server.</p>;
   if (account.loading) return <p role="status">Loading your account…</p>;
   return <div className="household-account">
-    <span className="eyebrow">YOUR NEXT SHARED ADVENTURE</span>
-    <h3>{recovery ? 'Choose a new password.' : account.session ? 'Your party awaits.' : mode === 'signup' ? 'Create your account.' : mode === 'forgot' ? 'Forgot your password?' : 'Welcome to your party.'}</h3>
+    {(!account.session||recovery)&&<span className="eyebrow">YOUR NEXT SHARED ADVENTURE</span>}
+    {(!account.session||recovery)&&<h3>{recovery ? 'Choose a new password.' : account.session ? 'Your party awaits.' : mode === 'signup' ? 'Create your account.' : mode === 'forgot' ? 'Forgot your password?' : 'Welcome to your party.'}</h3>}
     {(error || account.error) && <p className="account-error" role="alert">{error || account.error}</p>}
     {message && <p className="household-connection" role="status">{message}</p>}
     {account.session && !recovery ? <>
-      <p>Signed in as <strong>@{String(account.session.user.user_metadata.username || 'player')}</strong>.</p>
-      <p>Your player name remains {displayName ? <strong>{displayName}</strong> : 'independent of your username'}. Your character and progress are saved to this account.</p>
+      <p className="household-account-summary">Signed in as <strong>@{String(account.session.user.user_metadata.username || 'player')}</strong>{displayName&&<> · Playing as <strong>{displayName}</strong></>}</p>
       <HouseholdPanel key={account.session.user.id} state={household} userId={account.session.user.id}/>
       <button className="quiet-button" disabled={busy} onClick={signOut}>{busy ? 'Signing out…' : 'Sign out'}</button>
     </> : <>

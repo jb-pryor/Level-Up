@@ -3,7 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import type { Player } from '../types';
 import { outboxKey, parseOutbox, sharedProfile, type PendingActivity, type SharedProfile } from '../game/householdActivity';
 
-export type Member = { user_id:string; username:string; display_name:string; level:number; avatar:unknown };
+export type Member = { user_id:string; username:string; display_name:string; level:number; avatar:unknown; updated_at?:string };
 export type Activity = { id:string; display_name:string; level:number; avatar:unknown; quest_name:string; completed_at:string };
 type Household = { id:string; name:string; owner_id:string };
 type Invite = { code:string; expires_at:string };
@@ -45,7 +45,7 @@ export function useHousehold(session:Session|null,player:Player|null) {
       ]);
       for(const result of results)if(result.error)throw result.error;
       const memberIds=(results[1].data??[]).map(m=>m.user_id);
-      const profiles=await db.from('player_profiles').select('user_id,username,display_name,level,avatar').in('user_id',memberIds);if(profiles.error)throw profiles.error;
+      const profiles=await db.from('player_profiles').select('user_id,username,display_name,level,avatar,updated_at').in('user_id',memberIds);if(profiles.error)throw profiles.error;
       if(current.current.userId!==userId||version!==readVersion.current)return;
       membership.current={userId,id};
       setView({userId,household:results[0].data as Household,members:profiles.data as Member[],invite:results[2].data as Invite|null,activity:results[3].data as Activity[]});
@@ -54,7 +54,7 @@ export function useHousehold(session:Session|null,player:Player|null) {
     finally{if(current.current.userId===userId&&version===readVersion.current)setLoading(false);}
   },[userId]);
   const flush=useCallback(async()=>{
-    if(!userId||running.current||queue.current.userId!==userId||!queue.current.loaded)return;
+    if(!userId||running.current||queue.current.userId!==userId||!queue.current.loaded||document.visibilityState!=='visible')return;
     running.current=true;
     try{
       const {supabase:db}=await import('../lib/supabase');if(!db)return;
@@ -102,8 +102,10 @@ export function useHousehold(session:Session|null,player:Player|null) {
     void refresh();void flush();
     const retry=()=>{void refresh();void flush();};
     const timer=window.setInterval(()=>{if(document.visibilityState==='visible')retry();},30000);
+    const resume=()=>{if(document.visibilityState==='visible')retry();};
+    document.addEventListener('visibilitychange',resume);
     window.addEventListener('online',retry);
-    return()=>{clearInterval(timer);window.removeEventListener('online',retry);};
+    return()=>{clearInterval(timer);window.removeEventListener('online',retry);document.removeEventListener('visibilitychange',resume);};
   },[userId,refresh,flush]);
   const profile=player?JSON.stringify(sharedProfile(player)):'';
   useEffect(()=>{void flush();},[profile,flush]);

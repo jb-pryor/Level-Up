@@ -312,3 +312,6 @@ short-curly is accepted by Appearance, saved-player validation and household por
 
 
 newPants.ts defines six stable IDs, untouched source PNGs and crop bounds; NewPants renders them into the existing canonical pants footprint. The female fit reuses femalePantsTransform. MalePants and FemaleClothing route these IDs consistently for avatar and thumbnail rendering; Wardrobe pants options now derive from cosmetics instead of a fixed list. No save schema or database change is needed.
+
+
+Full household avatars: sharedProfile includes sanitized outfit and totalXp inside the existing avatar JSON. parseOutbox preserves those fields while accepting legacy head-only events. sharedOutfit accepts catalog IDs only in matching slots, and sharedProgress validates integer XP. Members read existing player_profiles.updated_at as the foreground profile heartbeat; flush skips hidden documents and resumes on visibility changes. SQL migration 007_household_full_avatars.sql extends private.clean_avatar to whitelist outfit fields and safe integer XP, preserves supported hairstyles and existing RLS, and leaves private player_saves untouched. No new public columns or RPC signatures are required. HouseholdPanel renders standard Avatar with clothing tooltips and centrally calculated XP bars; presence formatting is tested separately.

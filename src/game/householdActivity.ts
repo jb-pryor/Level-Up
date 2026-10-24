@@ -1,13 +1,14 @@
-import type { Appearance, Player } from '../types.ts';
+import { sharedOutfit, sharedProgress } from './householdMember.ts';
+import type { Appearance, Player, Outfit } from '../types.ts';
 import { defaultAppearance } from '../types.ts';
 import { levelFor } from './progression.ts';
 import { quests } from '../data/quests.ts';
 
-export type SharedProfile = { displayName: string; level: number; avatar: Omit<Appearance, 'name'> };
+export type SharedProfile = { displayName: string; level: number; avatar: Omit<Appearance, 'name'> & {outfit?:Outfit;totalXp?:number} };
 export type PendingActivity = { id: string; userId: string; householdId: string; questId: string; completedAt: string; profile: SharedProfile };
 export function sharedProfile(player: Player): SharedProfile {
   const { gender,bodyId,complexionId,hairStyleId,hairColorId,eyeColorId,expressionId }=player;
-  return { displayName: player.name.trim().slice(0,40), level: levelFor(player.totalXp), avatar: { gender,bodyId,complexionId,hairStyleId,hairColorId,eyeColorId,expressionId } };
+  return { displayName: player.name.trim().slice(0,40), level: levelFor(player.totalXp), avatar: { gender,bodyId,complexionId,hairStyleId,hairColorId,eyeColorId,expressionId,outfit:sharedOutfit(player.equipped,gender),totalXp:player.totalXp } };
 }
 export function headAppearance(value: unknown, name: string): Appearance {
   const p = value && typeof value === 'object' ? value as Record<string,unknown> : {};
@@ -30,7 +31,10 @@ export function parseOutbox(raw: string | null, userId: string): PendingActivity
       || !Number.isFinite(Date.parse(e.completedAt)) || !e.profile || typeof e.profile.displayName!=='string' || !e.profile.displayName.trim()
       || !Number.isSafeInteger(e.profile.level) || e.profile.level<1 || !e.profile.avatar || ids.has(e.id)) throw new Error('Unreadable household activity queue');
     ids.add(e.id);
-    const { name: _, ...avatar }=headAppearance(e.profile.avatar,e.profile.displayName);
+    const { name: _, ...head }=headAppearance(e.profile.avatar,e.profile.displayName);
+    const body=e.profile.avatar as SharedProfile['avatar'];
+    const xp=sharedProgress(body);
+    const avatar={...head,...(body.outfit?{outfit:sharedOutfit(body.outfit,head.gender)}:{}),...(xp!==null?{totalXp:xp}:{})};
     return { ...e, profile: { displayName:e.profile.displayName.slice(0,40),level:e.profile.level,avatar } };
   });
 }
