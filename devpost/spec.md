@@ -288,3 +288,6 @@ Reference clothing sprites live in public/avatars/shirts/reference-collection. T
 
 
 Wardrobe workspace: GameApp owns the active wardrobe category and draft outfit so Wardrobe and WardrobeDetails render the same selection. Desktop replaces FavoriteQuests with two sticky detail cards and hides the normal panel navigation during editing. A viewport-sized flex panel confines scrolling to the item grid, leaving the action footer visible. Tablet/mobile stack the detail cards below the inventory. CSS entry animation honors reduced motion. Stats are display-only placeholders and do not modify rewards or saved balances.
+
+
+Progression functions centrally define per-level costs, cumulative thresholds, binary-search level lookup and within-level XP. The player bar, accessibility values, reward animation rollover, reward dialog, completion gate, shop requirements and household profile levels derive from this curve. Level 3 / daily-shop unlock now occurs at 150 cumulative XP.

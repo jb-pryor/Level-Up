@@ -230,3 +230,6 @@ Reference clothing collection: seven photo-inspired shirts, sweaters and a flann
 
 
 Wardrobe layout revision: opening Wardrobe slides in a dedicated inventory workspace. The player previews the draft outfit on the left; the center shows owned clothing by category with its own scrolling grid and a persistent Cancel/Confirm footer. The usual catalog/favorites/household rail is replaced by a selected-item image/name/description card and a second name/rarity/stats card. Current items display Common rarity and no active boosts. Confirm equips the draft; Cancel restores the equipped look and both return to daily quests.
+
+
+Leveling curve: advancing from levels 1–5 costs 50, 100, 150, 200 and 250 XP respectively; each subsequent level costs 25 XP more than the previous one. Overflow carries forward. Existing test accounts recalculate directly from total XP with no level-preservation migration. The bar keeps its visual size and displays the current level’s capacity. Clothing boosts remain inactive.

@@ -7,14 +7,14 @@ const create=()=>gameReducer(initialGame,{type:'create',appearance:{...defaultAp
 function complete(state,id){const now=Math.max(Date.now(),...Object.values(state.player.questCooldowns));return gameReducer(gameReducer(state,{type:'add',questId:id,now}),{type:'complete',questId:id,now});}
 function firstLevel(){return ['dishes','room','laundry'].reduce(complete,create());}
 
-test('three ordinary quests reach level 2, 5 overflow XP and 55 coins including level bonus',()=>{
-  const state=firstLevel();assert.equal(state.player.totalXp,105);assert.equal(levelFor(state.player.totalXp),2);assert.equal(xpIntoLevel(state.player.totalXp),5);assert.equal(state.player.coins,55);assert.deepEqual(state.player.activeQuestIds,[]);assert.match(state.notice.message,/LEVEL UP/);
+test('three ordinary quests reach level 2, 55 overflow XP and 55 coins including level bonus',()=>{
+  const state=firstLevel();assert.equal(state.player.totalXp,105);assert.equal(levelFor(state.player.totalXp),2);assert.equal(xpIntoLevel(state.player.totalXp),55);assert.equal(state.player.coins,55);assert.deepEqual(state.player.activeQuestIds,[]);
 });
 test('duplicate add and repeated completion do not duplicate rewards',()=>{
   let s=gameReducer(create(),{type:'add',questId:'dishes'});s=gameReducer(s,{type:'add',questId:'dishes'});assert.equal(s.notice.message,'Quest already in your daily quests!');assert.deepEqual(s.player.activeQuestIds,['dishes']);s=gameReducer(s,{type:'complete',questId:'dishes'});assert.strictEqual(gameReducer(s,{type:'complete',questId:'dishes'}),s);assert.equal(s.player.coins,10);
 });
 test('delete earns no reward; deleted and completed quests can be added again',()=>{
-  let s=gameReducer(create(),{type:'add',questId:'room'});s=gameReducer(s,{type:'delete',questId:'room'});assert.equal(s.player.totalXp,0);assert.equal(s.player.coins,0);s=complete(s,'room');s=complete(s,'room');assert.equal(s.player.totalXp,70);assert.equal(s.player.coins,20);
+  let s=gameReducer(create(),{type:'add',questId:'room'});s=gameReducer(s,{type:'delete',questId:'room'});assert.equal(s.player.totalXp,0);assert.equal(s.player.coins,0);s=complete(s,'room');s=complete(s,'room');assert.equal(s.player.totalXp,70);assert.equal(s.player.coins,45);
 });
 test('purchase deducts coins once, preserves XP, and does not auto-equip',()=>{
   let s=gameReducer(firstLevel(),{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,25);assert.equal(s.player.totalXp,105);assert.deepEqual(s.player.ownedItemIds,['green-shirt']);assert.equal(s.player.equipped.shirt,'starter');s=gameReducer(s,{type:'buy',itemId:'green-shirt'});assert.equal(s.player.coins,25);assert.equal(s.player.ownedItemIds.length,1);
@@ -32,7 +32,7 @@ test('unknown IDs and blank names cannot mutate player progress',()=>{
   const s=create();for(const action of [{type:'add',questId:'missing'},{type:'buy',itemId:'missing'},{type:'edit',appearance:{...defaultAppearance,name:' '}}])assert.strictEqual(gameReducer(s,action).player,s.player);assert.equal(gameReducer(initialGame,{type:'create',appearance:defaultAppearance}).player,null);
 });
 test('a larger reward can cross a level and retains all overflow',()=>{
-  let s=complete(create(),'gym');s=complete(s,'gym');assert.equal(s.player.totalXp,120);assert.equal(levelFor(s.player.totalXp),2);assert.equal(xpIntoLevel(s.player.totalXp),20);assert.equal(s.player.coins,65);
+  let s=complete(create(),'gym');s=complete(s,'gym');assert.equal(s.player.totalXp,120);assert.equal(levelFor(s.player.totalXp),2);assert.equal(xpIntoLevel(s.player.totalXp),70);assert.equal(s.player.coins,65);
 });
 
 test('new purchases accumulate until opening the wardrobe; closing and equipping retain the count',()=>{

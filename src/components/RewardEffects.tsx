@@ -1,3 +1,4 @@
+import { levelFor } from '../game/progression';
 import { CoinIcon } from './CoinIcon';
 import { useEffect, useState, type CSSProperties, type RefObject } from 'react';
 import type { GameState, Reward } from '../game/gameReducer';
@@ -15,7 +16,7 @@ export function RewardEffects({notice,source,xpTarget,coinTarget,onRelease}:{not
     if(!xp||!wallet)return;
     const reward=notice.reward;
     playSound('quest');
-    setEffect({id:notice.sequence,reward,start:source.current??{x:window.innerWidth/2,y:window.innerHeight/2},xp:{x:xp.left+xp.width*.5,y:xp.top+xp.height/2},coins:{x:wallet.left+wallet.width/2,y:wallet.top+wallet.height/2},reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches,levelUp:Math.floor((reward.previousXp+reward.xp)/100)>Math.floor(reward.previousXp/100),phase:'pending'});
+    setEffect({id:notice.sequence,reward,start:source.current??{x:window.innerWidth/2,y:window.innerHeight/2},xp:{x:xp.left+xp.width*.5,y:xp.top+xp.height/2},coins:{x:wallet.left+wallet.width/2,y:wallet.top+wallet.height/2},reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches,levelUp:levelFor(reward.previousXp+reward.xp)>levelFor(reward.previousXp),phase:'pending'});
   },[notice?.sequence]);
   useEffect(()=>{
     if(effect?.phase!=='flight')return;
@@ -31,7 +32,7 @@ export function RewardEffects({notice,source,xpTarget,coinTarget,onRelease}:{not
     setEffect({...effect,phase:'flight',start:{x:window.innerWidth/2,y:window.innerHeight/2},xp:xp?{x:xp.left+xp.width*.5,y:xp.top+xp.height/2}:effect.xp,coins:wallet?{x:wallet.left+wallet.width/2,y:wallet.top+wallet.height/2}:effect.coins});
     onRelease(effect.id);
   };
-  if(effect.phase==='pending')return <Modal title="Quest completed!" onClose={release} className="reward-dialog"><div className="reward-summary"><span className="completion-mark" aria-hidden="true">✓</span><div><span className="eyebrow">LOOK WHO DID A THING</span><h3>Quest: {effect.reward.questName}, completed!</h3><p className="quest-completion-roast">{questHumor[quests.find(q=>q.name===effect.reward.questName)?.id??'']?.completion}</p><p>Reward: <span>+{effect.reward.xp} XP</span> · <strong><CoinIcon/> +{effect.reward.coins} coins</strong></p>{effect.levelUp&&<span className="reward-level-up">LEVEL UP! Level {1+Math.floor((effect.reward.previousXp+effect.reward.xp)/100)}</span>}</div></div><button className="primary reward-close" onClick={release}>Close <span>Collect rewards →</span></button></Modal>;
+  if(effect.phase==='pending')return <Modal title="Quest completed!" onClose={release} className="reward-dialog"><div className="reward-summary"><span className="completion-mark" aria-hidden="true">✓</span><div><span className="eyebrow">LOOK WHO DID A THING</span><h3>Quest: {effect.reward.questName}, completed!</h3><p className="quest-completion-roast">{questHumor[quests.find(q=>q.name===effect.reward.questName)?.id??'']?.completion}</p><p>Reward: <span>+{effect.reward.xp} XP</span> · <strong><CoinIcon/> +{effect.reward.coins} coins</strong></p>{effect.levelUp&&<span className="reward-level-up">LEVEL UP! Level {levelFor(effect.reward.previousXp+effect.reward.xp)}</span>}</div></div><button className="primary reward-close" onClick={release}>Close <span>Collect rewards →</span></button></Modal>;
   if(effect.reduced)return null;
   return <div className="reward-particles" aria-hidden="true" key={`particles-${effect.id}`}>{(['xp','coins'] as const).flatMap(kind=>Array.from({length:kind==='xp'?26:10},(_,index)=>{
     const end=effect[kind],dx=end.x-effect.start.x,dy=end.y-effect.start.y;

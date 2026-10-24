@@ -224,3 +224,6 @@ Activity mode: not established
 - [x] Add a slide-in transition, independently scrolling inventory and persistent Cancel/Confirm footer, including responsive/reduced-motion styles.
 - [x] Verify production build, 72 existing tests, and server-render checks for owned inventory, selection details, empty slots and footer controls.
 - [ ] Learner visual check: open Wardrobe, switch categories/select clothes, scroll the grid, then test Cancel and Confirm. Confirm the two sidebar cards match the selection and the footer stays visible. Browser connection was unavailable during implementation.
+
+
+- [x] Apply the approved gradual XP curve across progression, bar capacity, reward rollover and level-up detection; verify boundary/overflow behavior through level 10,000 and run the full test/build checks.
