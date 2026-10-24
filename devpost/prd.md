@@ -239,3 +239,6 @@ Shop and first clothing bonuses: Basic Shop shirts list all 11 colored tees firs
 
 
 Rarity/pricing revision: all former Common or unclassified purchasable items are labeled Uncommon (20 coins); Rare items cost 35 coins. Future Epic and Legendary prices are 75 and 100. Shop cards show every rarity, Wardrobe uses the same labels, and Daily Shop has a soft red background distinct from blue Rare cards.
+
+
+Avatar clothing hints: hovering over shirt, pants, equipped shoes or a visible hat displays a compact pixel-style item name and its quest XP/coin bonuses, or No boost. Keyboard focus also reveals the hint; Escape dismisses it. The dashboard avatar uses the displayed outfit, including wardrobe previews.

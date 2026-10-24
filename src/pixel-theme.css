@@ -450,3 +450,18 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .shop-panel.daily-shop-panel { background-color: #ffd8d6; }
 .daily-shop-panel .daily-shop-timer { color: #88494d; }
 .daily-shop-panel .daily-shop-timer time { color: #8b3549; }
+
+/* Clothing hit regions share the exact avatar canvas, keeping hover hints aligned. */
+.clothing-hit-map { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; overflow: visible; pointer-events: none; }
+.clothing-hit-target { fill: transparent; pointer-events: all; cursor: help; }
+.clothing-hit-region { outline: none; }
+.clothing-hit-region:focus-visible > .clothing-hit-target { stroke: #8063c3; stroke-width: 4; stroke-dasharray: 9 7; }
+.clothing-boost-tooltip { visibility: hidden; opacity: 0; pointer-events: all; transition: opacity 150ms ease; font: 30px LevelPixel,monospace; fill: #fff; }
+.clothing-tooltip-name { font-size: 28px; fill: #eee9ff; }
+.clothing-tooltip-box,.clothing-tooltip-notch { fill: #15131cdb; }
+.clothing-tooltip-connector { stroke: #40384b99; stroke-width: 3; fill: none; }
+.clothing-hit-region:hover:not([data-dismissed="true"]) .clothing-boost-tooltip,
+.clothing-hit-region:focus:not([data-dismissed="true"]) .clothing-boost-tooltip { visibility: visible; opacity: 1; }
+@media(prefers-reduced-motion:reduce) { .clothing-boost-tooltip { transition: none; } }
+
+@media(max-width:650px) { .clothing-boost-tooltip { transform: translateX(-200px); } }

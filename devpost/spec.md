@@ -297,3 +297,6 @@ Cosmetic metadata now includes shop placement, rarity and integer XP/coin boost 
 
 
 rarityPrices centrally maps Uncommon/Rare/Epic/Legendary to 20/35/75/100 coins. Exported cosmetics use that mapping for display and reducer purchase charges. The daily shop frame uses pastel red; item-specific rarity colors remain unchanged.
+
+
+ClothingTooltips overlays focusable SVG regions on the canonical avatar viewBox only when Avatar.showClothingInfo is enabled for the dashboard. Tooltip content derives from current outfit IDs and shared cosmetic metadata; empty clothing slots are omitted. TransitioningAvatar uses a labeled group when interactive regions are present and retains image semantics for noninteractive previews.

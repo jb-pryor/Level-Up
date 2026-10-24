@@ -233,3 +233,6 @@ Activity mode: not established
 
 
 - [x] Apply Uncommon labels, consistent rarity prices (20/35/75/100), and pastel-red Daily Shop styling; verify purchase balances and full build/test checks.
+
+
+- [x] Add pixel-style clothing hover/focus hints to the player avatar using equipped-item bonus metadata, with no-boost fallback and Escape dismissal; verify production build.
