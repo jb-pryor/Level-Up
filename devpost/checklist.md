@@ -247,3 +247,6 @@ Activity mode: not established
 
 - [x] Integrate Curly short in all four colors for both bodies; inspect fitted composites and verify saves/household portrait round trips, 87 tests and production build.
 - [ ] Apply supabase/migrations/006_short_curly_hair.sql in hosted Supabase for new-style household syncing.
+
+
+- [x] Add six new Uncommon pants to the regular shop and wardrobe for both bodies; inspect male/female fit composites, normalize waist/hem differences, and verify purchase/equip/save/body-change behavior plus full tests/build.

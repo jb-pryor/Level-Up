@@ -251,3 +251,6 @@ Additional hairstyle: Soft waves appears alongside Bald, Swoosh and Long & flowi
 
 
 Curly short hairstyle: add the supplied black/blonde/brown/gray PNGs as another choice for both genders, preserving all existing styles. Original files stay unchanged; female fitting is slightly smaller.
+
+
+Six supplied pants designs (light/dark-wash jeans, tan carpenter, leather, camo and zebra) are available in Basic Shop → Pants for both bodies. All are Uncommon, 20 coins, level 2, with no boosts. Purchases unlock both body fits and persist across body changes.

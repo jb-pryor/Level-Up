@@ -12,9 +12,11 @@ import { avatarPresets } from '../data/avatarPresets';
 export type Slot = keyof Outfit;
 type Item = { id: string | null; name: string; description: string };
 const categories: { slot: Slot; label: string }[] = [{slot:'shirt',label:'Shirts'},{slot:'pants',label:'Pants'},{slot:'hat',label:'Hats'},{slot:'shoes',label:'Shoes'}];
+const rarityOrder={Common:0,Rare:1,Epic:2,Legendary:3};
+const wardrobeRank=(item:Item)=>item.id===null||item.id==='starter'?-1:rarityOrder[cosmetics.find(c=>c.id===item.id)?.rarity??'Common'];
 const wardrobeItems: Record<Slot, Item[]> = {
   shirt: [{id:'starter',name:'Starter tank',description:'Your white tank top. Every adventure starts somewhere.'},...cosmetics.filter(item=>item.slot==='shirt')],
-  pants: [{id:'starter',name:'Starter gray',description:'Simple gray pants. A clean slate for your journey.'},{id:'dark-pants',name:'Midnight pants',description:'A charcoal finish that goes with every win.'},{id:'olive-pants',name:'Trail pants',description:'Earthy olive tones for everyday exploration.'}],
+  pants: [{id:'starter',name:'Starter gray',description:'Simple gray pants. A clean slate for your journey.'},...cosmetics.filter(item=>item.slot==='pants')],
   hat: [{id:null,name:'No hat',description:'Let your hairstyle take the spotlight.'},{id:'cap',name:'Quest cap',description:'A green cap for a little extra player energy.'}],
   shoes: [{id:null,name:'Barefoot',description:'Keep the original look.'},...cosmetics.filter(item=>item.slot==='shoes')],
 };
@@ -38,12 +40,12 @@ export function ItemPicture({ appearance, slot, item }: { appearance: Appearance
 }
 
 export function Wardrobe({ appearance, draft, ownedItemIds, tab, onTabChange, onChange, onConfirm, onCancel }: { appearance: Appearance; draft: Outfit; ownedItemIds: string[]; tab: Slot; onTabChange:(slot:Slot)=>void; onChange:(outfit:Outfit)=>void; onConfirm:()=>void; onCancel:()=>void }) {
-  const available=wardrobeItems[tab].filter(item=>appearance.gender==='male'||!cosmetics.find(c=>c.id===item.id)?.maleOnly);
+  const available=wardrobeItems[tab].filter(item=>appearance.gender==='male'||!cosmetics.find(c=>c.id===item.id)?.maleOnly).sort((a,b)=>wardrobeRank(a)-wardrobeRank(b));
   return <section className="quest-card wardrobe-panel" aria-label="Wardrobe">
     <div className="wardrobe-heading"><div><span className="eyebrow">MAKE IT YOURS</span><h2>Your wardrobe</h2></div></div>
     <p className="muted">Pick a look. Confirm when it feels like you.</p>
     <div className="wardrobe-tabs" role="tablist" aria-label="Clothing categories">{categories.map(({slot,label})=><button key={slot} type="button" role="tab" id={`wardrobe-tab-${slot}`} aria-selected={tab===slot} aria-controls="wardrobe-items" onClick={()=>onTabChange(slot)} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const index=categories.findIndex(c=>c.slot===slot);const next=categories[(index+(event.key==='ArrowRight'?1:3))%4].slot;onTabChange(next);document.getElementById(`wardrobe-tab-${next}`)?.focus()}}} tabIndex={tab===slot?0:-1}>{label}</button>)}</div>
-    <div key={tab} id="wardrobe-items" className="wardrobe-grid" tabIndex={0} role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" data-rarity={cosmetics.find(c=>c.id===item.id)?.rarity??'Uncommon'} type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
+    <div key={tab} id="wardrobe-items" className="wardrobe-grid" tabIndex={0} role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" data-rarity={cosmetics.find(c=>c.id===item.id)?.rarity??'Common'} type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
     <div className="wardrobe-actions"><button className="quiet-button" onClick={onCancel}>Cancel</button><button className="primary" onClick={onConfirm}>Confirm outfit <span>✓</span></button></div>
   </section>;
 }
@@ -53,14 +55,14 @@ export function WardrobeDetails({appearance, draft, tab}: {appearance:Appearance
   const item=wardrobeItems[tab].find(item=>item.id===draft[tab])??wardrobeItems[tab][0];
   const empty=item.id===null;
   const cosmetic=cosmetics.find(c=>c.id===item.id);
-  return <aside className="wardrobe-details" data-rarity={cosmetic?.rarity??'Uncommon'} aria-label="Selected clothing details" aria-live="polite">
+  return <aside className="wardrobe-details" data-rarity={cosmetic?.rarity??'Common'} aria-label="Selected clothing details" aria-live="polite">
     <section className="wardrobe-preview-card">
       <div className="wardrobe-preview-image"><ItemPicture appearance={appearance} slot={tab} item={item}/><span className="item-selected" aria-label="Selected">✓</span></div>
       <div className="wardrobe-preview-copy"><h2>{item.name}</h2><p>{item.description}</p></div>
     </section>
     <section className="wardrobe-stat-card">
       <h2>{item.name}</h2>
-      <dl><div><dt>Rarity</dt><dd>{empty?'—':cosmetic?.rarity??'Uncommon'}</dd></div><div><dt>Coin boost</dt><dd>{cosmetic?.coinBoostPercent?`+${cosmetic.coinBoostPercent}%`:'None'}</dd></div><div><dt>XP boost</dt><dd>{cosmetic?.xpBoostPercent?`+${cosmetic.xpBoostPercent}%`:'None'}</dd></div><div><dt>Other stats</dt><dd>None</dd></div></dl>
+      <dl><div><dt>Rarity</dt><dd>{empty?'—':cosmetic?.rarity??'Common'}</dd></div><div><dt>Coin boost</dt><dd>{cosmetic?.coinBoostPercent?`+${cosmetic.coinBoostPercent}%`:'None'}</dd></div><div><dt>XP boost</dt><dd>{cosmetic?.xpBoostPercent?`+${cosmetic.xpBoostPercent}%`:'None'}</dd></div><div><dt>Other stats</dt><dd>None</dd></div></dl>
       <p className="wardrobe-stat-note">{cosmetic?.xpBoostPercent||cosmetic?.coinBoostPercent?'Active while equipped. Quest rewards round up to whole numbers.':'No active item bonuses.'}</p>
     </section>
   </aside>;

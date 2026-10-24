@@ -1,3 +1,5 @@
+import { NewPants } from './NewPants';
+import { newPantsAsset } from '../data/newPants';
 import { useId } from 'react';
 import { ReferenceShirt } from './ReferenceShirt';
 import { referenceShirtPath } from '../data/referenceShirts';
@@ -7,6 +9,7 @@ import { femaleTeePath,femaleShirtTint,femalePantsTransform,femaleShoesTransform
 import { malePantsPath } from './MalePants';
 export function FemaleClothing({slot,id,thumbnail=false}:{slot:keyof Outfit;id:string|null;thumbnail?:boolean}){
   const uid=useId().replace(/[^a-zA-Z0-9]/g,'');
+  if(slot==='pants'&&id&&newPantsAsset(id))return <NewPants id={id} female thumbnail={thumbnail}/>;
   if(slot==='shirt'&&id&&referenceShirtPath(id,'female'))return <ReferenceShirt id={id} gender="female" thumbnail={thumbnail}/>;
   if(id===null||slot==='shirt'&&id==='starter')return null;
   let href:string|null=null,transform:string|undefined,tint:string|null=null;

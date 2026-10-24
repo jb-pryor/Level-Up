@@ -42,7 +42,7 @@ test('coin boosts are reflected in actual balances and completion notices',()=>{
 });
 
 test('rarity sets consistent whole-coin prices across both shops',()=>{
- assert.deepEqual(rarityPrices,{Uncommon:20,Rare:35,Epic:75,Legendary:100});
+ assert.deepEqual(rarityPrices,{Common:20,Rare:35,Epic:75,Legendary:100});
  for(const item of cosmetics){assert(item.rarity);assert.equal(item.price,rarityPrices[item.rarity]);}
 });
 

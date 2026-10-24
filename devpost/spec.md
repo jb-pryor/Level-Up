@@ -309,3 +309,6 @@ Soft waves uses hairStyleId long-waves, LongWaves.tsx and longWaves.ts source fr
 
 
 short-curly is accepted by Appearance, saved-player validation and household portrait parsing. CurlyHair.tsx renders the native 1024×1706 PNG canvas at y=-90, with the existing 0.84 female fit transform. Thumbnails use a tight source crop. Hosted household validation requires migration 006_short_curly_hair.sql, which also retains Soft waves support.
+
+
+newPants.ts defines six stable IDs, untouched source PNGs and crop bounds; NewPants renders them into the existing canonical pants footprint. The female fit reuses femalePantsTransform. MalePants and FemaleClothing route these IDs consistently for avatar and thumbnail rendering; Wardrobe pants options now derive from cosmetics instead of a fixed list. No save schema or database change is needed.
