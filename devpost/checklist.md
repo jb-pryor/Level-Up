@@ -236,3 +236,6 @@ Activity mode: not established
 
 
 - [x] Add pixel-style clothing hover/focus hints to the player avatar using equipped-item bonus metadata, with no-boost fallback and Escape dismissal; verify production build.
+
+
+- [x] Apply requested daily-shirt Rare/Epic/Legendary assignments and balanced single/dual boosts; verify all nine purchase prices and actual completion rewards, integer rounding, and no stacking from unequipped owned items.

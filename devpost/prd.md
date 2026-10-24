@@ -242,3 +242,6 @@ Rarity/pricing revision: all former Common or unclassified purchasable items are
 
 
 Avatar clothing hints: hovering over shirt, pants, equipped shoes or a visible hat displays a compact pixel-style item name and its quest XP/coin bonuses, or No boost. Keyboard focus also reveals the hint; Escape dismisses it. The dashboard avatar uses the displayed outfit, including wardrobe previews.
+
+
+Daily-shirt rarity tuning: Planet Muncher, Metallica and Mr. Worldwide are Legendary (100 coins), with +12% both rewards, +20% XP, and +20% coins respectively. Cloudscape, Cartoon Chaos and Neon Daydream are Epic (75 coins), with +12% XP, +8% both, and +12% coins. Unique Panda, Green Skull and Take It Slow are Rare (35 coins), with +5% XP, +5% coins, and +3% both. These are initial play-test balance values; smaller dual bonuses trade specialization for flexibility. Existing basic rare boosts and unlock levels stay the same. Boosted quest rewards round up individually; the level-up coin bonus is unaffected.

@@ -18,16 +18,17 @@ export function ClothingTooltips({appearance,outfit}:{appearance:Appearance;outf
       const item=cosmetics.find(c=>c.id===id);
       const name=item?.name??(region.slot==='shirt'?'Starter tank':'Starter gray');
       const boosts=[item?.xpBoostPercent?`+${item.xpBoostPercent}% quest XP`:null,item?.coinBoostPercent?`+${item.coinBoostPercent}% quest coins`:null].filter(Boolean);
-      const bonus=boosts.join(' · ')||'No boost';
+      const bonusLines=boosts.length?boosts:['No boost'];
+      const tooltipHeight=106+(bonusLines.length-1)*40;
       const tooltipId=`${uid}-${region.slot}`;
       return <g key={region.slot} className="clothing-hit-region" tabIndex={0} role="group" aria-label={name} aria-describedby={tooltipId} data-dismissed={dismissed===region.slot} onPointerEnter={()=>setDismissed(null)} onPointerLeave={()=>setDismissed(null)} onFocus={()=>setDismissed(null)} onKeyDown={event=>{if(event.key==='Escape'){event.preventDefault();setDismissed(region.slot)}}}>
         <rect className="clothing-hit-target" x={region.x} y={region.y} width={region.w} height={region.h}/>
         <g id={tooltipId} role="tooltip" className="clothing-boost-tooltip">
           <path className="clothing-tooltip-connector" d={`M${region.x+region.w-12} ${region.tip+53} H780`}/>
-          <rect className="clothing-tooltip-box" x="780" y={region.tip} width="610" height="106" rx="8"/>
+          <rect className="clothing-tooltip-box" x="780" y={region.tip} width="610" height={tooltipHeight} rx="8"/>
           <path className="clothing-tooltip-notch" d={`M780 ${region.tip+40} l-13 13 13 13 Z`}/>
           <text x="805" y={region.tip+42} className="clothing-tooltip-name">{name}</text>
-          <text x="805" y={region.tip+81}>{bonus}</text>
+          {bonusLines.map((line,index)=><text key={line} x="805" y={region.tip+81+40*index}>{line}</text>)}
         </g>
       </g>;
     })}

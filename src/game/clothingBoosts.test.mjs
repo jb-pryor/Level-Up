@@ -45,3 +45,33 @@ test('rarity sets consistent whole-coin prices across both shops',()=>{
  assert.deepEqual(rarityPrices,{Uncommon:20,Rare:35,Epic:75,Legendary:100});
  for(const item of cosmetics){assert(item.rarity);assert.equal(item.price,rarityPrices[item.rarity]);}
 });
+
+test('daily rarity upgrades charge the new prices and apply both reward currencies correctly',()=>{
+ const cases=[
+  ['pacman-planets-tee','Legendary',100,40,12],
+  ['metallica-tee','Legendary',100,42,10],
+  ['worldwide-tee','Legendary',100,35,12],
+  ['cloudscape-tee','Epic',75,40,10],
+  ['cartoon-chaos-tee','Epic',75,38,11],
+  ['neon-trip-tee','Epic',75,35,12],
+  ['unique-panda-tee','Rare',35,37,10],
+  ['green-skull-tee','Rare',35,35,11],
+  ['take-it-slow-tee','Rare',35,37,11],
+ ];
+ for(const [id,rarity,price,xp,coins] of cases){
+  let s=wear(id);const item=cosmetics.find(c=>c.id===id);
+  assert.equal(item.rarity,rarity);assert.equal(item.price,price);assert.equal(item.shop,'daily');
+  assert.equal(s.player.coins,1000-price);
+  s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.player.totalXp,150+xp);assert.equal(s.player.coins,1000-price+coins);
+  assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);
+  assert(Number.isInteger(s.player.coins));assert(Number.isInteger(s.player.totalXp));
+ }
+});
+test('owning multiple upgraded shirts does not stack unequipped bonuses',()=>{
+ let s=wear('metallica-tee');
+ for(const id of ['worldwide-tee','cartoon-chaos-tee','pacman-planets-tee'])s=gameReducer(s,{type:'buy',itemId:id});
+ assert.deepEqual(questReward(s.player,{xp:60,coins:20}),{xp:72,coins:20});
+ s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'pacman-planets-tee'}});
+ assert.deepEqual(questReward(s.player,{xp:60,coins:20}),{xp:68,coins:23});
+});

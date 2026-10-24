@@ -300,3 +300,6 @@ rarityPrices centrally maps Uncommon/Rare/Epic/Legendary to 20/35/75/100 coins. 
 
 
 ClothingTooltips overlays focusable SVG regions on the canonical avatar viewBox only when Avatar.showClothingInfo is enabled for the dashboard. Tooltip content derives from current outfit IDs and shared cosmetic metadata; empty clothing slots are omitted. TransitioningAvatar uses a labeled group when interactive regions are present and retains image semantics for noninteractive previews.
+
+
+Daily shirt rarity/boost values live in cosmetics.ts and preserve existing ownership IDs. Rarity pricing is derived centrally. Shop bonus text now lists both XP and coin effects for dual-bonus gear; avatar hints expand to separate lines so neither effect is truncated. Reward calculation remains equipped-only and rounds each final currency once.
