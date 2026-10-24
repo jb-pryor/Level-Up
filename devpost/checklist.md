@@ -261,3 +261,6 @@ Activity mode: not established
 - [x] Preserve full profile snapshots through the activity outbox, handle older profiles, and keep private balances/quests out of shared JSON.
 - [x] Verify 93 client tests, production build and server-render checks for full outfits, XP, tooltips, last seen and legacy fallbacks. Browser preview was unavailable.
 - [ ] Apply supabase/migrations/007_household_full_avatars.sql in hosted Supabase, then open both test accounts and check their member cards after the next 30-second sync. Hosted SQL execution and cross-account visual verification remain pending.
+
+
+- [x] Restore base quest XP previews and display snapshotted gear bonus amounts separately in the completion popup; verify receipt amounts, rounding and payout totals.

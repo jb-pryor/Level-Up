@@ -515,3 +515,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .household-gear-hint { text-align: center; margin: 12px 0 0; font-size: 10px; line-height: 1.7; color: #7c708c; }
 .household-refresh-note { font-size: 11px; }
 @media(max-width:650px) { .household-member-grid { grid-template-columns: minmax(0,1fr); } .household-member-figure .avatar { height: 380px; } }
+
+.reward-summary .reward-boost-breakdown { margin: 12px 0; padding: 10px 14px; background: #e8dbff70; border-left: 3px solid #9771c0; }
+.reward-summary .reward-boost-breakdown p { margin: 4px 0; font-size: 13px; line-height: 1.7; color: #75528f; }
+.reward-summary .reward-boost-breakdown strong { color: #594079; white-space: nowrap; }

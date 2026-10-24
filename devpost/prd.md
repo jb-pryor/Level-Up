@@ -260,3 +260,6 @@ Pants rarity tuning: Light-wash (+5% XP), Dark-wash (+5% coins) and Carpenter (+
 
 
 Household roster redesign: Members is the default tab and shows responsive full-body cards with current equipped clothing, level, per-level XP bar and hover/focus gear modifier hints. Presence is Active for a visible-app profile heartbeat within two minutes; otherwise show elapsed time since last app activity. Visible apps refresh/sync every 30 seconds. Older profiles show explicit missing-XP/outfit fallbacks instead of guessed progress. Account header copy is compact; invites and activity remain available. Only appearance, equipped outfit and total XP are added to shared data; balances, inventory, active quests and completion counts stay private.
+
+
+Quest reward display revision: quest book/list/favorite XP always shows the unchanged base quest reward. The completion popup shows base XP/coins and separate XP boost applied / Coin boost applied lines with the actual rounded extra amounts, only when positive. Boosted balances, XP rollover and level gates remain unchanged.

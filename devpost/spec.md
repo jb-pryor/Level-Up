@@ -315,3 +315,6 @@ newPants.ts defines six stable IDs, untouched source PNGs and crop bounds; NewPa
 
 
 Full household avatars: sharedProfile includes sanitized outfit and totalXp inside the existing avatar JSON. parseOutbox preserves those fields while accepting legacy head-only events. sharedOutfit accepts catalog IDs only in matching slots, and sharedProgress validates integer XP. Members read existing player_profiles.updated_at as the foreground profile heartbeat; flush skips hidden documents and resumes on visibility changes. SQL migration 007_household_full_avatars.sql extends private.clean_avatar to whitelist outfit fields and safe integer XP, preserves supported hairstyles and existing RLS, and leaves private player_saves untouched. No new public columns or RPC signatures are required. HouseholdPanel renders standard Avatar with clothing tooltips and centrally calculated XP bars; presence formatting is tested separately.
+
+
+Reward receipts now snapshot baseXp/baseCoins alongside awarded xp/coins at completion. RewardBreakdown uses their differences rather than current equipment, so later outfit changes cannot change a completed receipt. Quest preview components use raw quest rewards; the reducer still uses questReward for payouts.

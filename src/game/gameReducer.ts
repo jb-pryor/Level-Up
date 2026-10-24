@@ -6,7 +6,7 @@ import { quests } from '../data/quests.ts';
 import { cosmetics } from '../data/cosmetics.ts';
 import { levelFor } from './progression.ts';
 
-export type Reward = { questName: string; xp: number; coins: number; previousXp: number; previousCoins: number };
+export type Reward = { questName: string; xp: number; coins: number; baseXp: number; baseCoins: number; previousXp: number; previousCoins: number };
 export type GameState = { player: Player | null; notice: { sequence: number; message: string; error: boolean; reward?: Reward; purchaseItemId?: string } | null };
 export type Action = {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string;now?:number} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
 export const initialGame: GameState = {player:null,notice:null};
@@ -55,7 +55,7 @@ export function gameReducer(state: GameState, action: Action): GameState {
     const coins=p.coins+earned.coins+bonusCoins;
     if(!Number.isSafeInteger(totalXp)||!Number.isSafeInteger(coins))return feedback('Your progress could not be updated.',true);
     const level=levelFor(totalXp),levelUp=level>levelFor(p.totalXp);
-    return feedback(`+${earned.xp} XP · +${earned.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:earned.xp,coins:earned.coins,previousXp:p.totalXp,previousCoins:p.coins});
+    return feedback(`+${earned.xp} XP · +${earned.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:earned.xp,coins:earned.coins,baseXp:quest.xp,baseCoins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
   }
   if(action.type==='buy') {
     const item=cosmetics.find(c=>c.id===action.itemId);if(!item)return feedback('That item is unavailable.',true);

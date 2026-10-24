@@ -87,3 +87,17 @@ test('pants rarity boosts apply to completions and add with the equipped shirt b
  assert.deepEqual(questReward(s.player,{xp:35,coins:10}),{xp:41,coins:12});
  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:'starter'}});assert.deepEqual(questReward(s.player,{xp:35,coins:10}),{xp:37,coins:10});
 });
+
+test('completion receipts retain base rewards and the exact rounded gear bonuses',()=>{
+ let s=wear('metallica-tee');s=gameReducer(s,{type:'buy',itemId:'leather-pants'});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:'leather-pants'}});
+ s=gameReducer(s,{type:'add',questId:'gym'});s=gameReducer(s,{type:'complete',questId:'gym'});
+ const receipt=s.notice.reward;
+ assert.equal(receipt.baseXp,60);assert.equal(receipt.baseCoins,20);
+ assert.equal(receipt.xp,80);assert.equal(receipt.coins,23);
+ assert.equal(receipt.xp-receipt.baseXp,20);assert.equal(receipt.coins-receipt.baseCoins,3);
+ assert.equal(s.player.totalXp,receipt.previousXp+receipt.xp);
+ assert.equal(s.player.coins,receipt.previousCoins+receipt.coins);
+ // Later outfit changes cannot recalculate the completed quest's receipt.
+ s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'starter',pants:'starter'}});
+ assert.equal(receipt.xp,80);assert.equal(receipt.baseXp,60);
+});
