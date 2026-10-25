@@ -281,3 +281,6 @@ Activity mode: not established
 
 - [x] Add Ponytail for both bodies and all four colors; inspect fitted composites and verify source dimensions, saves and household portrait support (108 tests and build pass).
 - [ ] Apply supabase/migrations/009_ponytail_hair.sql in hosted Supabase for Ponytail household syncing.
+
+
+- [x] Replace all five long-sleeve designs for both bodies with the supplied refitted PNGs; inspect ten fit composites and verify shop/wardrobe/avatar routing plus asset dimensions (108 tests and build pass).

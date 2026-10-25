@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {referenceShirtIds,referenceShirtPath,redoneMaleShirts,redoneFemaleShirts} from '../data/referenceShirts.ts';
+import {referenceShirtIds,referenceShirtPath,redoneMaleShirts,redoneFemaleShirts,refittedShirtAsset} from '../data/referenceShirts.ts';
 import {cosmetics} from '../data/cosmetics.ts';
 import {defaultAppearance} from '../types.ts';
 import {initialGame,gameReducer} from './gameReducer.ts';
@@ -15,8 +15,9 @@ test('reference garments have complete body-specific PNG assets and valid source
       if(gender==='female'&&item.maleOnly){assert.equal(referenceShirtPath(id,gender),null);continue;}
       const bytes=readFileSync(new URL(`../../public${referenceShirtPath(id,gender)}`,import.meta.url));
       assert.equal(bytes.subarray(1,4).toString(),'PNG');
+      const refitted=refittedShirtAsset(id,gender);
       const redone=gender==='male'?redoneMaleShirts[id]:redoneFemaleShirts[id];
-      assert.equal(bytes.readUInt32BE(16),redone?(gender==='male'?1237:1145):1024);assert.equal(bytes.readUInt32BE(20),redone?(gender==='male'?1271:1374):1536);
+      assert.equal(bytes.readUInt32BE(16),refitted?refitted.width:redone?(gender==='male'?1237:1145):1024);assert.equal(bytes.readUInt32BE(20),refitted?refitted.height:redone?(gender==='male'?1271:1374):1536);
       assert.equal(bytes[25],6,'RGBA transparency');
     }
   }

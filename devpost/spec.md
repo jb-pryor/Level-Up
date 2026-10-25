@@ -327,3 +327,6 @@ afroHair.ts maps source filenames and native dimensions, including the different
 
 
 ponytailHair.ts maps source filenames (including poneytail-brown-female-fitted.png) and native dimensions. PonytailHair renders normalized male and canonical female-base placements above shirts, with female cap clipping. The ponytail ID is supported by Appearance/save/household validation. Migration 009_ponytail_hair.sql adds hosted support and preserves all previous styles and shared outfit/XP fields.
+
+
+Refitted long-sleeve assets: the five sweater/flannel IDs now resolve to the supplied refitted-male-* / refitted-female-* files in the redone/female shirt folders. refittedShirtAsset provides full-canvas placement and sleeve-aware thumbnail framing. Female canvases use the canonical female-base projection; T-shirt paths and framing stay unchanged. Item IDs, ownership, prices, rarity and loot eligibility are unchanged.

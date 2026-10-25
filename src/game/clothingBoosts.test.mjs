@@ -101,3 +101,18 @@ test('completion receipts retain base rewards and the exact rounded gear bonuses
  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'starter',pants:'starter'}});
  assert.equal(receipt.xp,80);assert.equal(receipt.baseXp,60);
 });
+
+test('refitted sweaters use the requested rarity tiers, prices and rounded quest boosts',()=>{
+ for(const [id,rarity,price,xp,coins] of [
+  ['pixel-knit-sweater','Epic',75,38,11],
+  ['cream-cable-sweater','Rare',35,37,10],
+  ['olive-stripe-sweater','Rare',35,35,11],
+  ['plaid-flannel','Rare',35,37,11],
+  ['scarlet-sweatshirt','Rare',35,37,10],
+ ]){
+  const item=cosmetics.find(c=>c.id===id);assert.equal(item.rarity,rarity);assert.equal(item.price,price);assert.equal(item.shop,'daily');
+  let s=wear(id);assert.equal(s.player.coins,1000-price);
+  s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.totalXp,150+xp);assert.equal(s.player.coins,1000-price+coins);
+ }
+});

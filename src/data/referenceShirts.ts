@@ -1,3 +1,4 @@
+import {femaleBase} from './femaleBases.ts';
 export const referenceShirtIds = ['tie-dye-tee', 'neon-trip-tee', 'pixel-knit-sweater', 'cream-cable-sweater', 'olive-stripe-sweater', 'plaid-flannel', 'scarlet-sweatshirt', 'built-different-tee', 'unique-panda-tee', 'metallica-tee', 'green-skull-tee', 'worldwide-tee', 'cartoon-chaos-tee', 'cloudscape-tee', 'take-it-slow-tee', 'pacman-planets-tee'] as const;
 export type ReferenceShirtId = typeof referenceShirtIds[number];
 
@@ -29,7 +30,15 @@ export const redoneFemaleShirts: Record<string,{file:string;viewBox:string}> = {
   'metallica-tee': {file:'metallicaFemale.png',viewBox:'44 137 1058 1129'},
 };
 
+export const refittedSweaterIds=['pixel-knit-sweater','cream-cable-sweater','olive-stripe-sweater','plaid-flannel','scarlet-sweatshirt'] as const;
+export function refittedShirtAsset(id:string,gender:'male'|'female'){
+  if(!refittedSweaterIds.includes(id as typeof refittedSweaterIds[number]))return null;
+  const female=gender==='female';
+  return {src:`/avatars/shirts/${female?'reference-collection-female':'reference-collection-redone'}/refitted-${gender}-${id}.png`,width:female?852:1021,height:female?1846:1541,placement:female?femaleBase({complexionId:'1',expressionId:'smile'}).placement:{x:0,y:0,width:1024,height:1536},preview:female?'200 410 630 510':'160 420 710 520'};
+}
+
 export function referenceShirtPath(id: string, gender: 'male' | 'female') {
+  const refitted=refittedShirtAsset(id,gender);if(refitted)return refitted.src;
   if(gender==='female'&&redoneFemaleShirts[id])return `/avatars/shirts/reference-collection-female/${redoneFemaleShirts[id].file}`;
   if(gender==='male'&&redoneMaleShirts[id])return `/avatars/shirts/reference-collection-redone/${redoneMaleShirts[id].file}`;
   if(redoneMaleShirts[id]&&id!=='tie-dye-tee'&&id!=='neon-trip-tee')return null;
