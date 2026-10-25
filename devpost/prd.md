@@ -266,3 +266,6 @@ Quest reward display revision: quest book/list/favorite XP always shows the unch
 
 
 Level-up loot boxes replace the former 25-coin bonus. Each crossed level awards one saved box. Opening rolls one uniformly selected, body-compatible item currently assigned to Daily Shop (owned items stay in the pool) plus one equally likely coin award from 15/20/25/30/35. New clothes are immediately owned and marked new; duplicates retain the existing item and offer a quicksell of a uniformly rolled integer 50–75% of its captured rarity price, rounded up. Quicksell pays once and never deletes the owned original. Opened/revealed rewards and unopened boxes persist across refreshes and account/cloud saves. Existing saves start with zero boxes; no retroactive grants. The modal offers a brief pixel chest animation, random arcade roll sound, rarity reveal and equip/keep or quicksell actions; muted/reduced-motion preferences are respected. Saved boxes can be opened later from the right sidebar.
+
+
+Afro hairstyle: add the supplied separate male/female versions in black, brown, blonde and gray alongside all previous hairstyles. Original PNGs are unchanged, with consistent avatar and gender-specific thumbnail rendering.

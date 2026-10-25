@@ -273,3 +273,7 @@ Activity mode: not established
 - [x] Add pixel chest opening animation, rarity reveal, original randomized prize sounds and reduced-motion/mute support.
 - [x] Verify box earning/consumption, ownership, repeated-click/claim protection, duplicate sale, exact coin ranges, old-save migration, cloud/cache persistence and snapshot quicksell prices; production build and 104 tests pass. Server-render checks cover new/duplicate/ready screens.
 - [ ] Learner visual/audio check: reach a new level, open the box, inspect the reveal, then open another from the sidebar. Check a duplicate quicksell and refresh during/reopen a reveal. Browser preview was unavailable during implementation.
+
+
+- [x] Add Afro in all four colors for both bodies, inspect fit composites and verify original-file dimensions plus save/household round trips; build and 106 tests pass.
+- [ ] Apply supabase/migrations/008_afro_hair.sql in hosted Supabase for Afro household syncing.

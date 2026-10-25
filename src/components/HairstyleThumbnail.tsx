@@ -1,7 +1,9 @@
+import { AfroHair } from './AfroHair';
 import { CurlyHair } from './CurlyHair';
 import { LongWaves } from './LongWaves';
 import type { Appearance } from '../types';
-export function HairstyleThumbnail({style,color}:{style:Appearance['hairStyleId'];color:Appearance['hairColorId']}){
+export function HairstyleThumbnail({style,color,gender='male'}:{style:Appearance['hairStyleId'];color:Appearance['hairColorId'];gender?:Appearance['gender']}){
+  if(style==='afro')return <AfroHair gender={gender} color={color} thumbnail/>;
   if(style==='short-curly')return <CurlyHair color={color} thumbnail/>;
   if(style==='long-waves')return <LongWaves gender="female" color={color} thumbnail/>;
   if(style==='bald')return <svg className="hairstyle-thumbnail" viewBox="0 0 96 110" aria-hidden="true"><path d="M24 58V39a24 24 0 0 1 48 0v19c0 21-13 31-24 31S24 79 24 58Z" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M24 51c-12-7-12 19 2 19m46-19c12-7 12 19-2 19" fill="none" stroke="currentColor" strokeWidth="3"/></svg>;

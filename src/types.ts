@@ -8,7 +8,7 @@ export type Appearance = {
   gender: 'male' | 'female';
   bodyId: BodyId;
   complexionId: '1' | '2' | '3';
-  hairStyleId: 'short-swept' | 'short-curly' | 'long' | 'long-waves' | 'bald';
+  hairStyleId: 'short-swept' | 'short-curly' | 'afro' | 'long' | 'long-waves' | 'bald';
   hairColorId: 'brown' | 'black' | 'blonde' | 'gray';
   eyeColorId: 'brown' | 'blue' | 'green' | 'gray' | 'red';
   expressionId: 'smile' | 'neutral';
