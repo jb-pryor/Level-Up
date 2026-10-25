@@ -71,7 +71,7 @@ Acceptance criteria:
 ### XP, Levels, and Coins
 Character XP determines level; coins buy cosmetics without reducing XP. Each 100 character XP gains a level, preserving overflow.
 
-Starter quest rewards are 15 XP/5 coins, 35 XP/10 coins, or 60 XP/20 coins. Each crossed level adds **25 bonus coins**. Three ordinary quests yield 105 XP, level 2 with 5 overflow XP, and **55 coins** (30 quest coins plus 25 level bonus). Emerald tee costs 30 coins and requires level 2; some cosmetics require level 3.
+Starter quest rewards are 15 XP/5 coins, 35 XP/10 coins, or 60 XP/20 coins. Each crossed level awards **one unopened loot box**. Three ordinary quests yield 105 XP, level 2 with 55 overflow XP, **30 quest coins**, and one unopened loot box. Emerald tee costs 20 coins and requires level 2; some cosmetics require level 3.
 
 Acceptance criteria:
 - Level bonuses are awarded once by completion, saved immediately, and never re-awarded by refresh or dialog dismissal.
@@ -263,3 +263,6 @@ Household roster redesign: Members is the default tab and shows responsive full-
 
 
 Quest reward display revision: quest book/list/favorite XP always shows the unchanged base quest reward. The completion popup shows base XP/coins and separate XP boost applied / Coin boost applied lines with the actual rounded extra amounts, only when positive. Boosted balances, XP rollover and level gates remain unchanged.
+
+
+Level-up loot boxes replace the former 25-coin bonus. Each crossed level awards one saved box. Opening rolls one uniformly selected, body-compatible item currently assigned to Daily Shop (owned items stay in the pool) plus one equally likely coin award from 15/20/25/30/35. New clothes are immediately owned and marked new; duplicates retain the existing item and offer a quicksell of a uniformly rolled integer 50–75% of its captured rarity price, rounded up. Quicksell pays once and never deletes the owned original. Opened/revealed rewards and unopened boxes persist across refreshes and account/cloud saves. Existing saves start with zero boxes; no retroactive grants. The modal offers a brief pixel chest animation, random arcade roll sound, rarity reveal and equip/keep or quicksell actions; muted/reduced-motion preferences are respected. Saved boxes can be opened later from the right sidebar.

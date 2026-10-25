@@ -1,5 +1,5 @@
 // Original synthesized arcade effects. No external samples or audio downloads.
-export type SoundName = 'click' | 'transform' | 'reorder' | 'add-quest' | 'purchase' | 'quest' | 'transfer' | 'level';
+export type SoundName = 'click' | 'transform' | 'reorder' | 'add-quest' | 'purchase' | 'quest' | 'transfer' | 'level' | 'loot-roll' | 'loot-reveal';
 let context: AudioContext | null=null;
 let master: GainNode | null=null;
 let enabled=true;
@@ -69,6 +69,15 @@ export function playSound(name:SoundName){
     [2093,3139.5,4186].forEach((f,i)=>note(f,now+.21,.5,.12/(i+1),'sine'));
     return;
   }
+  if(name==='loot-roll'){
+    const scale=[523.25,659.25,783.99,1046.5,1318.51];
+    for(let i=0;i<14;i++)note(scale[Math.floor(Math.random()*scale.length)],now+i*.075,.06,.045,'square');
+    note(180,now,.8,.035,'triangle',850);return;
+  }
+  if(name==='loot-reveal'){
+    [523.25,659.25,783.99,1046.5].forEach((f,i)=>{note(f,now+i*.065,.20,.065,'triangle');note(f*2,now+i*.065,.15,.018,'sine')});
+    [1046.5,1318.51,1567.98].forEach(f=>note(f,now+.30,.5,.04,'sine'));return;
+  }
   if(name==='quest'){
     [659.25,830.61,1046.5].forEach((f,i)=>{note(f,now+i*.075,.16,.08);note(f*2,now+i*.075,.11,.018,'sine')});return;
   }
@@ -88,4 +97,11 @@ export async function playTransformationSound(){
   if(!enabled||!context)return;
   try{if(context.state==='suspended')await context.resume()}catch{return}
   playSound('transform');
+}
+
+export async function playLootSound(){
+  unlockAudio();
+  if(!enabled||!context)return;
+  try{if(context.state==='suspended')await context.resume();}catch{return;}
+  playSound('loot-roll');
 }

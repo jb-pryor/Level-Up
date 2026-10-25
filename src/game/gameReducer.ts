@@ -1,3 +1,4 @@
+import { validLootRoll,lootPool,type LootRoll } from './loot.ts';
 import { questReward } from './questReward.ts';
 import { HOME_COOLDOWN_MS, cooldownRemaining } from './questCooldown.ts';
 import type { Appearance, Outfit, Player } from '../types.ts';
@@ -8,7 +9,7 @@ import { levelFor } from './progression.ts';
 
 export type Reward = { questName: string; xp: number; coins: number; baseXp: number; baseCoins: number; previousXp: number; previousCoins: number };
 export type GameState = { player: Player | null; notice: { sequence: number; message: string; error: boolean; reward?: Reward; purchaseItemId?: string } | null };
-export type Action = {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string;now?:number} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
+export type Action = {type:'open-loot';roll:LootRoll}|{type:'claim-loot';id:string;sell?:boolean;equip?:boolean}|  {type:'clear-notice'|'open-wardrobe'|'reset-player'} | {type:'create';appearance:Appearance} | {type:'edit';appearance:Appearance} | {type:'add'|'complete'|'delete'|'favorite';questId:string;now?:number} | {type:'reorder';questId:string;targetId:string;after:boolean} | {type:'buy';itemId:string} | {type:'equip';outfit:Outfit};
 export const initialGame: GameState = {player:null,notice:null};
 export function gameReducer(state: GameState, action: Action): GameState {
   if(action.type==='reset-player')return {...initialGame};
@@ -17,9 +18,23 @@ export function gameReducer(state: GameState, action: Action): GameState {
   if(action.type==='create') {
     if(state.player)return feedback('Your player already exists.',true);
     if(!action.appearance.name.trim())return feedback('Enter a player name.',true);
-    return feedback('Your adventure starts now.',false,{...action.appearance,name:action.appearance.name.trim(),totalXp:0,coins:0,activeQuestIds:[],ownedItemIds:[],newItemIds:[],questCompletions:{},questCooldowns:{},favoriteQuestIds:[],equipped:{...starterOutfit}});
+    return feedback('Your adventure starts now.',false,{...action.appearance,name:action.appearance.name.trim(),totalXp:0,coins:0,lootBoxes:0,lootReveal:null,activeQuestIds:[],ownedItemIds:[],newItemIds:[],questCompletions:{},questCooldowns:{},favoriteQuestIds:[],equipped:{...starterOutfit}});
   }
   const p=state.player;if(!p)return state;
+  if(action.type==='open-loot') {
+    if(p.lootBoxes<1||p.lootReveal||!validLootRoll(action.roll))return state;
+    const item=lootPool(p.gender).find(c=>c.id===action.roll.itemId);if(!item)return state;
+    const duplicate=p.ownedItemIds.includes(item.id),sellCoins=Math.ceil(item.price*action.roll.sellPercent/100);
+    const coins=p.coins+action.roll.coins;if(!Number.isSafeInteger(coins))return state;
+    return {player:{...p,coins,lootBoxes:p.lootBoxes-1,lootReveal:{...action.roll,duplicate,sellCoins,itemValue:item.price},ownedItemIds:duplicate?p.ownedItemIds:[...p.ownedItemIds,item.id],newItemIds:duplicate?p.newItemIds:[...p.newItemIds,item.id]},notice:null};
+  }
+  if(action.type==='claim-loot') {
+    const reveal=p.lootReveal;if(!reveal||reveal.id!==action.id)return state;
+    const item=cosmetics.find(c=>c.id===reveal.itemId);if(!item)return state;
+    const coins=p.coins+(action.sell&&reveal.duplicate?reveal.sellCoins:0);if(!Number.isSafeInteger(coins))return state;
+    const equipped=action.equip&&!reveal.duplicate&&(!item.maleOnly||p.gender==='male')?{...p.equipped,[item.slot]:item.id}:p.equipped;
+    return {player:{...p,coins,equipped,lootReveal:null},notice:null};
+  }
   if(action.type==='open-wardrobe')return {player:{...p,newItemIds:[]},notice:null};
   if(action.type==='reorder') {
     if(action.questId===action.targetId||!p.activeQuestIds.includes(action.questId)||!p.activeQuestIds.includes(action.targetId))return state;
@@ -51,11 +66,12 @@ export function gameReducer(state: GameState, action: Action): GameState {
     if(!Number.isSafeInteger(completions))return feedback('Your skill progress could not be updated.',true);
     const earned=questReward(p,quest);
     const totalXp=p.totalXp+earned.xp;
-    const bonusCoins=(levelFor(totalXp)-levelFor(p.totalXp))*25;
-    const coins=p.coins+earned.coins+bonusCoins;
-    if(!Number.isSafeInteger(totalXp)||!Number.isSafeInteger(coins))return feedback('Your progress could not be updated.',true);
+    const boxesGained=levelFor(totalXp)-levelFor(p.totalXp);
+    const lootBoxes=p.lootBoxes+boxesGained;
+    const coins=p.coins+earned.coins;
+    if(!Number.isSafeInteger(totalXp)||!Number.isSafeInteger(coins)||!Number.isSafeInteger(lootBoxes))return feedback('Your progress could not be updated.',true);
     const level=levelFor(totalXp),levelUp=level>levelFor(p.totalXp);
-    return feedback(`+${earned.xp} XP · +${earned.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:earned.xp,coins:earned.coins,baseXp:quest.xp,baseCoins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
+    return feedback(`+${earned.xp} XP · +${earned.coins} coins${levelUp?` · LEVEL UP! You're level ${level}.`:''}`,false,{...p,totalXp,coins,lootBoxes,activeQuestIds:remaining,questCompletions:{...p.questCompletions,[quest.id]:completions},questCooldowns:quest.category==='home'?{...p.questCooldowns,[quest.id]:now+HOME_COOLDOWN_MS}:p.questCooldowns},{questName:quest.name,xp:earned.xp,coins:earned.coins,baseXp:quest.xp,baseCoins:quest.coins,previousXp:p.totalXp,previousCoins:p.coins});
   }
   if(action.type==='buy') {
     const item=cosmetics.find(c=>c.id===action.itemId);if(!item)return feedback('That item is unavailable.',true);

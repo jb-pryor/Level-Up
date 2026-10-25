@@ -264,3 +264,12 @@ Activity mode: not established
 
 
 - [x] Restore base quest XP previews and display snapshotted gear bonus amounts separately in the completion popup; verify receipt amounts, rounding and payout totals.
+
+
+### Level-up loot boxes
+
+- [x] Replace +25 level coins with one persistent box per crossed level and update the level-up prompt/sidebar entry.
+- [x] Roll eligible Daily Shop clothing plus 15/20/25/30/35 coins; preserve duplicate eligibility and offer a saved 50–75% rounded quicksell.
+- [x] Add pixel chest opening animation, rarity reveal, original randomized prize sounds and reduced-motion/mute support.
+- [x] Verify box earning/consumption, ownership, repeated-click/claim protection, duplicate sale, exact coin ranges, old-save migration, cloud/cache persistence and snapshot quicksell prices; production build and 104 tests pass. Server-render checks cover new/duplicate/ready screens.
+- [ ] Learner visual/audio check: reach a new level, open the box, inspect the reveal, then open another from the sidebar. Check a duplicate quicksell and refresh during/reopen a reveal. Browser preview was unavailable during implementation.

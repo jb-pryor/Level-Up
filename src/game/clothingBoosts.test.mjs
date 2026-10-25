@@ -29,10 +29,10 @@ test('owning or previewing a shirt does not boost rewards; unequipping stops the
  s=wear('tie-dye-tee');s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shirt:'starter'}});
  assert.deepEqual(questReward(s.player,{xp:35,coins:10}),{xp:35,coins:10});
 });
-test('completion uses boosted XP for level gates and awards the unboosted level coin bonus once',()=>{
+test('completion uses boosted XP for level gates and awards one loot box at the new level',()=>{
  let s=wear('tie-dye-tee');s={...s,player:{...s.player,totalXp:264}};
  s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
- assert.equal(s.player.totalXp,301);assert.equal(s.player.coins,1000-35+10+25);assert.equal(s.notice.reward.xp,37);
+ assert.equal(s.player.totalXp,301);assert.equal(s.player.lootBoxes,1);assert.equal(s.player.coins,1000-35+10);assert.equal(s.notice.reward.xp,37);
  assert.strictEqual(gameReducer(s,{type:'complete',questId:'meal'}),s);
  let raw;savePlayer({setItem:(_,v)=>raw=v},s.player);assert.deepEqual(loadPlayer({getItem:()=>raw}).player,s.player);
 });

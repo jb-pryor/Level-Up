@@ -8,6 +8,10 @@ export type CloudSave={schema_version:number;revision:number;player:unknown;muta
 export function readCache(raw:string|null,id:string):AccountCache|null {
   if(!raw)return null;
   const c=JSON.parse(raw) as AccountCache;
+  if(c&&c.player!==null&&c.player!==undefined){
+    const migrated=loadPlayer({getItem:()=>JSON.stringify({schemaVersion:1,player:c.player}),setItem:()=>{}});
+    if(migrated.status==='ready')c.player=migrated.player;
+  }
   if(!c||c.userId!==id||!Number.isSafeInteger(c.revision)||c.revision<0||typeof c.dirty!=='boolean'||typeof c.mutationId!=='string'||(c.player!==null&&!validPlayer(c.player)))throw new Error('Your account backup could not be read. It has been preserved.');
   return c;
 }

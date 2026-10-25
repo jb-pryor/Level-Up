@@ -13,9 +13,9 @@ test('effects wait for audio activation, schedule their tones, and stop when mut
   }};
   playSound('level');assert.equal(created,0);assert.equal(events.length,0);
   unlockAudio();assert.equal(created,1);
-  for(const sound of ['click','transform','reorder','add-quest','purchase','quest','transfer','level']){const before=events.filter(e=>e[0]==='start').length;playSound(sound);assert(events.filter(e=>e[0]==='start').length>before,sound);}
+  for(const sound of ['click','transform','reorder','add-quest','purchase','quest','transfer','level','loot-roll','loot-reveal']){const before=events.filter(e=>e[0]==='start').length;playSound(sound);assert(events.filter(e=>e[0]==='start').length>before,sound);}
   unlockAudio();assert.equal(created,1,'reuse one context');
-  setSoundEnabled(false);const count=events.length;playSound('transfer');unlockAudio();assert.equal(events.length,count);assert(events.some(e=>e[0]==='master'&&e[1]===0));
+  setSoundEnabled(false);const count=events.length;playSound('transfer');playSound('loot-roll');playSound('loot-reveal');unlockAudio();assert.equal(events.length,count);assert(events.some(e=>e[0]==='master'&&e[1]===0));
   setSoundEnabled(true);playSound('click');assert(events.length>count);
   delete globalThis.window;
 });

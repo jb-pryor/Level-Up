@@ -1,3 +1,4 @@
+import {validLootRoll} from './loot.ts';
 import type { Player } from '../types.ts';
 import { quests } from '../data/quests.ts';
 import { cosmetics } from '../data/cosmetics.ts';
@@ -11,6 +12,14 @@ export function validPlayer(v:unknown):v is Player {
   if(!record(v)||typeof v.name!=='string'||!v.name.trim()||!oneOf(v.gender,['male','female'])||v.bodyId!==(v.gender==='male'?'base-a':'base-b'))return false;
   if(!oneOf(v.complexionId,['1','2','3']))return false;
   if(!oneOf(v.hairStyleId,['short-swept','short-curly','long','long-waves','bald'])||!oneOf(v.hairColorId,['brown','black','blonde','gray'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
+  if(!Number.isSafeInteger(v.lootBoxes)||Number(v.lootBoxes)<0)return false;
+  if(v.lootReveal!==null){
+    const reveal=v.lootReveal;
+    if(!record(reveal)||!validLootRoll(reveal)||typeof reveal.duplicate!=='boolean'||!Number.isSafeInteger(reveal.sellCoins)||Number(reveal.sellCoins)<0)return false;
+    if(!Array.isArray(v.ownedItemIds)||!v.ownedItemIds.includes(reveal.itemId))return false;
+    if(!Number.isSafeInteger(reveal.itemValue)||Number(reveal.itemValue)<0)return false;
+    if(reveal.sellCoins!==Math.ceil(Number(reveal.itemValue)*reveal.sellPercent/100))return false;
+  }
   if(![v.totalXp,v.coins].every(n=>typeof n==='number'&&Number.isSafeInteger(n)&&n>=0))return false;
   if(!ids(v.activeQuestIds,quests.map(q=>q.id))||!ids(v.ownedItemIds,cosmetics.map(c=>c.id))||!ids(v.newItemIds,v.ownedItemIds)||!record(v.equipped))return false;
   if(!ids(v.favoriteQuestIds,quests.map(q=>q.id)))return false;
@@ -32,7 +41,7 @@ export function loadPlayer(storage:StoragePort):LoadResult {
     const data:unknown=JSON.parse(raw);
     if(!record(data)||data.schemaVersion!==1||!record(data.player))return {status:'invalid',player:null};
     // Older saves have no completion history; preserve progress without inventing counts.
-    const player={...data.player,complexionId:data.player.complexionId===undefined||data.player.complexionId==='4'?'1':data.player.complexionId,questCooldowns:data.player.questCooldowns===undefined?{}:data.player.questCooldowns,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
+    const player={...data.player,lootBoxes:data.player.lootBoxes===undefined?0:data.player.lootBoxes,lootReveal:data.player.lootReveal===undefined?null:data.player.lootReveal,complexionId:data.player.complexionId===undefined||data.player.complexionId==='4'?'1':data.player.complexionId,questCooldowns:data.player.questCooldowns===undefined?{}:data.player.questCooldowns,favoriteQuestIds:data.player.favoriteQuestIds===undefined?[]:data.player.favoriteQuestIds,questCompletions:data.player.questCompletions===undefined?{}:data.player.questCompletions};
     if(!validPlayer(player))return {status:'invalid',player:null};
     // Keep the earliest two favorites after the household layout reduces the cap.
     return {status:'ready',player:{...player,favoriteQuestIds:player.favoriteQuestIds.slice(0,2)}};

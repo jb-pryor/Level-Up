@@ -1,12 +1,12 @@
-import { CoinIcon } from './CoinIcon';
+import { LootChest } from './LootBoxDialog';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { playSound } from '../game/soundEffects';
 import { Modal } from './Modal';
 
-export function LevelUpCelebration({ level, deferred=false, onAcknowledge }: { level: number; deferred?:boolean; onAcknowledge?:()=>void }) {
+export function LevelUpCelebration({ level, deferred=false, onAcknowledge, onOpenLoot, onSaveLoot }: { level: number; deferred?:boolean; onAcknowledge?:()=>void;onOpenLoot?:()=>void;onSaveLoot?:()=>void }) {
   const previous=useRef(level);
   const [celebration,setCelebration]=useState<{level:number;id:number;reduced:boolean}|null>(null);
-  const [advancement,setAdvancement]=useState<{level:number;coins:number}|null>(null);
+  const [advancement,setAdvancement]=useState<{level:number;boxes:number}|null>(null);
   useEffect(()=>{
     // Leave the previous level unconsumed until the quest popup is dismissed.
     if(deferred)return;
@@ -15,7 +15,7 @@ export function LevelUpCelebration({ level, deferred=false, onAcknowledge }: { l
     previous.current=level;
     if(!advanced)return;
     playSound('level');
-    setAdvancement({level,coins:levelsGained*25});
+    setAdvancement({level,boxes:levelsGained});
     setCelebration({level,id:Date.now(),reduced:window.matchMedia('(prefers-reduced-motion: reduce)').matches});
   },[level,deferred]);
   useEffect(()=>{
@@ -24,8 +24,9 @@ export function LevelUpCelebration({ level, deferred=false, onAcknowledge }: { l
     return()=>clearTimeout(timer);
   },[celebration?.id]);
   const acknowledge=()=>{setAdvancement(null);onAcknowledge?.();};
+  const saveForLater=()=>{acknowledge();onSaveLoot?.();};
   if(!celebration&&!advancement)return null;
-  return <>{advancement&&<Modal title="Level up!" className="level-advancement-dialog" onClose={acknowledge}><div className="level-up-banner level-up-banner-expanded"><span>LEVEL UP!</span><strong>LEVEL {advancement.level}</strong><small>Slightly less NPC. Nicely done.</small><p className="level-bonus"><CoinIcon/> +{advancement.coins} GOLD COINS</p><button className="primary" onClick={acknowledge}>Close</button></div></Modal>}{celebration&&<div className={`level-up-celebration ${celebration.reduced?'reduced-motion':''}`} key={celebration.id}>
+  return <>{advancement&&<Modal title="Level up!" className="level-advancement-dialog" onClose={saveForLater}><div className="level-up-banner level-up-banner-expanded"><span>LEVEL UP!</span><strong>LEVEL {advancement.level}</strong><small>Slightly less NPC. Nicely done.</small><p className="level-bonus"><LootChest/> +{advancement.boxes} LOOT {advancement.boxes===1?'BOX':'BOXES'}</p><button className="primary" onClick={()=>{acknowledge();onOpenLoot?.();}}>Open loot box →</button><button className="account-text-button loot-later" onClick={saveForLater}>Save for later</button></div></Modal>}{celebration&&<div className={`level-up-celebration ${celebration.reduced?'reduced-motion':''}`} key={celebration.id}>
     <div className="level-up-visuals" aria-hidden="true"><div className="level-up-aura"/><div className="level-up-ring ring-one"/><div className="level-up-ring ring-two"/>
       {Array.from({length:18},(_,i)=>{
         const angle=i*Math.PI*2/18;

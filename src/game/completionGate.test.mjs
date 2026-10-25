@@ -11,7 +11,7 @@ test('rapid completions stop on the first level-up and preserve remaining quests
   const paused=gate;
   for(let i=0;i<20;i++){gate=completeWithLevelGate(gate,'gym',102+i);gate=completeWithLevelGate(gate,'teacher',102+i);}
   assert.equal(gate,paused);assert.deepEqual(gate.state.player.activeQuestIds,['gym','teacher']);
-  assert.equal(gate.state.player.coins,40);assert.equal(gate.state.player.questCompletions.gym,undefined);
+  assert.equal(gate.state.player.coins,15);assert.equal(gate.state.player.questCompletions.gym,undefined);
   assert.equal(gate.state.notice.reward.questName,'Prepare a balanced meal');
 });
 test('acknowledging a level-up resumes completion and the next boundary locks again',()=>{
