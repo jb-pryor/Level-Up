@@ -290,3 +290,5 @@ Activity mode: not established
 
 
 - [x] Add six additional Common daily pants, preserve full male canvases and apply the established female leg tweak; inspect 12 fit composites and verify purchases/equipment/saves and dynamic loot eligibility (115 tests and build pass).
+
+- 2026-10-25: Added 14 distinct quests: eight Home chores (bathroom, countertops, cobwebs, floors, bins/recycling, fridge, sheets, plant care), two Health routines (dental care, screen-free wind-down), two Social tasks (concrete plans, calm disagreement conversation), and two Education tasks (practice quiz review, note organization). Explore unchanged to avoid overlapping its existing objectives. Added matching humor and skill titles; retained standard reward tiers and Home's 12-hour cooldown. Expanded catalog integration coverage to all five categories; all 119 tests and production build pass. Apply `supabase/migrations/010_more_daily_quests.sql` in the hosted Supabase SQL Editor to recognize new household activity IDs; this migration preserves all existing/archived quest IDs and activity safeguards.

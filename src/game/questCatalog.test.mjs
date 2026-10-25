@@ -13,16 +13,16 @@ test('all five chapters have distinct quests, descriptions, completion humor and
   for(const category of questCategories){assert(quests.filter(q=>q.category===category.id).length>=5);}
   for(const quest of quests){assert(questHumor[quest.id]?.description);assert(questHumor[quest.id]?.completion);assert(skillNames[quest.id]);}
 });
-for(const category of ['education','exploration'])test(`${category} quests support rewards, skills, favorites, local/cloud saving and household retries`,()=>{
+for(const category of ['home','health','social','education','exploration'])test(`${category} quests support rewards, skills, favorites, local/cloud saving and household retries`,()=>{
   let state=gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'New Adventurer'}});
   for(const quest of quests.filter(q=>!q.archived&&q.category===category)){
     state=gameReducer(state,{type:'add',questId:quest.id,now:100});assert(state.player.activeQuestIds.includes(quest.id));
     const xp=state.player.totalXp,coins=state.player.coins;
     state=gameReducer(state,{type:'complete',questId:quest.id,now:200});
     assert.equal(state.player.totalXp,xp+quest.xp);assert(state.player.coins>=coins+quest.coins);assert.equal(state.player.questCompletions[quest.id],1);
-    assert.equal(state.player.questCooldowns[quest.id],undefined);
+    assert.equal(state.player.questCooldowns[quest.id],category==='home'?200+12*60*60*1000:undefined);
     state=gameReducer(state,{type:'favorite',questId:quest.id});assert(state.player.favoriteQuestIds.includes(quest.id));
-    state=gameReducer(state,{type:'add',questId:quest.id,now:201});assert(state.player.activeQuestIds.includes(quest.id));
+    state=gameReducer(state,{type:'add',questId:quest.id,now:category==='home'?200+12*60*60*1000:201});assert(state.player.activeQuestIds.includes(quest.id));
     let raw=null;const storage={getItem:()=>raw,setItem:(_,v)=>raw=v};assert(savePlayer(storage,state.player));assert.deepEqual(loadPlayer(storage).player,state.player);
     assert.deepEqual(cloudPlayer({schema_version:1,revision:1,player:state.player,mutation_id:'save'}),state.player);
     const event={id:'10000000-0000-4000-8000-000000000001',userId:'me',householdId:'20000000-0000-4000-8000-000000000001',questId:quest.id,completedAt:new Date(200).toISOString(),profile:sharedProfile(state.player)};
@@ -40,7 +40,7 @@ test('Explore contains the three moved quests and Education keeps both reading o
 
 test('the complete household SQL update recognizes every current and archived quest',async()=>{
   const {readFile}=await import('node:fs/promises');
-  const sql=await readFile(new URL('../../supabase/migrations/004_read_book_quest.sql',import.meta.url),'utf8');
+  const sql=await readFile(new URL('../../supabase/migrations/010_more_daily_quests.sql',import.meta.url),'utf8');
   const recognized=new Map([...sql.matchAll(/when '([^']+)' then '((?:[^']|'')*)'/g)].map(([,id,name])=>[id,name.replaceAll("''","'")]));
   for(const quest of quests)assert.equal(recognized.get(quest.id),quest.name,`${quest.id} missing from shared activity`);
   assert.match(sql,/p_household_id is distinct from private.my_household\(\)/);
