@@ -1,5 +1,6 @@
 import {femaleBase} from './femaleBases.ts';
-export const referenceShirtIds = ['tie-dye-tee', 'neon-trip-tee', 'pixel-knit-sweater', 'cream-cable-sweater', 'olive-stripe-sweater', 'plaid-flannel', 'scarlet-sweatshirt', 'built-different-tee', 'unique-panda-tee', 'metallica-tee', 'green-skull-tee', 'worldwide-tee', 'cartoon-chaos-tee', 'cloudscape-tee', 'take-it-slow-tee', 'pacman-planets-tee'] as const;
+export const newTeeStyles = ['america','cheese','coca-cola','geometric','psychedelic','question-mark','rainbow','snoopy','wavy-stripes'] as const;
+export const referenceShirtIds = ['america-tee','cheese-tee','coca-cola-tee','geometric-tee','psychedelic-tee','question-mark-tee','rainbow-tee','snoopy-tee','wavy-stripes-tee','tie-dye-tee', 'neon-trip-tee', 'pixel-knit-sweater', 'cream-cable-sweater', 'olive-stripe-sweater', 'plaid-flannel', 'scarlet-sweatshirt', 'built-different-tee', 'unique-panda-tee', 'metallica-tee', 'green-skull-tee', 'worldwide-tee', 'cartoon-chaos-tee', 'cloudscape-tee', 'take-it-slow-tee', 'pacman-planets-tee'] as const;
 export type ReferenceShirtId = typeof referenceShirtIds[number];
 
 export const redoneMaleShirts: Record<string,{file:string;viewBox:string}> = {
@@ -17,6 +18,16 @@ export const redoneMaleShirts: Record<string,{file:string;viewBox:string}> = {
 };
 
 export const redoneFemaleShirts: Record<string,{file:string;viewBox:string}> = {
+  'america-tee': {file:'tee-female-america.png',viewBox:'41 136 1068 1133'},
+  'cheese-tee': {file:'tee-female-cheese.png',viewBox:'41 136 1068 1133'},
+  'coca-cola-tee': {file:'tee-female-coca-cola.png',viewBox:'41 136 1068 1133'},
+  'geometric-tee': {file:'tee-female-geometric.png',viewBox:'41 136 1068 1133'},
+  'psychedelic-tee': {file:'tee-female-psychedelic.png',viewBox:'41 136 1068 1133'},
+  'question-mark-tee': {file:'tee-female-question-mark.png',viewBox:'41 136 1068 1133'},
+  'rainbow-tee': {file:'tee-female-rainbow.png',viewBox:'41 136 1068 1133'},
+  'snoopy-tee': {file:'tee-female-snoopy.png',viewBox:'41 136 1068 1133'},
+  'wavy-stripes-tee': {file:'tee-female-wavy-stripes.png',viewBox:'41 136 1068 1133'},
+
   'green-skull-tee': {file:'green-skull-female.png',viewBox:'43 110 1066 1171'},
   'take-it-slow-tee': {file:'slow-turtle-female.png',viewBox:'44 130 1058 1148'},
   'neon-trip-tee': {file:'blueHallucigenicFemale.png',viewBox:'13 102 1120 1186'},
@@ -32,6 +43,8 @@ export const redoneFemaleShirts: Record<string,{file:string;viewBox:string}> = {
 
 export const refittedSweaterIds=['pixel-knit-sweater','cream-cable-sweater','olive-stripe-sweater','plaid-flannel','scarlet-sweatshirt'] as const;
 export function refittedShirtAsset(id:string,gender:'male'|'female'){
+  const newTee=newTeeStyles.find(style=>id===`${style}-tee`);
+  if(newTee&&gender==='male')return {src:`/avatars/shirts/reference-collection-redone/tee-male-${newTee}.png`,width:1024,height:1536,placement:{x:0,y:0,width:1024,height:1536},preview:'210 420 610 510'};
   if(!refittedSweaterIds.includes(id as typeof refittedSweaterIds[number]))return null;
   const female=gender==='female';
   return {src:`/avatars/shirts/${female?'reference-collection-female':'reference-collection-redone'}/refitted-${gender}-${id}.png`,width:female?852:1021,height:female?1846:1541,placement:female?femaleBase({complexionId:'1',expressionId:'smile'}).placement:{x:0,y:0,width:1024,height:1536},preview:female?'200 410 630 510':'160 420 710 520'};

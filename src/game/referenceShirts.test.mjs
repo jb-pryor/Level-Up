@@ -26,7 +26,7 @@ test('reference garments have complete body-specific PNG assets and valid source
 
 for(const gender of ['male','female'])test(`${gender}: reference clothes charge once, equip and survive saving at level 3`,()=>{
   let state=gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'Try on',gender,bodyId:gender==='male'?'base-a':'base-b'}});
-  state={...state,player:{...state.player,totalXp:150,coins:1000}};
+  state={...state,player:{...state.player,totalXp:150,coins:5000}};
   for(const id of referenceShirtIds){
     const item=cosmetics.find(item=>item.id===id),before=state.player.coins;
     if(gender==='female'&&item.maleOnly){const next=gameReducer(state,{type:'buy',itemId:id});assert.equal(next.player.coins,before);assert(!next.player.ownedItemIds.includes(id));continue;}
