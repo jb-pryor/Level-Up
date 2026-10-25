@@ -64,6 +64,15 @@ const catalog: Cosmetic[] = [
   {id:'blue-white-shoes',name:'Blue streak sneakers',description:'Blue and white sneakers for your next adventure.',rarity:'Rare',slot:'shoes',price:35,requiredLevel:2,xpBoostPercent:5},
   {id:'brown-shoes',name:'Trail sneakers',description:'Brown sneakers for getting out and getting things done.',rarity:'Common',slot:'shoes',price:20,requiredLevel:2},
   {id:'green-yellow-shoes',name:'High score sneakers',description:'Green and yellow. Ready for another high score.',rarity:'Common',slot:'shoes',price:20,requiredLevel:2},
+  {"id": "black-high-tops", "name": "Rebel high-tops", "description": "High tops. Questionably low motivation.", "rarity": "Rare", "slot": "shoes", "price": 35, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 5},
+  {"id": "double-strap-sandals", "name": "Errand sandals", "description": "Two straps holding your life together. Better than nothing.", "rarity": "Legendary", "slot": "shoes", "price": 100, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 12, "coinBoostPercent": 12},
+  {"id": "blue-five-toe-shoes", "name": "Toe-tal chaos", "description": "Every toe gets its own room. Luxury living.", "rarity": "Epic", "slot": "shoes", "price": 75, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 12},
+  {"id": "bear-claw-slippers", "name": "Bear minimum", "description": "All claws. Absolutely no intention of leaving the couch.", "rarity": "Legendary", "slot": "shoes", "price": 100, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 20},
+  {"id": "cream-samba-sneakers", "name": "Cream of the crop", "description": "Fresh cream kicks. A brave choice around your own coffee.", "rarity": "Rare", "slot": "shoes", "price": 35, "requiredLevel": 3, "shop": "daily", "coinBoostPercent": 5},
+  {"id": "suede-clogs", "archived": true, "name": "Clogged schedule", "description": "Slip on. Wander off. Remember why you entered the room.", "rarity": "Common", "slot": "shoes", "price": 20, "requiredLevel": 3, "shop": "daily"},
+  {"id": "gray-running-shoes", "name": "Deadline runners", "description": "Built for running. Mostly away from your responsibilities.", "rarity": "Rare", "slot": "shoes", "price": 35, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 3, "coinBoostPercent": 3},
+  {"id": "bunny-slippers", "name": "Hopelessly cozy", "description": "Tiny rabbits supervising your questionable life choices.", "rarity": "Legendary", "slot": "shoes", "price": 100, "requiredLevel": 3, "shop": "daily", "coinBoostPercent": 20},
+  {"id": "grass-sneakers", "name": "Touch grass", "description": "You brought the lawn. Now bring some effort.", "rarity": "Epic", "slot": "shoes", "price": 75, "requiredLevel": 3, "shop": "daily", "xpBoostPercent": 8, "coinBoostPercent": 8},
   {id:'cap',name:'Quest cap',description:'A green cap for a little extra player energy.',rarity:'Common',slot:'hat',price:20,requiredLevel:3},
 ];
 

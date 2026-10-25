@@ -20,4 +20,4 @@ export const defaultAppearance: Appearance = { name: '', gender: 'male', bodyId:
 export type Player = Appearance & { lootBoxes:number; lootReveal:LootReveal|null; totalXp: number; coins: number; activeQuestIds: string[]; ownedItemIds: string[]; newItemIds: string[]; questCompletions: Record<string, number>; questCooldowns: Record<string, number>; favoriteQuestIds: string[]; equipped: Outfit };
 export type Category = 'home' | 'health' | 'social' | 'education' | 'exploration';
 export type Quest = { id: string; name: string; category: Category; xp: number; coins: number; archived?: boolean };
-export type Cosmetic = { id: string; name: string; description: string; slot: keyof Outfit; price: number; requiredLevel: number; maleOnly?: boolean; shop?: 'basic'|'daily'; rarity?: 'Common'|'Rare'|'Epic'|'Legendary'; xpBoostPercent?: number; coinBoostPercent?: number };
+export type Cosmetic = { id: string; name: string; description: string; slot: keyof Outfit; price: number; requiredLevel: number; maleOnly?: boolean; archived?: boolean; shop?: 'basic'|'daily'; rarity?: 'Common'|'Rare'|'Epic'|'Legendary'; xpBoostPercent?: number; coinBoostPercent?: number };

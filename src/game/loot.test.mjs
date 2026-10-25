@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {cosmetics} from '../data/cosmetics.ts';
 import {defaultAppearance} from '../types.ts';
 import {gameReducer,initialGame} from './gameReducer.ts';
-import {lootPool,rollLootBox,lootCoinRewards} from './loot.ts';
+import {lootPool,rollLootBox,lootCoinRewards,lootRarityWeights} from './loot.ts';
 import {loadPlayer,savePlayer,validPlayer} from './save.ts';
 import {readCache,cloudPlayer} from './accountSave.ts';
 function start(boxes=1){const s=gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'Loot tester'}});return {...s,player:{...s.player,lootBoxes:boxes}};}
@@ -18,14 +18,34 @@ test('level-up awards a saved box instead of 25 coins and repeat completion cann
  for(const questId of ['meal','gym']){s=gameReducer(s,{type:'add',questId});s=gameReducer(s,{type:'complete',questId});}
  assert.equal(s.player.totalXp,150);assert.equal(s.player.lootBoxes,2);assert.equal(s.player.coins,35);
 });
-test('each eligible daily item has one equally sized roll interval, including already-owned items',()=>{
+test('all active Daily Shop shirts, pants and shoes can drop, with equal odds within each rarity even when owned',()=>{
  for(const gender of ['male','female']){
   const s=start();s.player.gender=gender;s.player.bodyId=gender==='male'?'base-a':'base-b';
-  const pool=lootPool(gender);assert(pool.length>0);assert(pool.every(c=>c.shop==='daily'&&(!c.maleOnly||gender==='male')));
-  for(let i=0;i<pool.length;i++){
-   let n=0;const values=[(i+.5)/pool.length,.999,.999];
-   const reward=rollLootBox(s.player,()=>values[n++]);assert.equal(reward.itemId,pool[i].id);assert.equal(reward.coins,35);assert.equal(reward.sellPercent,75);
+  const pool=lootPool(gender);
+  assert.deepEqual(pool.map(c=>c.id),cosmetics.filter(c=>!c.archived&&c.shop==='daily'&&(!c.maleOnly||gender==='male')).map(c=>c.id));
+  assert.deepEqual(new Set(pool.map(c=>c.slot)),new Set(['shirt','pants','shoes']));
+  assert(!pool.some(c=>c.id==='suede-clogs'));
+  s.player.ownedItemIds=pool.map(c=>c.id);
+  const tiers=Object.entries(lootRarityWeights).map(([rarity,weight])=>({weight,items:pool.filter(c=>(c.rarity??'Common')===rarity)})).filter(t=>t.items.length);
+  const total=tiers.reduce((sum,t)=>sum+t.weight,0);let offset=0;
+  for(const tier of tiers){
+   for(let i=0;i<tier.items.length;i++){
+    let n=0;const values=[(offset+tier.weight*(i+.5)/tier.items.length)/total,.999,.999];
+    const reward=rollLootBox(s.player,()=>values[n++]);assert.equal(reward.itemId,tier.items[i].id);assert.equal(reward.coins,35);assert.equal(reward.sellPercent,75);
+    const opened=gameReducer(s,{type:'open-loot',roll:reward});assert.equal(opened.player.lootReveal.duplicate,true);
+   }
+   offset+=tier.weight;
   }
+ }
+});
+test('current loot odds are 60% Rare, 25% Epic and 15% Legendary for both avatars',()=>{
+ for(const gender of ['male','female']){
+  const player={...start().player,gender};const counts={Rare:0,Epic:0,Legendary:0};
+  for(let i=0;i<10000;i++){
+   let n=0;const values=[(i+.5)/10000,0,0];const reward=rollLootBox(player,()=>values[n++]);
+   counts[cosmetics.find(c=>c.id===reward.itemId).rarity]++;
+  }
+  assert.deepEqual(counts,{Rare:6000,Epic:2500,Legendary:1500});
  }
 });
 test('coin rolls cover only the five requested amounts and quicksell endpoints',()=>{

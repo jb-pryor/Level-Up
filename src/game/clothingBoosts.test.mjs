@@ -124,7 +124,7 @@ test('rare sneakers have correct prices and actual reward boosts while other sho
   s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});s=gameReducer(s,{type:'add',questId:'walk'});s=gameReducer(s,{type:'complete',questId:'walk'});
   assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.coins,965+coins);
  }
- for(const item of cosmetics.filter(c=>c.slot==='shoes'&&!['black-white-shoes','blue-white-shoes'].includes(c.id))){assert.equal(item.rarity,'Common');assert.equal(item.price,20);assert(!item.xpBoostPercent&&!item.coinBoostPercent);}
+ for(const item of cosmetics.filter(c=>c.slot==='shoes'&&c.shop!=='daily'&&!['black-white-shoes','blue-white-shoes'].includes(c.id))){assert.equal(item.rarity,'Common');assert.equal(item.price,20);assert(!item.xpBoostPercent&&!item.coinBoostPercent);}
 });
 
 test('additional pants rarity upgrades pay the correct equipped bonuses',()=>{
@@ -140,5 +140,23 @@ test('six newest pants apply their upgraded rarity boosts to actual quest reward
   let s=gameReducer(start(),{type:'buy',itemId:id});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:id}});
   const before=s.player.coins;s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
   assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.coins,before+coins);
+ }
+});
+
+
+test('daily shoes apply their rarity prices and rounded equipped boosts for both avatars',()=>{
+ for(const gender of ['male','female'])for(const [id,rarity,xpBoost,coinBoost] of [
+  ['black-high-tops','Rare',5,0],['double-strap-sandals','Legendary',12,12],
+  ['blue-five-toe-shoes','Epic',12,0],['bear-claw-slippers','Legendary',20,0],
+  ['cream-samba-sneakers','Rare',0,5],['gray-running-shoes','Rare',3,3],
+  ['bunny-slippers','Legendary',0,20],['grass-sneakers','Epic',8,8],
+ ]){
+  const item=cosmetics.find(c=>c.id===id);assert.equal(item.rarity,rarity);assert.equal(item.price,rarityPrices[rarity]);assert.equal(item.shop,'daily');
+  let s=start();s={...s,player:{...s.player,gender,bodyId:gender==='male'?'base-a':'base-b'}};
+  s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,1000-item.price);
+  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});
+  s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.notice.reward.xp,Math.ceil(35*(100+xpBoost)/100));
+  assert.equal(s.notice.reward.coins,Math.ceil(10*(100+coinBoost)/100));
  }
 });

@@ -15,7 +15,7 @@ export function ClothingTooltips({appearance,outfit}:{appearance:Appearance;outf
     {regions.map(region=>{
       const id=outfit[region.slot];
       if(id===null||region.slot==='hat'&&appearance.gender==='male')return null;
-      const item=cosmetics.find(c=>c.id===id);
+      const item=cosmetics.find(c=>c.id===id&&!c.archived);
       const name=item?.name??(region.slot==='shirt'?'Starter tank':'Starter gray');
       const boosts=[item?.xpBoostPercent?`+${item.xpBoostPercent}% quest XP`:null,item?.coinBoostPercent?`+${item.coinBoostPercent}% quest coins`:null].filter(Boolean);
       const bonusLines=boosts.length?boosts:['No boost'];

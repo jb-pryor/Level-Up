@@ -1,22 +1,22 @@
+import { FittedShoes } from './FittedShoes';
 import { NewPants } from './NewPants';
 import { newPantsAsset } from '../data/newPants';
 import { useId } from 'react';
 import { ReferenceShirt } from './ReferenceShirt';
 import { referenceShirtPath } from '../data/referenceShirts';
 import type { Outfit } from '../types';
-import { maleShoePath } from '../data/maleShoes';
-import { femaleTeePath,femaleShirtTint,femalePantsTransform,femaleShoesTransform,femaleCapTransform } from '../data/femaleClothing';
+import { femaleTeePath,femaleShirtTint,femalePantsTransform,femaleCapTransform } from '../data/femaleClothing';
 import { malePantsPath } from './MalePants';
 export function FemaleClothing({slot,id,thumbnail=false}:{slot:keyof Outfit;id:string|null;thumbnail?:boolean}){
   const uid=useId().replace(/[^a-zA-Z0-9]/g,'');
   if(slot==='pants'&&id&&newPantsAsset(id))return <NewPants id={id} female thumbnail={thumbnail}/>;
   if(slot==='shirt'&&id&&referenceShirtPath(id,'female'))return <ReferenceShirt id={id} gender="female" thumbnail={thumbnail}/>;
+  if(slot==='shoes')return <FittedShoes id={id} female thumbnail={thumbnail}/>;
   if(id===null||slot==='shirt'&&id==='starter')return null;
   let href:string|null=null,transform:string|undefined,tint:string|null=null;
   let crop='260 420 510 450';
   if(slot==='shirt'){href=femaleTeePath;tint=femaleShirtTint(id);}
   if(slot==='pants'){href=malePantsPath;transform=femalePantsTransform;crop='300 800 430 620';tint=id==='dark-pants'?'.13 .13 .13 0 0 .14 .14 .14 0 0 .15 .15 .15 0 0 0 0 0 1 0':id==='olive-pants'?'.28 .28 .28 0 0 .31 .31 .31 0 0 .19 .19 .19 0 0 0 0 0 1 0':null;}
-  if(slot==='shoes'){href=maleShoePath(id);transform=femaleShoesTransform;crop='260 1340 520 200';}
   if(slot==='hat'){href='/avatars/base-b-hat.png';transform=femaleCapTransform;crop='320 -30 390 250';}
   if(!href)return null;
   return <svg className={thumbnail?'wardrobe-picture':'avatar-shirt-overlay'} viewBox={thumbnail?crop:'0 0 1024 1536'} aria-hidden="true"><defs>{tint&&<filter id={`${uid}-tint`} colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values={tint}/></filter>}</defs>
