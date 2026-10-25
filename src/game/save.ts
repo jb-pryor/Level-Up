@@ -11,7 +11,7 @@ const ids=(v:unknown,allowed:string[]):v is string[]=>Array.isArray(v)&&v.every(
 export function validPlayer(v:unknown):v is Player {
   if(!record(v)||typeof v.name!=='string'||!v.name.trim()||!oneOf(v.gender,['male','female'])||v.bodyId!==(v.gender==='male'?'base-a':'base-b'))return false;
   if(!oneOf(v.complexionId,['1','2','3']))return false;
-  if(!oneOf(v.hairStyleId,['short-swept','short-curly','afro','long','long-waves','bald'])||!oneOf(v.hairColorId,['brown','black','blonde','gray'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
+  if(!oneOf(v.hairStyleId,['short-swept','short-curly','afro','ponytail','long','long-waves','bald'])||!oneOf(v.hairColorId,['brown','black','blonde','gray'])||!oneOf(v.eyeColorId,['brown','blue','green','gray','red'])||!oneOf(v.expressionId,['smile','neutral']))return false;
   if(!Number.isSafeInteger(v.lootBoxes)||Number(v.lootBoxes)<0)return false;
   if(v.lootReveal!==null){
     const reveal=v.lootReveal;

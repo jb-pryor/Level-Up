@@ -277,3 +277,7 @@ Activity mode: not established
 
 - [x] Add Afro in all four colors for both bodies, inspect fit composites and verify original-file dimensions plus save/household round trips; build and 106 tests pass.
 - [ ] Apply supabase/migrations/008_afro_hair.sql in hosted Supabase for Afro household syncing.
+
+
+- [x] Add Ponytail for both bodies and all four colors; inspect fitted composites and verify source dimensions, saves and household portrait support (108 tests and build pass).
+- [ ] Apply supabase/migrations/009_ponytail_hair.sql in hosted Supabase for Ponytail household syncing.

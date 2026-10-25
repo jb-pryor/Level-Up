@@ -324,3 +324,6 @@ Loot state is private Player data: lootBoxes and lootReveal. The completion redu
 
 
 afroHair.ts maps source filenames and native dimensions, including the different black female canvas, to gender-specific rendering placements. AfroHair.tsx handles avatar/thumbnail and female cap clipping. The afro ID is supported by appearance typing, save validation and household parsing. Migration 008_afro_hair.sql expands hosted avatar validation while preserving full outfit/XP fields.
+
+
+ponytailHair.ts maps source filenames (including poneytail-brown-female-fitted.png) and native dimensions. PonytailHair renders normalized male and canonical female-base placements above shirts, with female cap clipping. The ponytail ID is supported by Appearance/save/household validation. Migration 009_ponytail_hair.sql adds hosted support and preserves all previous styles and shared outfit/XP fields.

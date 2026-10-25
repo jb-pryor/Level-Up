@@ -1,8 +1,10 @@
+import { PonytailHair } from './PonytailHair';
 import { AfroHair } from './AfroHair';
 import { CurlyHair } from './CurlyHair';
 import { LongWaves } from './LongWaves';
 import type { Appearance } from '../types';
 export function HairstyleThumbnail({style,color,gender='male'}:{style:Appearance['hairStyleId'];color:Appearance['hairColorId'];gender?:Appearance['gender']}){
+  if(style==='ponytail')return <PonytailHair gender={gender} color={color} thumbnail/>;
   if(style==='afro')return <AfroHair gender={gender} color={color} thumbnail/>;
   if(style==='short-curly')return <CurlyHair color={color} thumbnail/>;
   if(style==='long-waves')return <LongWaves gender="female" color={color} thumbnail/>;

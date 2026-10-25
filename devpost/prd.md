@@ -269,3 +269,6 @@ Level-up loot boxes replace the former 25-coin bonus. Each crossed level awards 
 
 
 Afro hairstyle: add the supplied separate male/female versions in black, brown, blonde and gray alongside all previous hairstyles. Original PNGs are unchanged, with consistent avatar and gender-specific thumbnail rendering.
+
+
+Ponytail hairstyle is available alongside existing styles for both genders, with all four supplied colorways and gender-specific source files and thumbnails.
