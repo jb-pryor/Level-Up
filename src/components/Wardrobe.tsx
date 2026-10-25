@@ -11,7 +11,7 @@ import { avatarPresets } from '../data/avatarPresets';
 
 export type Slot = keyof Outfit;
 type Item = { id: string | null; name: string; description: string };
-const categories: { slot: Slot; label: string }[] = [{slot:'shirt',label:'Shirts'},{slot:'pants',label:'Pants'},{slot:'hat',label:'Hats'},{slot:'shoes',label:'Shoes'}];
+const categories: { slot: Slot; label: string }[] = [{slot:'shirt',label:'Shirts'},{slot:'pants',label:'Pants'},{slot:'shoes',label:'Shoes'}];
 const rarityOrder={Common:0,Rare:1,Epic:2,Legendary:3};
 const wardrobeRank=(item:Item)=>item.id===null||item.id==='starter'?-1:rarityOrder[cosmetics.find(c=>c.id===item.id)?.rarity??'Common'];
 const wardrobeItems: Record<Slot, Item[]> = {
@@ -44,7 +44,7 @@ export function Wardrobe({ appearance, draft, ownedItemIds, tab, onTabChange, on
   return <section className="quest-card wardrobe-panel" aria-label="Wardrobe">
     <div className="wardrobe-heading"><div><span className="eyebrow">MAKE IT YOURS</span><h2>Your wardrobe</h2></div></div>
     <p className="muted">Pick a look. Confirm when it feels like you.</p>
-    <div className="wardrobe-tabs" role="tablist" aria-label="Clothing categories">{categories.map(({slot,label})=><button key={slot} type="button" role="tab" id={`wardrobe-tab-${slot}`} aria-selected={tab===slot} aria-controls="wardrobe-items" onClick={()=>onTabChange(slot)} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const index=categories.findIndex(c=>c.slot===slot);const next=categories[(index+(event.key==='ArrowRight'?1:3))%4].slot;onTabChange(next);document.getElementById(`wardrobe-tab-${next}`)?.focus()}}} tabIndex={tab===slot?0:-1}>{label}</button>)}</div>
+    <div className="wardrobe-tabs" role="tablist" aria-label="Clothing categories">{categories.map(({slot,label})=><button key={slot} type="button" role="tab" id={`wardrobe-tab-${slot}`} aria-selected={tab===slot} aria-controls="wardrobe-items" onClick={()=>onTabChange(slot)} onKeyDown={event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();const index=categories.findIndex(c=>c.slot===slot);const next=categories[(index+(event.key==='ArrowRight'?1:categories.length-1))%categories.length].slot;onTabChange(next);document.getElementById(`wardrobe-tab-${next}`)?.focus()}}} tabIndex={tab===slot?0:-1}>{label}</button>)}</div>
     <div key={tab} id="wardrobe-items" className="wardrobe-grid" tabIndex={0} role="tabpanel" aria-labelledby={`wardrobe-tab-${tab}`}>{available.filter(item=>item.id===null||item.id==='starter'||ownedItemIds.includes(item.id)).map(item=><button key={item.id??'none'} className="wardrobe-item" data-rarity={cosmetics.find(c=>c.id===item.id)?.rarity??'Common'} type="button" aria-pressed={draft[tab]===item.id} onClick={()=>onChange({...draft,[tab]:item.id} as Outfit)}><div className="wardrobe-image-wrap"><ItemPicture appearance={appearance} slot={tab} item={item}/>{draft[tab]===item.id&&<span className="item-selected" aria-hidden="true">✓</span>}</div><span className="wardrobe-item-name">{item.name}</span></button>)}</div>
     <div className="wardrobe-actions"><button className="quiet-button" onClick={onCancel}>Cancel</button><button className="primary" onClick={onConfirm}>Confirm outfit <span>✓</span></button></div>
   </section>;

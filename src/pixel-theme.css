@@ -566,3 +566,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .loot-alert-tab > span { -webkit-text-stroke: 1px #302347; text-shadow: 2px 2px 0 #302347; }
 .loot-alert-tab:hover { background: #ffed9b; }
 @media(max-width:650px) { .loot-alert-tab { left: 7px; } }
+
+/* Three clothing categories while accessories are not offered. */
+.wardrobe-tabs { grid-template-columns: repeat(3,minmax(0,1fr)); }

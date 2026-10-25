@@ -5,12 +5,12 @@ import { cosmetics } from '../data/cosmetics';
 import { levelFor } from '../game/progression';
 import { ItemPicture } from './Wardrobe';
 const rarityOrder={Common:0,Rare:1,Epic:2,Legendary:3};
-const categories: {slot:keyof Outfit;label:string}[] = [{slot:'shirt',label:'Shirts'},{slot:'pants',label:'Pants'},{slot:'hat',label:'Hats'},{slot:'shoes',label:'Shoes'}];
+const categories: {slot:keyof Outfit;label:string}[] = [{slot:'shirt',label:'Shirts'},{slot:'pants',label:'Pants'},{slot:'shoes',label:'Shoes'}];
 export function Shop({player,onBuy,feedback,daily=false}:{daily?:boolean;player:Player;onBuy:(id:string)=>void;feedback?:string}) {
   const [category,setCategory]=useState<keyof Outfit>('shirt');
   const level=levelFor(player.totalXp);
   return <>{!daily&&<div className="shop-intro"><p className="muted">New looks unlock as you level up.</p></div>}
-    {!daily&&<div className="wardrobe-tabs shop-tabs" role="tablist" aria-label="Shop categories">{categories.map(({slot,label},index)=><button key={slot} type="button" role="tab" id={`shop-tab-${slot}`} aria-controls="shop-items" aria-selected={category===slot} tabIndex={category===slot?0:-1} onClick={()=>setCategory(slot)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const next=categories[(index+(e.key==='ArrowRight'?1:3))%4].slot;setCategory(next);document.getElementById(`shop-tab-${next}`)?.focus()}}}>{label}</button>)}</div>}
+    {!daily&&<div className="wardrobe-tabs shop-tabs" role="tablist" aria-label="Shop categories">{categories.map(({slot,label},index)=><button key={slot} type="button" role="tab" id={`shop-tab-${slot}`} aria-controls="shop-items" aria-selected={category===slot} tabIndex={category===slot?0:-1} onClick={()=>setCategory(slot)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const next=categories[(index+(e.key==='ArrowRight'?1:categories.length-1))%categories.length].slot;setCategory(next);document.getElementById(`shop-tab-${next}`)?.focus()}}}>{label}</button>)}</div>}
     <p className="shop-inline-feedback" role="status">{feedback}</p>
     <div className="shop-grid" id={daily?'daily-shop-items':'shop-items'} role={daily?'region':'tabpanel'} aria-label={daily?'Daily shop inventory':undefined} aria-labelledby={daily?undefined:`shop-tab-${category}`}>{cosmetics.filter(item=>(daily?item.shop==='daily':item.shop!=='daily'&&item.slot===category)).sort((a,b)=>daily?0:rarityOrder[a.rarity??'Common']-rarityOrder[b.rarity??'Common']).map(item=>{
       const owned=player.ownedItemIds.includes(item.id),locked=level<item.requiredLevel,poor=player.coins<item.price,wrongBody=!!item.maleOnly&&player.gender!=='male';

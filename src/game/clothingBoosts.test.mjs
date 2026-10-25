@@ -116,3 +116,29 @@ test('refitted sweaters use the requested rarity tiers, prices and rounded quest
   assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.totalXp,150+xp);assert.equal(s.player.coins,1000-price+coins);
  }
 });
+
+test('rare sneakers have correct prices and actual reward boosts while other shoes stay common',()=>{
+ for(const [id,xp,coins] of [['black-white-shoes',15,6],['blue-white-shoes',16,5]]){
+  const item=cosmetics.find(c=>c.id===id);assert.equal(item.rarity,'Rare');assert.equal(item.price,35);assert.notEqual(item.shop,'daily');
+  let s=gameReducer(start(),{type:'buy',itemId:id});assert.equal(s.player.coins,965);
+  s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});s=gameReducer(s,{type:'add',questId:'walk'});s=gameReducer(s,{type:'complete',questId:'walk'});
+  assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.coins,965+coins);
+ }
+ for(const item of cosmetics.filter(c=>c.slot==='shoes'&&!['black-white-shoes','blue-white-shoes'].includes(c.id))){assert.equal(item.rarity,'Common');assert.equal(item.price,20);assert(!item.xpBoostPercent&&!item.coinBoostPercent);}
+});
+
+test('additional pants rarity upgrades pay the correct equipped bonuses',()=>{
+ for(const [id,xp,coins] of [['brown-track-pants',35,12],['shrek-pajama-pants',38,11],['red-joggers',35,10],['green-joggers',37,10],['plaid-pajama-pants',37,11],['red-velvet-pants',35,11],['ripped-jeans',37,10],['white-airy-pants',35,11]]){
+  let s=gameReducer(start(),{type:'buy',itemId:id});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:id}});
+  const before=s.player.coins;s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.coins,before+coins);
+ }
+});
+
+test('six newest pants apply their upgraded rarity boosts to actual quest rewards',()=>{
+ for(const [id,xp,coins] of [['cow-print-pants',40,10],['flame-pants',35,12],['multicolor-diamond-pants',40,12],['gold-fringe-pants',35,11],['patchwork-tapestry-pants',37,11],['snoopy-pajama-pants',37,10]]){
+  let s=gameReducer(start(),{type:'buy',itemId:id});s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,pants:id}});
+  const before=s.player.coins;s=gameReducer(s,{type:'add',questId:'meal'});s=gameReducer(s,{type:'complete',questId:'meal'});
+  assert.equal(s.notice.reward.xp,xp);assert.equal(s.notice.reward.coins,coins);assert.equal(s.player.coins,before+coins);
+ }
+});

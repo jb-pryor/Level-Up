@@ -330,3 +330,9 @@ ponytailHair.ts maps source filenames (including poneytail-brown-female-fitted.p
 
 
 Refitted long-sleeve assets: the five sweater/flannel IDs now resolve to the supplied refitted-male-* / refitted-female-* files in the redone/female shirt folders. refittedShirtAsset provides full-canvas placement and sleeve-aware thumbnail framing. Female canvases use the canonical female-base projection; T-shirt paths and framing stay unchanged. Item IDs, ownership, prices, rarity and loot eligibility are unchanged.
+
+
+New pants use their original 1024×1536 aligned PNGs through newPants.ts, with a 322/875/386/519 source region that preserves their existing male placement and the established female pants transform. Existing avatar/thumbnail/wardrobe/loot routing and ownership validation derive from the catalog; no SQL migration is required.
+
+
+The six additional new-pants entries use canvasAligned=true to render the full original PNG instead of cropping side fringe/patchwork details. Male coordinates are unchanged; female rendering uses the same existing pants transform and 6-pixel inward shift per leg as the previous batch. Source PNGs are untouched; shared outfit IDs need no SQL update.

@@ -284,3 +284,9 @@ Activity mode: not established
 
 
 - [x] Replace all five long-sleeve designs for both bodies with the supplied refitted PNGs; inspect ten fit composites and verify shop/wardrobe/avatar routing plus asset dimensions (108 tests and build pass).
+
+
+- [x] Add eight new Common daily-shop pants for both bodies; inspect 16 fit composites and verify purchase/equip/save and dynamic loot eligibility (112 tests and build pass).
+
+
+- [x] Add six additional Common daily pants, preserve full male canvases and apply the established female leg tweak; inspect 12 fit composites and verify purchases/equipment/saves and dynamic loot eligibility (115 tests and build pass).

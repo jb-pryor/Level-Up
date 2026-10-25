@@ -272,3 +272,9 @@ Afro hairstyle: add the supplied separate male/female versions in black, brown, 
 
 
 Ponytail hairstyle is available alongside existing styles for both genders, with all four supplied colorways and gender-specific source files and thumbnails.
+
+
+Eight additional supplied pants (brown track, green joggers, plaid pajamas, red joggers, red velvet, ripped jeans, swamp pajamas and white airy pants) are Common, 20 coins, level 3, in Daily Shop for both avatars. No boosts. They also enter the eligible daily clothing loot pool.
+
+
+Six additional pants designs (cow print, flame, gold fringe, multicolor diamond, patchwork tapestry and Snoopy pajamas) are Common, 20 coins, level 3 in Daily Shop for both avatars, with no boosts. They are eligible for daily clothing loot drops.

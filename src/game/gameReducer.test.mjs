@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { gameReducer, initialGame } from './gameReducer.ts';
 import { levelFor, xpIntoLevel } from './progression.ts';
+import { cosmetics } from '../data/cosmetics.ts';
 import { defaultAppearance } from '../types.ts';
 const create=()=>gameReducer(initialGame,{type:'create',appearance:{...defaultAppearance,name:'James'}});
 function complete(state,id){const now=Math.max(Date.now(),...Object.values(state.player.questCooldowns));return gameReducer(gameReducer(state,{type:'add',questId:id,now}),{type:'complete',questId:id,now});}
@@ -128,7 +129,7 @@ test('sneaker purchase supports equip and barefoot without altering other outfit
 
 test('all new shoe styles stay owned and equipped when changing to the female body',()=>{
   for(const id of ['black-red-shoes','black-white-shoes','blue-white-shoes','brown-shoes','green-yellow-shoes']){
-    let s=firstLevel();s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,10);assert(s.player.ownedItemIds.includes(id));
+    let s=firstLevel();s={...s,player:{...s.player,coins:100}};s=gameReducer(s,{type:'buy',itemId:id});assert.equal(s.player.coins,100-cosmetics.find(c=>c.id===id).price);assert(s.player.ownedItemIds.includes(id));
     s=gameReducer(s,{type:'equip',outfit:{...s.player.equipped,shoes:id}});assert.equal(s.player.equipped.shoes,id);
     const female=gameReducer(s,{type:'edit',appearance:{...defaultAppearance,name:'Test',gender:'female',bodyId:'base-b'}});
     assert.equal(female.player.equipped.shoes,id);assert(female.player.ownedItemIds.includes(id));
