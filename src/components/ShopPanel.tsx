@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Player } from '../types';
 import { Shop } from './Shop';
 import { levelFor } from '../game/progression';
 import { useNow } from '../game/useNow';
-import { DAILY_SHOP_UNLOCK_LEVEL, dailyShopCountdown, dailyShopResetAt } from '../game/dailyShop';
+import { DAILY_SHOP_UNLOCK_LEVEL, dailyShopCountdown, dailyShopResetAt, dailyShopItems } from '../game/dailyShop';
 
 export function ShopPanel({player,onBuy,feedback}:{player:Player;onBuy:(id:string)=>void;feedback?:string}){
   const [daily,setDaily]=useState(false);
@@ -18,8 +18,9 @@ export function ShopPanel({player,onBuy,feedback}:{player:Player;onBuy:(id:strin
 function DailyShop({player,onBuy,feedback}:{player:Player;onBuy:(id:string)=>void;feedback?:string}){
   const now=useNow();
   const resetAt=dailyShopResetAt(now);
+  const items=useMemo(()=>dailyShopItems(resetAt-1,player.gender),[resetAt,player.gender]);
   return <div className="daily-shop-content shop-view-content">
     <p className="daily-shop-timer"><span>Next refresh in</span> <time dateTime={new Date(resetAt).toISOString()} aria-label={`Next daily shop refresh in ${dailyShopCountdown(now)}`}>{dailyShopCountdown(now)}</time></p>
-    <Shop player={player} onBuy={onBuy} feedback={feedback} daily/>
+    <Shop player={player} onBuy={onBuy} feedback={feedback} daily dailyItems={items}/>
   </div>;
 }
