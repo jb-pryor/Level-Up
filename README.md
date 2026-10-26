@@ -1,59 +1,138 @@
 # Level Up
 
-A gamified daily quest log where real-life activities develop a personalized cartoon character.
+Level Up is a gamified task tracker with customizable cartoon avatars and shared households. Complete real-life quests to earn XP and coins, unlock clothing, and track activity with the people you live with.
+
+**[Watch the video walkthrough on YouTube](https://www.youtube.com/watch?v=pMXMZ4k6vko)**
+
+## Features
+
+- **Quest catalog:** searchable tasks across Home, Health, Social, Education, and Exploration, with favorites and a personal daily quest list.
+- **Character progression:** increasing XP requirements, level-up celebrations, personal stats, and one loot box for every level gained.
+- **Avatar customization:** male and female bases, complexions, eye colors, hairstyles, and an owned-item wardrobe with outfit previews and confirmation.
+- **Clothing rewards:** Common, Rare, Epic, and Legendary items, with equipped clothing bonuses to quest XP and coins. Bonuses round up to whole numbers and appear separately on completion.
+- **Two shops:** a permanent basic collection and a Daily Shop unlocked at level 3. Every 12 hours, the Daily Shop selects four distinct items: three shirts or pants, plus a fourth with a 50% chance of shoes and a 50% chance of another shirt or pair of pants.
+- **Loot boxes:** a random Daily Shop cosmetic plus 15, 20, 25, 30, or 35 coins. The current clothing drop odds are 60% Rare, 25% Epic, and 15% Legendary, with equal chances within each rarity. The pool includes the full active Daily Shop collection, not just the four displayed items. Duplicates can be quicksold for 50–75% of their item's value, rounded up.
+- **Shared households:** account-based membership, invite codes, completed-quest activity, full-body member avatars, levels, shared XP progress, and recent activity indicators.
+- **Saved progress:** browser saves for guests and private Supabase-backed saves for signed-in accounts, with account-specific local caching and sync feedback.
+- **Arcade presentation:** pixel-style interface, original synthesized sound effects, and optional chiptune music.
+
+## Try the core flow
+
+1. Create a character and open the quest catalog.
+2. Search for a task, add it to your list, and mark it complete after doing it in real life.
+3. Watch your XP and coins increase. Complete more quests to level up and earn a loot box.
+4. Buy clothing in the shop, open the wardrobe, and confirm an outfit. Hover over equipped clothing to inspect its bonuses.
+5. Register or sign in to save your character to an account. Create a household and invite another account to see shared activity and member avatars.
+
+Home quests have a 12-hour cooldown after completion. Purchases add items to your wardrobe; they do not automatically change your outfit. Daily Shop stock stays fixed until the UTC midnight/noon reset, including when the page is refreshed or an item is purchased.
+
+## Technology
+
+| Area | Implementation |
+| --- | --- |
+| Interface | React 19, TypeScript, Vite |
+| Game state | React reducer and typed quest/cosmetic catalogs |
+| Avatar rendering | Layered PNG artwork with SVG positioning, clipping, and filters |
+| Accounts and database | Supabase Auth, Postgres, Row Level Security, and database functions |
+| Local persistence | Versioned browser `localStorage` saves and account caches |
+| Audio | Web Audio API; music and effects are synthesized locally |
+| Tests | Node.js test runner with experimental TypeScript stripping |
+| Deployment | Static Vite build; compatible with Vercel |
 
 ## Run locally
 
-Requires Node.js compatible with the locked Vite version (currently Node 22.13.1 works for the production build).
+The project has been tested with **Node.js 22.13.1** and npm. Use the committed lockfile to install dependencies.
 
 ```bash
 npm ci
-npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
+npm run dev
 ```
 
-Open http://127.0.0.1:5173. Keep the same hostname and port to access the same browser save.
+Open **http://127.0.0.1:5173**. The development server uses that host and port by default.
 
-```bash
-npm run build
-```
+Guest play works without Supabase configuration. To enable accounts, cloud saves, and households, complete the setup below.
 
-## Current build step
+### Configure Supabase
 
-Character setup, catalog browsing/search, daily quests, XP/coin rewards, level-gated purchases, and the owned-item wardrobe are implemented. Progress saves automatically in this browser on this device. Refresh restores your character, unfinished quests, XP, coins, owned clothes, outfit, and unread wardrobe count.
+1. Create or use an existing Supabase project.
+2. Copy the environment template:
 
-Try adding Do the dishes, Clean your room, and Wash and put away laundry from Home improvement. Complete those tasks to reach level 2 with 55 coins, buy Emerald tee in the shop, then use Edit clothes to select it and Confirm outfit. Purchases do not automatically equip. Wardrobe Cancel restores the prior outfit. Character editing preserves earned progress.
+   ```bash
+   cp .env.example .env.local
+   ```
 
-Known character/clothing edge imperfections are deferred for later photo-editor refinement.
+3. In the Supabase project's **Connect** panel, find the project URL and publishable key. Add them to `.env.local`:
+
+   ```dotenv
+   VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+   VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YOUR_KEY
+   ```
+
+   These are browser-facing configuration values. Never put a database password, secret key, or `service_role` key in a `VITE_` variable. `.env.local` is ignored by Git.
+
+4. For a new database, run the SQL files in [supabase/migrations](supabase/migrations) in numeric order, **001 through 010**, using the Supabase SQL Editor. For an existing installation, apply only the migrations that have not already been applied. Migration 010 registers the latest quests for household activity.
+5. In Supabase **Authentication → URL Configuration**, add `http://127.0.0.1:5173/` as an allowed redirect URL. Configure the Site URL for the environment you are using.
+6. Restart the development server after changing environment variables.
+
+See [the backend setup guide](supabase/README.md) for database details and account/household checks. For public registration, configure production SMTP and test email confirmation and password recovery.
+
+### Saves and account behavior
+
+- Guest progress belongs to the current browser and origin. Changing host or port creates a separate local storage context; clearing site data removes guest saves.
+- Signing in loads that account's character and progress. Existing guest progress can be linked through the app's explicit account-linking flow.
+- Signed-in progress syncs to Supabase. Check sync feedback before switching devices, particularly after playing without a connection.
+- Household members see shared character information and completed activity. They do not receive another member's private coins, inventory, or unfinished quest list.
+- Presence reflects recent app activity; it is not an exact real-time online guarantee.
+
+## Checks and production build
 
 ```bash
 npm test
 npm run build
+npm run preview -- --host 127.0.0.1
 ```
 
-Tests use Node's built-in runner and experimental TypeScript stripping on Node 22.13.1. Browser dialog/focus and visual checks are part of the learner's hands-on review.
+The test suite covers progression, quest rewards and cooldowns, clothing boosts, purchase/equipment rules, save compatibility, household payloads, loot odds, and shop rotation. The last verified run passed **125 tests** and the production build.
 
-## Interface theme
+`npm run build` writes the static website to `dist/`. The preview command serves that build locally; it does not deploy the app. Live email delivery, cross-device account flows, and visual behavior should also be checked manually on the deployed site.
 
-The blue/yellow/purple arcade interface uses an original local 5×7 display font generated by `scripts/build_pixel_font.py`. Theme rules are in `src/pixel-theme.css`. Player and clothing images keep their smooth cartoon style.
+## Deploy with Vercel
 
-## Sounds
+1. Push the source code and runtime assets to your GitHub repository.
+2. Import the repository into Vercel with the **Vite** framework preset.
+3. Use **`npm run build`** as the build command and **`dist`** as the output directory.
+4. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the project's environment variables before building. Redeploy after changing them.
+5. Deploy, then set the live HTTPS address as the Supabase Auth Site URL and add it to allowed redirect URLs. Keep local development redirects if still needed.
+6. Test registration, recovery links, account saves, household invites, and asset loading at the live address.
 
-Original arcade effects are synthesized locally in `src/game/soundEffects.ts`. Use Sound on/off in the header. Audio activates after interaction; no external audio files or services are needed.
+Vercel serves the frontend and static assets. Supabase continues to host authentication and the database; no separate application server is required for the current architecture. A custom website domain is optional.
 
-## Assets
+## Project structure
 
-Character raster artwork was generated with the built-in image-generation tool, then cut and fitted with learner-authorized code-based cleanup. Selected runtime images live in `public/avatars/`. Original generation outputs, prompt records and preparation scripts are retained under `output/imagegen/`. Male/Female selects the corresponding body; either hairstyle remains available.
+```text
+src/
+  components/      Avatar layers, quest catalog, shops, wardrobe, and dialogs
+  data/            Quests, cosmetics, humor, and asset metadata
+  game/            Progression, rewards, saves, loot, rotation, audio, and tests
+  account/         Account-save synchronization
+  auth/            Authentication state
+  household/       Household membership and shared activity
+  lib/             Supabase client configuration
+public/avatars/    Runtime character and clothing images
+supabase/          Database migrations, SQL tests, and setup documentation
+devpost/           Project planning, implementation notes, and asset notes
+scripts/           Asset preparation and font-generation utilities
+```
 
-## Planning and progress
+## Artwork and audio
 
-Canonical scope, PRD, technical spec and build checklist are in `devpost/`. Personal learner context and local credential files are ignored. A demo video and public GitHub repository are required for the hackathon; publishing is a later step.
+Avatar and clothing artwork combines AI-generated images with manually resized and positioned assets. Clothing is fitted for each avatar through shared rendering components and body-specific metadata. Runtime images live in `public/avatars/`; generation records and preparation material are retained under `output/imagegen/` and [asset notes](devpost/asset-notes).
 
-## Local saves and recovery
+The local pixel display font is generated by `scripts/build_pixel_font.py`. Sound effects and music are original Web Audio compositions in `src/game/soundEffects.ts` and `src/game/music.ts`; neither requires an external audio service.
 
-Use the same browser and address (`http://127.0.0.1:5173`) when returning. Other browsers, private windows, hosts or ports have separate storage. Clearing site data removes progress; there is no cloud backup or cross-device sync. If saving fails, an on-screen warning offers Retry saving while the current session stays usable. An unreadable save is preserved until you explicitly choose Start fresh and create a new character.
+## Current limits and future work
 
-For the demo, leave an unfinished quest and equip a purchased shirt, then refresh to show everything restored. To check narrow layout, resize the browser and open the quest catalog, shop and wardrobe. Character/clothing image polish remains deferred.
-
-### Account saving setup
-
-Email accounts and households use Supabase. To enable private account-owned character/progress saving, apply `supabase/migrations/002_account_player_saves.sql` after migration 001. See `supabase/README.md` for setup and cross-device testing. Existing guests are linked explicitly; signed-in accounts load their own player and save automatically. Keep `.env.local` ignored and use only the publishable browser key.
+- Task completion is self-reported. Parent approval and parental household controls are planned ideas, not implemented features.
+- XP, currency, purchases, and loot are calculated in the browser. Account saves are private, but the economy is not server-authoritative and is not intended for paid rewards, trading, or competitive rankings.
+- Daily Shop rotation follows the device clock and a shared seeded 12-hour schedule. Loot drops are generated independently from the complete daily catalog.
+- Some artwork may need further fitting refinement. Runtime images are currently PNGs; image optimization and removing unused public reference assets are useful next steps for mobile loading.
