@@ -2,7 +2,7 @@
 
 Level Up is a gamified task tracker with customizable cartoon avatars and shared households. Complete real-life quests to earn XP and coins, unlock clothing, and track activity with the people you live with.
 
-**[Watch the video walkthrough on YouTube](https://www.youtube.com/watch?v=pMXMZ4k6vko)**
+**[Try Level Up](https://leveluptodo.xyz)** · **[Watch the video walkthrough](https://www.youtube.com/watch?v=pMXMZ4k6vko)**
 
 ## Features
 
